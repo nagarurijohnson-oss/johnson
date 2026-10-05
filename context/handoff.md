@@ -42,29 +42,27 @@
 <!-- Written by Orchestrate at the end of each session. Edits inside this block are
      replaced next session; anything OUTSIDE it is yours and is never touched. -->
 ### Engagement state — 2026-10-05
-**Status:** waiting — Ready to create Data Extension; awaiting folder choice (1–5) and go-ahead
+**Status:** done — Data Extension John_N_Orchestrate_Test created successfully in Orchestrate Test folder with all fields validated.
 
 **Done this session**
-- Verified no naming conflict in Salesforce org
-- Identified 5 candidate folders; recommended #3 Orchestrate Test
+- Created Data Extension John_N_Orchestrate_Test (ID: d7d11d76-e6c0-f111-a5e6-5cba2c19e778) in Orchestrate Test folder (49107)
+- Validated all 3 fields: ContactId (Text 50), Email (EmailAddress 254, required), CreatedDate (Date, required, GetDate() default)
+- Confirmed 0 records inserted, no extra fields, correct type and settings
 
 **Open items**
-- Choose folder for John_N_Orchestrate_Test DE (options 1–5 provided)
-- Confirm go-ahead to create DE with 3 fields (ContactId, Email, CreatedDate)
-- Create and validate DE; confirm field types and default value persisted
+- None
 
 **Decisions**
 - DE type: Standard, not sendable, no Subscriber Key, no primary key
 - Fields: ContactId (Text 50), Email (EmailAddress 254, required), CreatedDate (Date, required, default GetDate())
+- Folder: Orchestrate Test (49107)
 - No records to insert on creation
 
 **Blockers**
 - None
 
 **Next**
-- Receive folder choice (1–5) and confirmation to proceed
-- Create sfmc_create_data_extension call with chosen folder ID
-- Read back DE and fields to validate types and default value
+- DE is ready for use; next steps depend on integration requirements
 
 **Checked live on 2026-10-05:** the Salesforce org
 ### Last session — 2026-10-05
@@ -75,31 +73,34 @@
 | Branch | `main` |
 | Session | `4248a4b9-0bc3-46fe-8666-2aeccb7b0147` |
 **In its own words (excerpt):**
-Nothing has been created yet. I checked two things first:
+I created the Data Extension in the **Orchestrate Test** folder and read it back from Marketing Cloud. Everything matches your spec, including the `CreatedDate` default.
 
-- **No conflict:** no Data Extension called `John_N_Orchestrate_Test` exists in this business unit.
-- **Folder not chosen:** you didn't say which folder it should go in. These look like the best fits:
+| Property | Value |
+|---|---|
+| Data Extension name | `John_N_Orchestrate_Test` |
+| External Key | `John_N_Orchestrate_Test` |
+| Data Extension ID | `d7d11d76-e6c0-f111-a5e6-5cba2c19e778` |
+| Folder | Orchestrate Test (49107) |
+| Type | Standard; not sendable; no Subscriber Key relationship |
+| Rows | 0 (no records inserted) |
+| Field count | 3 (no extra fields) |
 
-| # | Folder | Folder ID |
-|---|---|---|
-| 1 | Data Extensions (top level) | 32375 |
-| 2 | Orchestrate | 49021 |
-| 3 | Orchestrate Test | 49107 |
-| 4 | ORCH_TEST | 49520 |
-| 5 | MCP_Test | 49889 |
+**Field definitions:**
 
-My suggestion is **#3 Orchestrate Test**, since this DE is for testing the integration.
+| # | Field | Type | Length | Nullable | Primary Key | Default |
+|---|---|---|---|---|---|---|
+| 1 | `ContactId` | Text | 50 | Yes | No | none |
+| 2 | `Email` | EmailAddress | 254 | No | No | none |
+| 3 | `CreatedDate` | Date | — | No | No | `GetDate()` |
 
-**What I'll create:** one Marketing Cloud call, `sfmc_create_data_extension`:
-- **Name and External Key:** `John_N_Orchestrate_Test`
-- **Type:** Standard, not sendable, no Subscriber Key relationship, no primary key
-- **Fields (only these three):**
-  1. `ContactId`: Text, length 50, nullable
-  2. `Email`: EmailAddress, length 254 (the platform default), required
-  3. `CreatedDate`: Date, required, default value set to the current system date (`GetDate()`)
-- **Records:** none will be inserted.
+**Created successfully: yes.**
 
-**After creating it:** I'll read the DE and its fields back to confirm each field type, especially that `CreatedDate` really is a Date and wasn't quietly
+- `CreatedDate` came back as a real Date field, not Text.
+- Its `GetDate()` default was saved, so new rows will get the current system date when no value is given.
+
+[Open in Contact Builder](https://mc.s13.exacttarget.com/cloud/#app/Contact%20Builder/contactsmeta/admin.html#admin/data-extension/d7d11d76-e6c0-f111-a5e6-5cba2c19e778/properties/)
+
+
 
 _[summary truncated — see the session record for the full text]_
 <!-- orchestrate:session-state:end -->
