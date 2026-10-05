@@ -42,32 +42,30 @@
 <!-- Written by Orchestrate at the end of each session. Edits inside this block are
      replaced next session; anything OUTSIDE it is yours and is never touched. -->
 ### Engagement state — 2026-10-05
-**Status:** on track — CSV validated, DE confirmed live, ready to import 5 rows. Awaiting proceed signal.
+**Status:** waiting — CSV validated, DE live with 0 rows. Awaiting explicit user confirmation to proceed with 5-row insert.
 
 **Done this session**
-- Verified DE John_N_Orchestrate_Test live in Salesforce org (ID 2c6c5dc5-…e778)
-- Validated CSV: 5 rows, UTF-8 clean, header matches mapping, all ContactId and Email values well-formed and unique
+- Confirmed DE John_N_Orchestrate_Test live (ID 2c6c5dc5-e8c0-f111-a5e6-5cba2c19e778), 0 rows, schema correct
+- Attempted import; platform blocked as expected pending explicit confirmation
 
 **Open items**
-- Import 5 CSV rows via sfmc_bulk_upsert_data_extension_rows
-- Verify all 5 rows inserted with CreatedDate filled by GetDate() default
-- Report final counts: CSV rows, inserted, rejected, and any rejection reasons
+- User confirms: reply 'Confirm' to proceed with 5-row insert or 'Cancel' to stop
+- Execute sfmc_bulk_upsert_data_extension_rows for 5 rows (ContactId, Email only)
+- Read rows back and verify all 5 match CSV with CreatedDate populated
+- Report final import counts: CSV rows, inserted, rejected, and any rejection reasons
 
 **Decisions**
 - DE type: Standard, folder: Data Extensions (top level, 32375), Business Unit: MID 546010305
 - Fields: ContactId (Text 50, nullable), Email (EmailAddress 254, required), CreatedDate (Date, required, GetDate() default)
-- Not sendable, no Subscriber Key relationship
-- Import method: upsert (insert-only in this case, no primary key, DE empty)
-- Undo method: delete the 5 test rows
+- Import method: upsert (insert-only, no primary key, DE empty)
+- Undo method: delete the 5 test rows manually post-import
 
 **Blockers**
-- None
+- Platform requires explicit confirmation before irreversible bulk row write
 
 **Next**
-- User confirms: proceed with import
-- Execute sfmc_bulk_upsert_data_extension_rows for 5 rows (ContactId, Email only)
-- Read rows back and verify all 5 match CSV with CreatedDate populated
-- Report final import counts and any rejections
+- User replies 'Confirm' or 'Cancel'
+- If confirmed: run insert, read back all 5 rows, verify CreatedDate filled, report counts and any rejections
 
 **Checked live on 2026-10-05:** the Salesforce org
 ### Last session — 2026-10-05
@@ -78,27 +76,19 @@
 | Branch | `main` |
 | Session | `4248a4b9-0bc3-46fe-8666-2aeccb7b0147` |
 **In its own words (excerpt):**
-I've finished the checks before the import. Nothing has been written yet.
+I still haven't inserted the records. Your message confirmed the right thing: the DE is live (top-level Data Extensions folder, not sendable) and has **0 rows**, because I stopped at "Proceed?" last turn and the import never ran.
 
-**The Data Extension (checked live):** `John_N_Orchestrate_Test` (ID `2c6c5dc5-…e778`) is in the top-level Data Extensions folder. It has the same 3 fields as before: `ContactId` Text(50) nullable, `Email` EmailAddress(254) required, `CreatedDate` Date required with the `GetDate()` default. It has **0 rows** right now.
+I tried to run it just now and the platform blocked the call. The bulk row write counts as an irreversible action, so it needs a separate explicit confirmation first. Nothing was written.
 
-**CSV validation: all 5 rows pass.**
+**What it will do:**
+- **Target:** only `John_N_Orchestrate_Test` (ID `2c6c5dc5-e8c0-f111-a5e6-5cba2c19e778`), business unit MID 546010305.
+- **Rows:** 5 rows inserted, TEST-CONTACT-001 to 005, with just `ContactId` and `Email`. `CreatedDate` is left for the `GetDate()` default to fill in.
+- **What it can't touch:** existing rows (there are none), the schema, field definitions, or any other DE. The DE has no primary key, so nothing can be matched and updated.
+- **Undo:** there's no automatic rollback. You'd have to delete the 5 test rows afterwards.
 
-| Check | Result |
-|---|---|
-| Encoding | Decodes as strict UTF-8. No byte-order mark, line endings are LF only, every character is plain ASCII (which is valid UTF-8) |
-| Header | `ContactId,Email`, which matches the mapping exactly. No CreatedDate column |
-| Data rows | **5** |
-| ContactId | All present, all 16 characters (limit is 50), no duplicates |
-| Email | All present and well-formed (`name@domain.tld`), 22–25 characters (limit is 254), no duplicates |
-
-| Row | ContactId | Email |
-|---|---|---|
-| 1 | TEST-CONTACT-001 | john.smith@example.com |
-| 2 | TEST-CONTACT-002 | sarah.johnson@example.com |
-| 3 | TEST-CONTACT-003 | michael.brown@example.com |
-| 4 | TEST-CONTACT-004 | david.wilson@example.com |
-| 5 | TEST-CONTACT-005 | emily.davis@example.com |
+I don't have the confirmation pop-up available in this session, so please **reply "Confirm"** to run the import, or "Cancel" to stop. Once you confirm, I'll:
+1. run the insert,
+2. read the DE back and match all 5 rows again
 
 _[summary truncated — see the session record for the full text]_
 <!-- orchestrate:session-state:end -->
