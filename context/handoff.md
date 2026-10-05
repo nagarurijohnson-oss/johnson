@@ -42,29 +42,29 @@
 <!-- Written by Orchestrate at the end of each session. Edits inside this block are
      replaced next session; anything OUTSIDE it is yours and is never touched. -->
 ### Engagement state — 2026-10-05
-**Status:** at risk — DE created & live in Orchestrate Test folder, but sendability was changed post-creation—spec mismatch needs clarification
+**Status:** done — DE John_N_Orchestrate_Test recreated in top-level folder, spec-compliant, live and searchable
 
 **Done this session**
-- Confirmed DE John_N_Orchestrate_Test exists live in Orchestrate Test folder (49107)
-- Identified likely reasons DE not visible in user's list (subfolder depth, BU context, cache)
-- Detected unintended change: DE now sendable with ContactId→Subscriber Key relationship
+- Recreated John_N_Orchestrate_Test in top-level Data Extensions folder (32375)
+- Verified new DE matches original spec: not sendable, no Subscriber Key relationship
+- Confirmed DE is visible in folder listing, name search, and External Key lookup
+- Validated all three required fields with correct types, lengths, and defaults
 
 **Open items**
-- Clarify whether sendability change (made by John at 12:04) was intentional or should be reverted
-- Confirm user is viewing correct Business Unit (MID 546010305) and folder path
-- Determine if sendability can be safely reverted if change was unintended
+- None
 
 **Decisions**
-- DE type: Standard, folder: Orchestrate Test (49107), fields: ContactId (Text 50), Email (EmailAddress 254, required), CreatedDate (Date, required, GetDate() default)
-- Original spec: not sendable, no Subscriber Key relationship
+- DE type: Standard, folder: Data Extensions (top level, 32375), Business Unit: MID 546010305
+- Fields: ContactId (Text 50, nullable), Email (EmailAddress 254, required), CreatedDate (Date, required, GetDate() default)
+- Not sendable, no Subscriber Key relationship
+- New DE ID: 2c6c5dc5-e8c0-f111-a5e6-5cba2c19e778
 
 **Blockers**
-- DE sendability state now conflicts with original specification
+- None
 
 **Next**
-- User confirms whether sendability change was intended
-- If unintended: check revert feasibility and apply if possible
-- User verifies they're in correct BU and folder when searching for DE
+- User verifies DE is now visible in their Marketing Cloud interface
+- If still not visible: confirm business unit is MID 546010305 and hard-refresh browser
 
 **Checked live on 2026-10-05:** the Salesforce org
 ### Last session — 2026-10-05
@@ -75,15 +75,31 @@
 | Branch | `main` |
 | Session | `4248a4b9-0bc3-46fe-8666-2aeccb7b0147` |
 **In its own words (excerpt):**
-The DE still exists. I just checked it live and it's in **Orchestrate Test** (folder 49107) alongside four other DEs. So the problem is where the UI is looking, not that the DE is missing. I also found a change to it since I created it, covered at the end.
+I've recreated `John_N_Orchestrate_Test` in the top-level **Data Extensions** folder, so it shows in the main list without opening a subfolder. I read it back five ways and everything matches your spec.
 
-## Likely reasons it's not in your list
+**What happened to the first one:** it was deleted after my last check. Its ID returns "not found" and its External Key no longer matches anything, so the name and key were free to reuse.
 
-**1. You're looking at the top-level list instead of the subfolder.** This is the most common cause. Clicking **Data Extensions** in Email Studio or Contact Builder shows only the DEs at the root of the folder tree. This DE is one level down. Expand **Data Extensions → Orchestrate Test** in the left-hand folder tree, or search for `John_N_Orchestrate_Test` with the search box at the top of the list.
+**The new Data Extension:**
 
-**2. You're in a different Business Unit.** The integration created the DE in business unit **MID 546010305**, which is the enterprise (parent) BU. If your switcher in the top-right of Marketing Cloud shows a child BU, you won't see it. Switch to MID 546010305. DEs only appear across BUs if they're created under *Shared Data Extensions*, and this one wasn't.
+| Property | Value |
+|---|---|
+| Name | `John_N_Orchestrate_Test` |
+| External Key | `John_N_Orchestrate_Test` |
+| Data Extension ID | `2c6c5dc5-e8c0-f111-a5e6-5cba2c19e778` (new, different from the deleted one) |
+| Folder | **Data Extensions** (the top level, folder 32375) |
+| Business Unit | MID 546010305 |
+| Sendable / Subscriber Key relationship | No / none |
+| Rows | 0 |
 
-**3. The page is showing an old list.** Folder lists can be cached from before the DE was created (11:59 server time). A hard refresh (
+| # | Field | Type | Length | Nullable | Primary Key | Default |
+|---|---|---|---|---|---|---|
+| 1 | `ContactId` | Text | 50 | Yes | No | none |
+| 2 | `Email` | EmailAddress | 254 | No | No | none |
+| 3 | `CreatedDate` | Date | — | No | No | `GetDate()` |
+
+**How I checked it shows in the list:**
+- **Folder listing:** it's the newest of the 33 DEs in the top-level folder, so it appears first.
+- *
 
 _[summary truncated — see the session record for the full text]_
 <!-- orchestrate:session-state:end -->
