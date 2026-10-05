@@ -42,31 +42,34 @@
 <!-- Written by Orchestrate at the end of each session. Edits inside this block are
      replaced next session; anything OUTSIDE it is yours and is never touched. -->
 ### Engagement state — 2026-10-05
-**Status:** waiting — DE live, 0 rows. Platform blocked insert pending explicit confirmation dialog. Ready to proceed once dialog shown.
+**Status:** waiting — DE ready, 0 rows. Awaiting confirmation dialog to proceed with 5-row insert.
 
 **Done this session**
-- Confirmed DE still live with 0 rows, schema correct, no rows written
+- Verified DE still live with 0 rows, schema correct
+- Confirmed CSV valid: 5 rows, ContactId 16 chars, unique emails
+- Confirmed no primary key — insert-only write possible
 
 **Open items**
-- User provides explicit confirmation via dialog (Confirm/Cancel) to proceed with 5-row insert
+- User provides explicit confirmation via IRREVERSIBLE dialog (Confirm/Cancel)
 - Execute sfmc_bulk_upsert_data_extension_rows for 5 rows (TEST-CONTACT-001 to 005)
 - Read rows back and verify all 5 match CSV with CreatedDate populated
-- Report final import counts: CSV rows, inserted, rejected, and any rejection reasons
+- Report final import counts: CSV rows, inserted, rejected, rejection reasons
 
 **Decisions**
-- DE type: Standard, folder: Data Extensions (top level, 32375), Business Unit: MID 546010305
+- DE type: Standard, folder: Data Extensions (32375), Business Unit: MID 546010305
 - Fields: ContactId (Text 50, nullable), Email (EmailAddress 254, required), CreatedDate (Date, required, GetDate() default)
 - Import method: upsert (insert-only, no primary key, DE empty)
-- Undo method: delete the 5 test rows manually post-import
 - Confirmation gate required: irreversible bulk write must be gated by explicit user confirmation dialog
+- Undo method: delete the 5 test rows manually post-import
 
 **Blockers**
-- Platform requires explicit confirmation dialog before bulk row write; dialog unavailable in current session type
+- Confirmation dialog unavailable in current session type — requires session with question tool loaded
 
 **Next**
-- Start new Build session to display confirmation dialog (Confirm/Cancel)
-- User clicks Confirm in dialog
-- Run insert of 5 rows, read back all rows, verify CreatedDate filled, report counts and rejections
+- Start new BUILD session with confirmation dialog capability
+- Display IRREVERSIBLE dialog with Confirm/Cancel buttons
+- User clicks Confirm
+- Run insert of 5 rows, read back all rows, verify CreatedDate filled, report counts
 
 **Checked live on 2026-10-05:** the Salesforce org
 ### Last session — 2026-10-05
@@ -74,23 +77,24 @@
 |---|---|
 | Type | BUILD |
 | Outcome | COMPLETED |
-| Branch | `main` |
-| Session | `4248a4b9-0bc3-46fe-8666-2aeccb7b0147` |
+| Branch | `orchestrate/context` |
+| Session | `2ffe59c9-623c-42a8-8ec3-ae2cfcf05d5f` |
 **In its own words (excerpt):**
-I haven't inserted the records. You asked for the confirmation dialog, and I can't show it in this session.
+I haven't inserted any records. You asked me to use the IRREVERSIBLE confirmation dialog before writing, and I can't show that dialog in this session because the question tool it needs isn't loaded. The last session hit the same block.
 
-**What happened:**
-- The platform blocked the insert. Its message said to raise the confirmation through the question tool, with the header `IRREVERSIBLE` and **Confirm / Cancel** buttons, and to send the write only after you click Confirm.
-- That question tool isn't available in this session, so I can't show the dialog.
-- You said not to substitute a chat reply for it, so I won't ask you to type "Confirm" and won't set the override myself. Either one would skip the gate you asked for.
-- Nothing was written. I checked just now: `John_N_Orchestrate_Test` (ID `2c6c5dc5-e8c0-f111-a5e6-5cba2c19e778`, MID 546010305) still has **0 rows**, is not sendable, and is in folder 32375.
+I won't ask you to type "Confirm" in chat instead, and I won't set the override flag myself. Either would skip the gate you asked for.
 
-**What's ready to run once the dialog can be shown:**
-- 5 rows: TEST-CONTACT-001 to 005, with only `ContactId` and `Email`. `CreatedDate` is left for its `GetDate()` default.
-- The DE has no primary key and no existing rows, so this can only insert. No updates, no deletes, no schema change.
-- The CSV already passed validation: strict UTF-8, 5 rows, IDs of 16 characters, valid unique emails.
+**What I checked just now (read-only):**
+- **Target:** `John_N_Orchestrate_Test` exists. Its ID is `2c6c5dc5-e8c0-f111-a5e6-5cba2c19e778`, it's in folder 32375, and it isn't sendable.
+- **Schema:** it matches what you expect.
+  - `ContactId` is Text(50) and can be blank.
+  - `Email` is EmailAddress(254) and required.
+  - `CreatedDate` is a required Date with a default of `GetDate()`.
+  - There's no primary key, so the write can only add rows. It can't update or delete existing ones.
+- **Rows:** the DE has 0 rows. Both the metadata and a direct row query agree.
+- **CSV:** it has 5 data rows, TEST-CONTACT-001 to 005. Each email is valid and unique, and each ContactId is 16 characters, well under the 50 limit.
 
-**Ways to fin
+**Ready to run once you can confirm:** one bulk insert of 5 rows with only `ContactId` and `Email` mapped, le
 
 _[summary truncated — see the session record for the full text]_
 <!-- orchestrate:session-state:end -->
