@@ -42,29 +42,32 @@
 <!-- Written by Orchestrate at the end of each session. Edits inside this block are
      replaced next session; anything OUTSIDE it is yours and is never touched. -->
 ### Engagement state — 2026-10-05
-**Status:** done — DE John_N_Orchestrate_Test recreated in top-level folder, spec-compliant, live and searchable
+**Status:** on track — CSV validated, DE confirmed live, ready to import 5 rows. Awaiting proceed signal.
 
 **Done this session**
-- Recreated John_N_Orchestrate_Test in top-level Data Extensions folder (32375)
-- Verified new DE matches original spec: not sendable, no Subscriber Key relationship
-- Confirmed DE is visible in folder listing, name search, and External Key lookup
-- Validated all three required fields with correct types, lengths, and defaults
+- Verified DE John_N_Orchestrate_Test live in Salesforce org (ID 2c6c5dc5-…e778)
+- Validated CSV: 5 rows, UTF-8 clean, header matches mapping, all ContactId and Email values well-formed and unique
 
 **Open items**
-- None
+- Import 5 CSV rows via sfmc_bulk_upsert_data_extension_rows
+- Verify all 5 rows inserted with CreatedDate filled by GetDate() default
+- Report final counts: CSV rows, inserted, rejected, and any rejection reasons
 
 **Decisions**
 - DE type: Standard, folder: Data Extensions (top level, 32375), Business Unit: MID 546010305
 - Fields: ContactId (Text 50, nullable), Email (EmailAddress 254, required), CreatedDate (Date, required, GetDate() default)
 - Not sendable, no Subscriber Key relationship
-- New DE ID: 2c6c5dc5-e8c0-f111-a5e6-5cba2c19e778
+- Import method: upsert (insert-only in this case, no primary key, DE empty)
+- Undo method: delete the 5 test rows
 
 **Blockers**
 - None
 
 **Next**
-- User verifies DE is now visible in their Marketing Cloud interface
-- If still not visible: confirm business unit is MID 546010305 and hard-refresh browser
+- User confirms: proceed with import
+- Execute sfmc_bulk_upsert_data_extension_rows for 5 rows (ContactId, Email only)
+- Read rows back and verify all 5 match CSV with CreatedDate populated
+- Report final import counts and any rejections
 
 **Checked live on 2026-10-05:** the Salesforce org
 ### Last session — 2026-10-05
@@ -75,31 +78,27 @@
 | Branch | `main` |
 | Session | `4248a4b9-0bc3-46fe-8666-2aeccb7b0147` |
 **In its own words (excerpt):**
-I've recreated `John_N_Orchestrate_Test` in the top-level **Data Extensions** folder, so it shows in the main list without opening a subfolder. I read it back five ways and everything matches your spec.
+I've finished the checks before the import. Nothing has been written yet.
 
-**What happened to the first one:** it was deleted after my last check. Its ID returns "not found" and its External Key no longer matches anything, so the name and key were free to reuse.
+**The Data Extension (checked live):** `John_N_Orchestrate_Test` (ID `2c6c5dc5-…e778`) is in the top-level Data Extensions folder. It has the same 3 fields as before: `ContactId` Text(50) nullable, `Email` EmailAddress(254) required, `CreatedDate` Date required with the `GetDate()` default. It has **0 rows** right now.
 
-**The new Data Extension:**
+**CSV validation: all 5 rows pass.**
 
-| Property | Value |
+| Check | Result |
 |---|---|
-| Name | `John_N_Orchestrate_Test` |
-| External Key | `John_N_Orchestrate_Test` |
-| Data Extension ID | `2c6c5dc5-e8c0-f111-a5e6-5cba2c19e778` (new, different from the deleted one) |
-| Folder | **Data Extensions** (the top level, folder 32375) |
-| Business Unit | MID 546010305 |
-| Sendable / Subscriber Key relationship | No / none |
-| Rows | 0 |
+| Encoding | Decodes as strict UTF-8. No byte-order mark, line endings are LF only, every character is plain ASCII (which is valid UTF-8) |
+| Header | `ContactId,Email`, which matches the mapping exactly. No CreatedDate column |
+| Data rows | **5** |
+| ContactId | All present, all 16 characters (limit is 50), no duplicates |
+| Email | All present and well-formed (`name@domain.tld`), 22–25 characters (limit is 254), no duplicates |
 
-| # | Field | Type | Length | Nullable | Primary Key | Default |
-|---|---|---|---|---|---|---|
-| 1 | `ContactId` | Text | 50 | Yes | No | none |
-| 2 | `Email` | EmailAddress | 254 | No | No | none |
-| 3 | `CreatedDate` | Date | — | No | No | `GetDate()` |
-
-**How I checked it shows in the list:**
-- **Folder listing:** it's the newest of the 33 DEs in the top-level folder, so it appears first.
-- *
+| Row | ContactId | Email |
+|---|---|---|
+| 1 | TEST-CONTACT-001 | john.smith@example.com |
+| 2 | TEST-CONTACT-002 | sarah.johnson@example.com |
+| 3 | TEST-CONTACT-003 | michael.brown@example.com |
+| 4 | TEST-CONTACT-004 | david.wilson@example.com |
+| 5 | TEST-CONTACT-005 | emily.davis@example.com |
 
 _[summary truncated — see the session record for the full text]_
 <!-- orchestrate:session-state:end -->
