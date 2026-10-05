@@ -42,15 +42,18 @@
 <!-- Written by Orchestrate at the end of each session. Edits inside this block are
      replaced next session; anything OUTSIDE it is yours and is never touched. -->
 ### Engagement state — 2026-10-05
-**Status:** waiting — DE ready, 0 rows. Awaiting confirmation dialog to proceed with 5-row insert.
+**Status:** blocked — BUILD failed: confirmation dialog unavailable + CSV not attached. Needs new session with both.
 
 **Done this session**
-- Verified DE still live with 0 rows, schema correct
-- Confirmed CSV valid: 5 rows, ContactId 16 chars, unique emails
-- Confirmed no primary key — insert-only write possible
+- Verified DE schema matches expected mapping (ContactId, Email, CreatedDate)
+- Confirmed DE still has 0 rows, ready for insert
+- Identified two blockers preventing write execution
 
 **Open items**
-- User provides explicit confirmation via IRREVERSIBLE dialog (Confirm/Cancel)
+- User attaches John_N_test_records_UTF8.csv to next BUILD session
+- Start new BUILD session with confirmation dialog tool loaded
+- Display IRREVERSIBLE confirmation dialog (Confirm/Cancel)
+- User clicks Confirm
 - Execute sfmc_bulk_upsert_data_extension_rows for 5 rows (TEST-CONTACT-001 to 005)
 - Read rows back and verify all 5 match CSV with CreatedDate populated
 - Report final import counts: CSV rows, inserted, rejected, rejection reasons
@@ -64,37 +67,37 @@
 
 **Blockers**
 - Confirmation dialog unavailable in current session type — requires session with question tool loaded
+- CSV file not attached to this session — cannot proceed without email addresses for 5 test rows
 
 **Next**
-- Start new BUILD session with confirmation dialog capability
+- Attach John_N_test_records_UTF8.csv to next BUILD session
+- Start new BUILD session with confirmation dialog capability enabled
 - Display IRREVERSIBLE dialog with Confirm/Cancel buttons
-- User clicks Confirm
-- Run insert of 5 rows, read back all rows, verify CreatedDate filled, report counts
+- On user Confirm: run insert of 5 rows, read back all rows, verify CreatedDate filled, report counts
 
 **Checked live on 2026-10-05:** the Salesforce org
 ### Last session — 2026-10-05
 | | |
 |---|---|
 | Type | BUILD |
-| Outcome | COMPLETED |
+| Outcome | FAILED |
 | Branch | `orchestrate/context` |
-| Session | `2ffe59c9-623c-42a8-8ec3-ae2cfcf05d5f` |
+| Session | `8783e703-aab9-4180-986e-22bf5d910cae` |
 **In its own words (excerpt):**
-I haven't inserted any records. You asked me to use the IRREVERSIBLE confirmation dialog before writing, and I can't show that dialog in this session because the question tool it needs isn't loaded. The last session hit the same block.
+I haven't inserted anything. Two things are missing in this session, and either one alone would stop the write.
 
-I won't ask you to type "Confirm" in chat instead, and I won't set the override flag myself. Either would skip the gate you asked for.
+**1. I can't show the IRREVERSIBLE confirmation dialog.** The question tool that draws the Confirm/Cancel modal isn't available in this session, which is the same problem the last session hit. You asked for that dialog before any write. I won't swap in a typed "yes" in chat, and I won't set the confirmation flag myself.
 
-**What I checked just now (read-only):**
-- **Target:** `John_N_Orchestrate_Test` exists. Its ID is `2c6c5dc5-e8c0-f111-a5e6-5cba2c19e778`, it's in folder 32375, and it isn't sendable.
-- **Schema:** it matches what you expect.
+**2. The CSV isn't attached to this session.** No attached file came through, and there's no `John_N_test_records_UTF8.csv` anywhere I can read. Last session's notes say it held TEST-CONTACT-001 to 005, but they don't record the email addresses. I'm not going to rebuild the rows from memory.
+
+**What I checked just now (read-only), all fine:**
+- **Target:** `John_N_Orchestrate_Test` (ID `2c6c5dc5-e8c0-f111-a5e6-5cba2c19e778`) is in folder 32375 and is not sendable.
+- **Schema:** it matches your mapping.
   - `ContactId` is Text(50) and can be blank.
   - `Email` is EmailAddress(254) and required.
   - `CreatedDate` is a required Date with a default of `GetDate()`.
-  - There's no primary key, so the write can only add rows. It can't update or delete existing ones.
-- **Rows:** the DE has 0 rows. Both the metadata and a direct row query agree.
-- **CSV:** it has 5 data rows, TEST-CONTACT-001 to 005. Each email is valid and unique, and each ContactId is 16 characters, well under the 50 limit.
-
-**Ready to run once you can confirm:** one bulk insert of 5 rows with only `ContactId` and `Email` mapped, le
+  - There's no primary key, so the write can only add rows.
+- **Rows:** the DE has 0 rows. The 
 
 _[summary truncated — see the session record for the full text]_
 <!-- orchestrate:session-state:end -->
