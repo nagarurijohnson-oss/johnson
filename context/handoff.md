@@ -42,34 +42,32 @@
 <!-- Written by Orchestrate at the end of each session. Edits inside this block are
      replaced next session; anything OUTSIDE it is yours and is never touched. -->
 ### Engagement state — 2026-10-06
-**Status:** blocked — Folder 49911 verified: 3 DEs, 8 rows total. Orchestrate_Random_DE creation awaits user approval.
+**Status:** waiting — Awaiting user instruction: which contact phone number(s) to update and new values
 
 **Done this session**
-- Verified folder 49911 contains John_N_Orchestrate_Test (5 rows), John filter (2 rows), John_N_Orchestrate_Test Segment 0 (1 row)
-- Confirmed Orchestrate_Random_DE does not yet exist
+- Re-read John_N_Orchestrate_Test current phone numbers to confirm before update
 
 **Open items**
+- User specifies which contact(s) and new phone number(s) for update
+- Display before → after confirmation table
+- Execute phone number update via sfmc_bulk_upsert_data_extension_rows
+- Read rows back and verify new phone numbers saved
 - User approves creation of Orchestrate_Random_DE DE with 4 fields (ID, Name, Email, Date)
 - Create Orchestrate_Random_DE in folder 49911, read back to verify schema and 0 rows
 - Enable confirmation tool in session — required to display IRREVERSIBLE dialog before CSV insert
 - Display IRREVERSIBLE dialog for 5-row CSV insert into John_N_Orchestrate_Test
-- User clicks Confirm in modal
-- Execute sfmc_bulk_upsert_data_extension_rows for 5 CSV rows
-- Read rows back and verify all 5 match CSV with CreatedDate populated
-- Report final import counts: CSV rows, inserted, rejected, rejection reasons
 
 **Decisions**
 - John_N_Orchestrate_Test: Standard DE, folder 32375, upsert method, confirmation gate required
 - Orchestrate_Random_DE: Standard DE, folder 49911, external key John_Mike, 4 fields (ID primary key, Name, Email, Date), not sendable, no Subscriber Key link
 
 **Blockers**
-- User approval required before creating Orchestrate_Random_DE
 - Confirmation tool not available — platform/admin setting blocks IRREVERSIBLE modal display
 
 **Next**
-- User replies 'proceed' to create Orchestrate_Random_DE
-- Create DE and read back to verify schema and 0 rows
-- Raise with Orchestrate admin: enable confirmation tool for next BUILD session
+- User replies with contact identifier(s) and new phone number(s)
+- Show before → after table for confirmation
+- Execute update and verify in live system
 
 **Checked live on 2026-10-06:** the Salesforce org
 ### Last session — 2026-10-06
@@ -80,26 +78,25 @@
 | Branch | `orchestrate/context` |
 | Session | `dbc33f2a-5193-4665-918d-f4285692262b` |
 **In its own words (excerpt):**
-The "John Orchestrate Test" folder (category 49911) has **3 Data Extensions** with **8 rows** between them. I only read data and changed nothing.
+I can do that, but I need to know which row to change and what the new number should be. I haven't changed anything yet.
 
-### 1. John_N_Orchestrate_Test: standard Data Extension, 5 rows
-Key: `John_N_Orchestrate_Test` · Primary key: ContactKey
+These are the current phone numbers in **John_N_Orchestrate_Test** (I just re-read them):
 
-| ContactKey | Name | Email | Phone | CreatedDate |
-|---|---|---|---|---|
-| TEST-CONTACT-001 | John Smith | john.smith@example.com | 12758759879 | 10/6/2026 3:30:11 PM |
-| TEST-CONTACT-002 | Sarah Johnson | sarah.johnson@example.com | 12758759889 | 10/6/2026 3:30:11 PM |
-| TEST-CONTACT-003 | Michael Brown | michael.brown@example.com | 12758759332 | 10/6/2026 3:30:11 PM |
-| TEST-CONTACT-004 | David Wilson | david.wilson@example.com | 12758759454 | 10/6/2026 3:30:11 PM |
-| TEST-CONTACT-005 | Emily Davis | emily.davis@example.com | 12758759667 | 10/6/2026 3:30:11 PM |
+| ContactKey | Name | Current Phone |
+|---|---|---|
+| TEST-CONTACT-001 | John Smith | 12758759879 |
+| TEST-CONTACT-002 | Sarah Johnson | 12758759889 |
+| TEST-CONTACT-003 | Michael Brown | 12758759332 |
+| TEST-CONTACT-004 | David Wilson | 12758759454 |
+| TEST-CONTACT-005 | Emily Davis | 12758759667 |
 
-### 2. John filter: filtered Data Extension, 2 rows
-This is built from John_N_Orchestrate_Test.
+**Please reply with:**
+1. **Which contact(s):** a ContactKey or name, several of them, or "all".
+2. **The new phone number** for each one.
 
-| ContactKey | Name | Email | Phone | CreatedDate |
-|---|---|---|---|---|
-| TEST-CONTACT-001 | John Smith | john.smith@example.com | 12758759879 | 10/6/2026 3:30:11 PM |
-| TEST-CONTACT-002 | Sarah Johnson | sarah.johnson@example.com | 12758759889 | 10/6/2026 3:
+For example: *"Sarah Johnson → 12758750000"* or *"001 → 12750000001, 004 → 12750000004"*.
 
-_[summary truncated — see the session record for the full text]_
+When you reply, I'll show you a before → after table to confirm. After the update I'll read the rows back to check the new numbers saved. Only the Phone field will change. **John filter** and **Segment 0** are built from this table, so they'll show the new numbers after their next refresh.
+
+Sources: engagement context (context/handoff.md) · checked live: Marketing Cloud (John_N_Orchestrate_Test rows) · not checked: nothing
 <!-- orchestrate:session-state:end -->
