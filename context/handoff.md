@@ -45,10 +45,10 @@
 **Status:** blocked — Phone update blocked by unavailable confirmation dialog — awaiting admin enablement or manual edit
 
 **Done this session**
-- Verified current state of all 5 rows in John_N_Orchestrate_Test — no changes made
+- Verified current state of TEST-CONTACT-001 row in John_N_Orchestrate_Test — no changes made
 
 **Open items**
-- Admin enables confirmation dialog in Orchestrate settings, OR user manually edits 3 phone numbers in Marketing Cloud Contact Builder
+- Admin enables confirmation dialog in Orchestrate settings, OR user manually edits phone in Contact Builder (TEST-CONTACT-001 12758759879→12758750001, TEST-CONTACT-002 12758759889→12758750002, TEST-CONTACT-003 12758759332→12758750003)
 - Execute phone number update via sfmc_bulk_upsert_data_extension_rows on TEST-CONTACT-001, 002, 003
 - Read all 5 rows back and verify 3 new numbers saved, 2 unchanged
 - User approves creation of Orchestrate_Random_DE DE with 4 fields (ID, Name, Email, Date)
@@ -60,7 +60,7 @@
 - Proposed update: TEST-CONTACT-001 12758759879→12758750001, TEST-CONTACT-002 12758759889→12758750002, TEST-CONTACT-003 12758759332→12758750003
 
 **Blockers**
-- Confirmation tool not available — platform/admin setting blocks IRREVERSIBLE modal display, preventing phone number update write
+- Confirmation tool not available — platform/admin setting blocks IRREVERSIBLE modal display, preventing phone number update write (third consecutive session blocked by this)
 
 **Next**
 - Admin enables confirmation dialog in Orchestrate settings, OR user manually edits 3 phone numbers in Contact Builder
@@ -75,16 +75,17 @@
 | Branch | `orchestrate/context` |
 | Session | `1b84983c-0176-4408-ba7d-84146bcb3f53` |
 **In its own words (excerpt):**
-**I haven't changed anything. I can't run this update in this session.** You asked me to show the IRREVERSIBLE confirmation dialog before the update. The tool that displays that dialog still isn't available to me here, so I can't show it. Marketing Cloud also won't accept this write until someone clicks Confirm in that dialog, and a reply in chat doesn't count. This is the same thing that blocked the last two attempts, so I stopped rather than try the write again or get around the check.
+**I haven't updated the phone number, and I can't in this session.** Marketing Cloud's safeguard blocked the write. It only runs after you click **Confirm** in the IRREVERSIBLE confirmation dialog. The tool that shows that dialog isn't available to me here, and a "yes" typed in chat doesn't count as confirming. I won't get around the check.
 
-**What I checked (read-only):** `John_N_Orchestrate_Test` (key `John_N_Orchestrate_Test`, folder 49911) has 5 rows. `ContactKey` is its only primary key, so an upsert would match on it as you asked. This is the "before" picture:
+**Current state (checked live just now):**
 
 | ContactKey | Name | Email | CreatedDate | Current Phone | Requested Phone |
 |---|---|---|---|---|---|
 | TEST-CONTACT-001 | John Smith | john.smith@example.com | 10/6/2026 3:30:11 PM | 12758759879 | **12758750001** |
-| TEST-CONTACT-002 | Sarah Johnson | sarah.johnson@example.com | 10/6/2026 3:30:11 PM | 12758759889 | **12758750002** |
-| TEST-CONTACT-003 | Michael Brown | michael.brown@example.com | 10/6/2026 3:30:11 PM | 12758759332 | **12758750003** |
-| TEST-CONTACT-004
+
+**What I'd run once confirmation works:** one upsert on `John_N_Orchestrate_Test`, matched on ContactKey. It would send only `{"ContactKey":"TEST-CONTACT-001","phone":"12758750001"}`, so Name, Email and CreatedDate stay as they are and no other rows are touched. Afterwards I'd read the row back to check it.
+
+**The quickest way to get this done now:** edit the value yourself in Marketing Cloud. Go to **Contact Builder → Data Extensions → John_N_Orchestrate_Test → Records**, then change Phone on TEST-CONTACT-001 to `12758750001`. Tell me when it's done and I'll read the row back to check 
 
 _[summary truncated — see the session record for the full text]_
 <!-- orchestrate:session-state:end -->
