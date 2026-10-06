@@ -42,10 +42,10 @@
 <!-- Written by Orchestrate at the end of each session. Edits inside this block are
      replaced next session; anything OUTSIDE it is yours and is never touched. -->
 ### Engagement state — 2026-10-06
-**Status:** blocked — Phone update blocked by unavailable confirmation dialog — awaiting admin enablement or manual edit
+**Status:** blocked — Phone update blocked by confirmation dialog unavailability — awaiting manual edit or admin enablement (4th session)
 
 **Done this session**
-- Verified current state of TEST-CONTACT-001 row in John_N_Orchestrate_Test — no changes made
+- Verified TEST-CONTACT-001 current state in Salesforce org — phone still 12758759879, no changes written
 
 **Open items**
 - Admin enables confirmation dialog in Orchestrate settings, OR user manually edits phone in Contact Builder (TEST-CONTACT-001 12758759879→12758750001, TEST-CONTACT-002 12758759889→12758750002, TEST-CONTACT-003 12758759332→12758750003)
@@ -60,10 +60,10 @@
 - Proposed update: TEST-CONTACT-001 12758759879→12758750001, TEST-CONTACT-002 12758759889→12758750002, TEST-CONTACT-003 12758759332→12758750003
 
 **Blockers**
-- Confirmation tool not available — platform/admin setting blocks IRREVERSIBLE modal display, preventing phone number update write (third consecutive session blocked by this)
+- Confirmation tool not available — platform/admin setting blocks IRREVERSIBLE modal display, preventing phone number update write (fourth consecutive session blocked by this)
 
 **Next**
-- Admin enables confirmation dialog in Orchestrate settings, OR user manually edits 3 phone numbers in Contact Builder
+- User manually edits 3 phone numbers in Contact Builder (fastest path), OR admin enables confirmation dialog in Orchestrate settings
 - Once unblocked: start new Build session, execute upsert on John_N_Orchestrate_Test, read back all 5 rows to verify
 
 **Checked live on 2026-10-06:** the Salesforce org
@@ -75,17 +75,22 @@
 | Branch | `orchestrate/context` |
 | Session | `1b84983c-0176-4408-ba7d-84146bcb3f53` |
 **In its own words (excerpt):**
-**I haven't updated the phone number, and I can't in this session.** Marketing Cloud's safeguard blocked the write. It only runs after you click **Confirm** in the IRREVERSIBLE confirmation dialog. The tool that shows that dialog isn't available to me here, and a "yes" typed in chat doesn't count as confirming. I won't get around the check.
+**I haven't updated the phone number. Nothing was written.** The platform blocked the update until you click **Confirm** in the IRREVERSIBLE dialog. The tool that shows that dialog isn't available to me in this session, so I can't show it to you. A "yes" in chat doesn't count as that confirmation, and I won't set the flag without it.
 
-**Current state (checked live just now):**
+**Current row (checked just now):**
 
-| ContactKey | Name | Email | CreatedDate | Current Phone | Requested Phone |
-|---|---|---|---|---|---|
-| TEST-CONTACT-001 | John Smith | john.smith@example.com | 10/6/2026 3:30:11 PM | 12758759879 | **12758750001** |
+| Field | Current value | After the update |
+|---|---|---|
+| ContactKey | TEST-CONTACT-001 | unchanged (used to match the row) |
+| Name | John Smith | unchanged |
+| Email | john.smith@example.com | unchanged |
+| CreatedDate | 10/6/2026 3:30:11 PM | unchanged |
+| Phone | 12758759879 | **12758750001** |
 
-**What I'd run once confirmation works:** one upsert on `John_N_Orchestrate_Test`, matched on ContactKey. It would send only `{"ContactKey":"TEST-CONTACT-001","phone":"12758750001"}`, so Name, Email and CreatedDate stay as they are and no other rows are touched. Afterwards I'd read the row back to check it.
+**What the update would do:** change 1 existing row in `John_N_Orchestrate_Test`, matched on ContactKey (the only primary key). The update only sends `phone`, so the other fields aren't sent and no other row is touched. Once confirmed, I'd read the row back to check it.
 
-**The quickest way to get this done now:** edit the value yourself in Marketing Cloud. Go to **Contact Builder → Data Extensions → John_N_Orchestrate_Test → Records**, then change Phone on TEST-CONTACT-001 to `12758750001`. Tell me when it's done and I'll read the row back to check 
+**Ways to get this done:**
+1. **Edit it yourself (quickest):** in Marketing Cloud, go to Contact Builder → Data Extensions → `John_N_Orchestrate_Test` → Records, and set Phone on TEST-CONTACT-001 to `12758750001`. Tell me when it's done and I'll read
 
 _[summary truncated — see the session record for the full text]_
 <!-- orchestrate:session-state:end -->
