@@ -42,40 +42,38 @@
 <!-- Written by Orchestrate at the end of each session. Edits inside this block are
      replaced next session; anything OUTSIDE it is yours and is never touched. -->
 ### Engagement state — 2026-10-06
-**Status:** waiting — Two-step filtered table method ready; awaiting user choice on CreatedDate filter condition (1/2/3) and approval to proceed
+**Status:** blocked — Two-step filtered table method failed (500 error). Empty table created; awaiting user choice (a/b/c) to proceed.
 
 **Done this session**
-- Analyzed John_N_Orchestrate_Test: 15 rows, 5 fields, CreatedDate stored in seconds
-- Identified 10 rows with CreatedDate 9:38:48 AM (TEST-CONTACT-006 to 015)
-- Confirmed 5 rows with CreatedDate 3:30:11 PM (TEST-CONTACT-001 to 005)
-- Ruled out John_N_Orchestrate_Test Segment 0 (random-split segment, not filtered table)
-- Designed three filter condition options for user decision
+- Created saved filter JNOT_CreatedDate_0938_Filter (ID a7dfb812-…) on John_N_Orchestrate_Test, condition CreatedDate = 10/6/2026 9:38:48 AM
+- Created empty table JNOT_CreatedDate_0938_Filtered (ID a95b95c8-…, folder 49911) with correct 5 fields and types
+- Confirmed POST /automation/v1/filters with destinationObjectId returns 500 Internal Server Error; two-step method does not work
 
 **Open items**
-- User decision: proceed with filter condition (1) within-the-minute, (2) exactly 9:38:48 AM, or (3) whole day
-- User approval: confirm table name or provide alternative
-- Execute two-step retry on JMC_Amateur_Chef_Filtered: create standard table, then POST filter activity with destinationObjectId
-- Execute two-step method on JNOT_CreatedDate_0938_Filtered with chosen condition
-- Verify both filtered tables report type FilteredDataExtension and correct row counts
+- User decision: (a) delete empty table and finish in Email Studio, (b) fill table with SQL query, or (c) save under different name
+- Execute chosen path for JNOT_CreatedDate_0938_Filtered (expect 10 rows: TEST-CONTACT-006 to 015)
+- Execute two-step method on JMC_Amateur_Chef_Filtered (Email Studio steps from previous session)
 - Update TEST-CONTACT-001 phone to 12758750001 in Contact Builder
 - Create MCP_Email_Send_Test in folder 49889 with external key MCP_Email_Send_Test
+- Verify both filtered tables report correct row counts when complete
 
 **Decisions**
 - Option B: Standard table + SQL Query Activity for John_Mike_Customers_Amateur_Chef
 - Bio field: Text(100); all current bios fit
 - John_Mike_Customers: Standard DE, folder 49911, external key John_Mike_Customers, 5 fields, not sendable
-- Two-step creation: table first, then filter activity with destinationObjectId
-- Filtered table named JMC_Amateur_Chef_Filtered to avoid overwrite conflict
-- Recommended filter condition: (1) within-the-minute (9:38:00–9:39:00 AM) for 10 rows
+- Filter condition (1): within-the-minute (CreatedDate = 10/6/2026 9:38:48 AM) for 10 rows
+- Filtered table API route /automation/v1/filters is not workable; use Email Studio or SQL query instead
 
 **Blockers**
-- FilteredDataExtension creation via single-step POST /automation/v1/filters returns 500 Internal Server Error; two-step method not yet tested
+- POST /automation/v1/filters with destinationObjectId returns 500 Internal Server Error; filtered table creation via API not viable
+- Empty table JNOT_CreatedDate_0938_Filtered blocks Email Studio save under same name; user must choose delete, query fill, or rename
 
 **Next**
-- Await user reply: 'Proceed with (1)', (2), or (3)', optionally with alternative table name
-- If approved: create JNOT_CreatedDate_0938_Filtered table, then POST filter activity with destinationObjectId
-- In same pass: execute two-step method on JMC_Amateur_Chef_Filtered
-- Verify both tables report type FilteredDataExtension and expected row counts
+- Await user reply: (a) confirm delete empty table, (b) create SQL query to populate it, or (c) provide alternative table name
+- If (a): delete table, then in Email Studio open John_N_Orchestrate_Test → Filter → load JNOT_CreatedDate_0938_Filter → Save As JNOT_CreatedDate_0938_Filtered
+- If (b): create SQL query writing 10 matching rows into JNOT_CreatedDate_0938_Filtered
+- If (c): save Email Studio filtered table under new name (e.g. JNOT_CreatedDate_0938_FDE)
+- For JMC_Amateur_Chef_Filtered: apply Email Studio steps from previous session (no API route available)
 
 **Checked live on 2026-10-06:** the Salesforce org
 ### Last session — 2026-10-06
@@ -86,19 +84,14 @@
 | Branch | `orchestrate/context` |
 | Session | `58b3d8ba-c450-493f-9233-a0d9e3d2720f` |
 **In its own words (excerpt):**
-I haven't created anything yet. The filter needs one decision from you, because no row is stamped exactly 9:38 AM. The API route for filtered tables is also still unproven.
+The filtered table wasn't created. The two-step method failed with the same `500 Internal Server Error` as the earlier attempts. I created the saved filter, but the table that now exists is a plain, empty table, not a filtered one.
 
-**What I checked (read-only)**
-- `John_N_Orchestrate_Test` (folder 49911) has 15 rows and 5 fields. `CreatedDate` is a Date field that stores seconds.
-- **10 rows** have `CreatedDate` = 10/6/2026 **9:38:48 AM**: TEST-CONTACT-006 to 015 (Olivia Martinez to Daniel Lewis).
-- The other **5 rows** (001 to 005) are 10/6/2026 3:30:11 PM.
-- A filter of "equals 9:38:00 AM" would match **0 rows**, because of the 48 seconds.
-- There's also a table called `John_N_Orchestrate_Test Segment 0`. It's a random-split segment, not a filtered table, so it doesn't meet this request.
+**Created and confirmed by reading back**
+- **Saved filter `JNOT_CreatedDate_0938_Filter`** (ID `a7dfb812-d8c6-493c-80d2-efe521ecd3ac`). Its source is `John_N_Orchestrate_Test` and its condition is CreatedDate equals `10/6/2026 9:38:48 AM`, as you chose. The first create attempt was rejected because the description contained `/` and `:` ("Description cannot contain illegal characters"). The second attempt, with a plain-text description, worked.
+- **Table `JNOT_CreatedDate_0938_Filtered`** (ID `a95b95c8-…`, folder 49911). It has the 5 source fields with the right types: CreatedDate is Date, ContactKey is the primary key. It is **type `DataExtension`, not `FilteredDataExtension`, and has 0 rows.**
 
-**Open from your last request.** `JMC_Amateur_Chef_Filtered` still doesn't exist. Every API attempt to create a filtered table has returned `500 Internal Server Error`. The best lead so far is the two-step method: create the table first, then link the filter activity to it. That method hasn't been tested yet, and this table would use it too.
-
-**Proposed plan**
-1. **Saved filter** `JNOT_CreatedDate_0938_Filter` on `John_N_Orchestrate_Test`, using the co
+**What failed**
+- **Linking them:** `POST /automation/v1/filters` with `destinationObjectId` set to the new table, matching the working example field for field. It returned `500 Internal Server Error` (`errorcode: 0`). No filter activity was created; there are 
 
 _[summary truncated — see the session record for the full text]_
 <!-- orchestrate:session-state:end -->
