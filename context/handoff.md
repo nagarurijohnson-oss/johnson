@@ -42,14 +42,14 @@
 <!-- Written by Orchestrate at the end of each session. Edits inside this block are
      replaced next session; anything OUTSIDE it is yours and is never touched. -->
 ### Engagement state — 2026-10-06
-**Status:** blocked — 5 sample rows ready but blocked by confirmation dialog — user must import CSV manually or admin enables dialog
+**Status:** blocked — 5 sample rows ready; import blocked by confirmation dialog — user must import CSV manually or admin enables dialog
 
 **Done this session**
-- Verified John_Mike_Customers still empty (0 rows)
-- Prepared 5 sample rows CSV with all fields and bios ≤20 chars
+- Verified John_Mike_Customers still at 0 rows before and after import attempt
+- Confirmed CSV file exists with 5 sample rows (CreatedDate column blank)
 
 **Open items**
-- User imports John_Mike_Customers_sample_rows.csv manually via Contact Builder, or admin enables confirmation dialog
+- User imports John_Mike_Customers_sample_rows.csv manually via Contact Builder (add CreatedDate values if needed)
 - Read back all 5 rows from John_Mike_Customers to verify import succeeded
 - User confirms template choice (A or B) for MCP_Email_Send_Test creation
 - Create MCP_Email_Send_Test in folder 49889 with external key MCP_Email_Send_Test
@@ -68,7 +68,7 @@
 - Template choice (A or B) required before MCP_Email_Send_Test creation can proceed
 
 **Next**
-- User imports CSV via Contact Builder → Data Extensions → John_Mike_Customers → Import, or admin enables dialog
+- User imports CSV via Contact Builder → Data Extensions → John_Mike_Customers → Import (add CreatedDate in YYYY-MM-DD if desired)
 - Read back all 5 rows to confirm import succeeded
 - User provides template choice (A or B) for MCP_Email_Send_Test
 - Escalate confirmation dialog blocker to Orchestrate admin
@@ -82,17 +82,15 @@
 | Branch | `orchestrate/context` |
 | Session | `4a65901d-f270-45ec-96fa-260777323520` |
 **In its own words (excerpt):**
-The 5 rows are not in `John_Mike_Customers` yet. Nothing was written, and the data extension still has 0 rows.
+I couldn't import the file, so `John_Mike_Customers` still has 0 rows. I checked it just before and after the attempt.
 
-**Why it stopped:** Orchestrate treats a data extension row write as irreversible. Before it will run the insert, you have to click Confirm on an acknowledgement dialog, and I can't open that dialog in this session. It's the same blocker that has held up the TEST-CONTACT-001 phone change. I also didn't push the rows through a different write tool, because that would skip the check you're meant to approve.
+**What blocked it:** Orchestrate treats writing rows to a data extension as an action that can't be undone. Before it runs the write, you have to click Confirm on a confirmation dialog. When I sent the 5 rows, the write was stopped at that check, and this session has no way to open the dialog. I didn't try a different write tool or a separate import activity, because that would skip the approval you're supposed to give. The data extension has no problem. This is the same block that's holding up the TEST-CONTACT-001 phone change.
 
-**Import them yourself in about a minute.** I've attached a CSV with the 5 rows exactly as listed to this session.
-1. Open **Contact Builder → Data Extensions → John Orchestrate Test → John_Mike_Customers**.
-2. Click **Import**, choose the attached `John_Mike_Customers_sample_rows.csv`, and set the delimiter to comma.
-3. Choose **Add and Update**. Check that the 5 columns map to the matching fields; the names are identical. The dates are in YYYY-MM-DD format.
-4. Finish the import. Then tell me, and I'll read the rows back and confirm all 5 landed correctly.
+**The file you attached has no CreatedDate values.** That column is blank on all 5 rows, unlike the rows I proposed earlier, which had dates from 2026-09-01 to 2026-09-29. CreatedDate can be empty, so the import will still work, but those rows will have no date. If you want the dates, add them to the CSV in YYYY-MM-DD format before you import.
 
-**Or get the dialog fixed:** an Orchestrate admin can turn the confirmation dialog back on. After that, I can ins
+**To import it yourself (about a minute):**
+1. In Marketing Cloud, go to **Contact Builder → Data Extensions → John Orchestrate Test → John_Mike_Customers**.
+2. Click **Import** and upload `John_Mi
 
 _[summary truncated — see the session record for the full text]_
 <!-- orchestrate:session-state:end -->
