@@ -42,38 +42,35 @@
 <!-- Written by Orchestrate at the end of each session. Edits inside this block are
      replaced next session; anything OUTSIDE it is yours and is never touched. -->
 ### Engagement state — 2026-10-06
-**Status:** waiting — Bio field (Text 20) ready to add to John_Mike_Customers — awaiting confirmation before write
+**Status:** on track — Bio field added to John_Mike_Customers (Text 20). Awaiting template choice for MCP_Email_Send_Test and phone number confirmation.
 
 **Done this session**
-- Verified John_Mike_Customers has 4 fields, Bio name is available
-- Proposed Bio field: Text type, length 20, optional
+- Added Bio field (Text, length 20, optional) to John_Mike_Customers
+- Read back all 5 fields from John_Mike_Customers to verify save
 
 **Open items**
-- User confirms Bio field length (20 chars vs 200/500) before adding to John_Mike_Customers
-- Add Bio field to John_Mike_Customers and read back to verify
+- User confirms template choice (A or B) for MCP_Email_Send_Test creation
+- Create MCP_Email_Send_Test in folder 49889 with external key MCP_Email_Send_Test from chosen template
 - User manually edits TEST-CONTACT-001 phone to 12758750001 in Contact Builder, OR admin enables confirmation dialog
 - Execute phone number update via upsert on John_N_Orchestrate_Test, read back all 5 rows to verify
 - Load sample rows into John_Mike_Customers DE, or make it sendable if user plans to email contacts
-- Choose template (A or B) for MCP_Email_Send_Test data extension creation
-- Escalate persistent confirmation dialog issue to Orchestrate admin — blocking for 9 sessions, requires platform fix
+- Escalate persistent confirmation dialog issue to Orchestrate admin — blocking for 10 sessions, requires platform fix
 
 **Decisions**
+- Bio field: Text type, length 20 chars, optional, added to John_Mike_Customers
 - John_N_Orchestrate_Test: Standard DE, folder 32375, upsert method, confirmation gate required
-- Orchestrate_Random_DE: Standard DE, folder 49911, external key John_Mike, 4 fields (ID PK, Name, Email, Date), not sendable
-- John_Mike_Customers: Standard DE, folder 49911, external key John_Mike_Customers, 4 fields (ContactKey PK, FirstName, Email, CreatedDate), not sendable unless user specifies
-- MCP_Email_Send_Test: will be created in folder 49889 (MCP_Test) with external key MCP_Email_Send_Test — awaiting template selection
-- Bio field: Text type proposed; length 20 chars (short, safer) vs 200/500 (more room for sentences) — user to decide
+- Orchestrate_Random_DE: Standard DE, folder 49911, external key John_Mike, 4 fields, not sendable
+- John_Mike_Customers: Standard DE, folder 49911, external key John_Mike_Customers, 5 fields (added Bio), not sendable unless user specifies
+- MCP_Email_Send_Test: will be created in folder 49889 with external key MCP_Email_Send_Test — awaiting template selection
 
 **Blockers**
-- Confirmation dialog unavailable — platform/admin setting blocks IRREVERSIBLE modal display, preventing phone number update write (ninth consecutive session)
+- Confirmation dialog unavailable — platform/admin setting blocks IRREVERSIBLE modal display, preventing phone number update write (tenth consecutive session)
 - Template choice (A or B) required before MCP_Email_Send_Test creation can proceed
-- Bio field length decision required before write to John_Mike_Customers
 
 **Next**
-- User confirms Bio field length: proceed with Text 20, or specify 200/500
-- Add Bio field to John_Mike_Customers, read back to confirm save
 - User replies with template choice: A (TriggeredSendDataExtension) or B (SendLog) for MCP_Email_Send_Test
 - Create MCP_Email_Send_Test from chosen template in folder 49889 with external key MCP_Email_Send_Test
+- User manually updates TEST-CONTACT-001 phone in Contact Builder or requests admin enable confirmation dialog
 
 **Checked live on 2026-10-06:** the Salesforce org
 ### Last session — 2026-10-06
@@ -84,19 +81,25 @@
 | Branch | `orchestrate/context` |
 | Session | `4a65901d-f270-45ec-96fa-260777323520` |
 **In its own words (excerpt):**
-I haven't changed anything yet. `John_Mike_Customers` has 4 fields and none of them is called `Bio`, so the name is free.
+I added `Bio` to `John_Mike_Customers` and read the fields back to check it. It saved as you asked: Text, length 20, not a primary key, and can be left empty.
 
-**Field to add**
+**Fields now on `John_Mike_Customers` (read back from Marketing Cloud)**
 
 | # | Field | Type | Length | Primary key | Required |
 |---|---|---|---|---|---|
-| 5 | Bio | Text | 20 | No | No (can be empty) |
+| 1 | ContactKey | Text | 50 | Yes | Yes |
+| 2 | FirstName | Text | 50 | No | No |
+| 3 | Email | EmailAddress | 254 | No | No |
+| 4 | CreatedDate | Date | — | No | No |
+| 5 | **Bio** | **Text** | **20** | **No** | **No** |
 
-**On the type:** Marketing Cloud field types are Text, Number, Date, Boolean, EmailAddress, Phone, Decimal and Locale. You asked for Text, and I'd use Text too. One thing to check is the length. 20 characters is very short for a bio, about three or four words. You can make a Text field longer later, but you can't make it shorter, so starting small is the safer choice. Still, if you want room for a sentence or two, 200 or 500 would suit better.
+The data extension now has 5 fields. The other four didn't change. I didn't touch any SQL queries.
 
-**Before you confirm:**
-- **This can't be fully undone.** Once the field is added, you can't remove it through the API. Taking it out later would mean deleting it by hand in Contact Builder, or rebuilding the data extension.
-- **SQL queries:** I created this data extension earlier today and don't expect any SQL Query activities to write to it. My check for queries that target it didn't run, because Marketing Cloud doesn't allow that filter. If you know of a query that writes
+**Still open:**
+- **MCP_Email_Send_Test:** I'm still waiting for you to pick a template. Reply **A** for TriggeredSendDataExtension or **B** for SendLog.
+- **TEST-CONTACT-001 phone number:** this change on `John_N_Orchestrate_Test` is still blocked because the confirmation step it needs isn't available here. You can change it to 12758750001 by hand in Contact Builder, or an Orchestrate admin can turn that confirmation step on.
+
+Sources: engagement context (`context/handoff.md`, for the open items) · checked live: Marketing Cloud (added the field, then rea
 
 _[summary truncated — see the session record for the full text]_
 <!-- orchestrate:session-state:end -->
