@@ -42,20 +42,22 @@
 <!-- Written by Orchestrate at the end of each session. Edits inside this block are
      replaced next session; anything OUTSIDE it is yours and is never touched. -->
 ### Engagement state — 2026-10-06
-**Status:** on track — PK constraint on ContactKey confirmed twice via insert rejection (error 71005). Table stable at 5 rows.
+**Status:** waiting — Awaiting three decisions on AUTO_Daily_Data_Load before build: step choice, time zone, folder
 
 **Done this session**
-- Re-ran insert-only test with duplicate ContactKey JMC-0001
-- Confirmed primary key enforcement repeatable: error 71005 both runs
-- Verified John_Mike_Customers unchanged: 5 rows, JMC-0001 still Aarav
+- Confirmed AUTO_Daily_Data_Load name is available
+- Mapped existing automation folders and schedules
+- Identified Loyalty_Daily_Recognition stuck in Building (no steps)
 
 **Open items**
+- User decides: step for AUTO_Daily_Data_Load (existing activity or shell only)
+- User decides: time zone for 9:00 AM (IST or Central Standard Time)
+- User decides: folder for AUTO_Daily_Data_Load (32393 or other)
 - User creates filtered table JNOT_CreatedDate_0938_Filtered in Email Studio UI
 - Verify filtered table type, source, and row count (expect 10: TEST-CONTACT-006 to 015)
-- Confirm date condition matches; if empty, switch to within-the-minute filter
+- Clarify: restore JMC-0004 FirstName from 'Updated' to 'Meera' or leave as-is
 - Execute two-step method on JMC_Amateur_Chef_Filtered
 - Update TEST-CONTACT-001 phone to 12758750001 in Contact Builder
-- Clarify: restore JMC-0004 FirstName from 'Updated' to 'Meera' or leave as-is
 
 **Decisions**
 - Option B: Standard table + SQL Query Activity for John_Mike_Customers_Amateur_Chef
@@ -63,18 +65,17 @@
 - John_Mike_Customers: Standard DE, folder 49911, external key John_Mike_Customers, 5 fields, not sendable
 - Filter condition (1): within-the-minute (CreatedDate = 10/6/2026 9:38:48 AM) for 10 rows
 - API creation of filtered tables not viable; UI creation required
-- Test PK constraint via insert-only route (not upsert) — CONFIRMED effective both runs
+- Test PK constraint via insert-only route — CONFIRMED effective both runs
 - Primary key ContactKey is enforced; insert-only rejects duplicates; upserts update instead
 
 **Blockers**
 - None
 
 **Next**
-- User creates filtered table JNOT_CreatedDate_0938_Filtered in Email Studio (3 clicks)
-- User clarifies: restore JMC-0004 FirstName to 'Meera' or leave 'Updated'
-- Verify filtered table row count and date condition
-- Execute two-step method on JMC_Amateur_Chef_Filtered
-- Update TEST-CONTACT-001 phone in Contact Builder
+- User replies with three choices: step (1a/1b), time zone (IST/CST), folder (32393/other)
+- Create AUTO_Daily_Data_Load automation with chosen step and schedule
+- User creates filtered table JNOT_CreatedDate_0938_Filtered in Email Studio
+- Verify filtered table and clarify JMC-0004 FirstName restoration
 
 **Checked live on 2026-10-06:** the Salesforce org
 ### Last session — 2026-10-06
@@ -85,18 +86,19 @@
 | Branch | `orchestrate/context` |
 | Session | `58b3d8ba-c450-493f-9233-a0d9e3d2720f` |
 **In its own words (excerpt):**
-I ran the test again and Marketing Cloud rejected the duplicate `ContactKey` a second time. The table hasn't changed.
+I haven't created anything yet. The name `AUTO_Daily_Data_Load` is free. Before I build it I need you to settle three things, because the answers change what gets created.
 
-**What I sent:** one row through the insert-only route, using ContactKey **`JMC-0001`** (that key already exists) with FirstName `DuplicateTest`, Email `duplicate.test@example.com` and Bio `PK duplicate test`. The request ID is `c14fefe7-7142-4264-831f-75b57a8e1bbc`.
+**What I checked (read-only)**
+- No automation called `AUTO_Daily_Data_Load` exists in this business unit (27 automations in total).
+- Most automations here sit in folder **32393**, and the Re-Engagement ones are in 49860.
+- Existing schedules use either **Central Standard Time** or **India Standard Time**. You're on IST, so 9:00 AM could mean either.
+- `Loyalty_Daily_Recognition` was created with no steps and is stuck in **Building** status with no schedule. An automation needs at least one activity before its schedule can be switched on.
 
-**What came back:** `status: Error`, error code **71005**:
-> Violation of PRIMARY KEY constraint 'PK_C546010305_4cac233d-86c1-f111-a5e6-5cba2c19e778'. Cannot insert duplicate key in object 'C546010305.John_Mike_Customers'. The duplicate key value is (JMC-0001). The statement has been terminated.
-
-**What I checked afterwards:** the table still has **5 rows**. JMC-0001 is still Aarav, aarav.sample@example.com, 10/6/2026 9:48:31 AM, "Loves hiking". The `DuplicateTest` row was never written, so there's nothing to clean up.
-
-This matches the first run: the primary key on `ContactKey` is enforced, and an insert with an existing key fails with error 71005. Upserts work differently. They don't raise this error and update the existing row instead.
-
-Row JMC-0004 still has FirstName **"Updated"**. If you want it
+**Three choices (reply with all three together)**
+1. **What should it run?** Without a step it can be created but not actually scheduled to run.
+   - (a) An existing activity, e.g. the SQL query `John_Mike_Customers_Amateur_Chef_Query` (refreshes `John_Mike_Customers_Amateur_Chef`). Name any other query, import or file transfer you want instead.
+   - (b) No step for now. I create the shell with the Monday schedule saved but not active, and you or I add the step later.
+2. **Ti
 
 _[summary truncated — see the session record for the full text]_
 <!-- orchestrate:session-state:end -->
