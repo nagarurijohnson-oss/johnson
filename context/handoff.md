@@ -42,7 +42,7 @@
 <!-- Written by Orchestrate at the end of each session. Edits inside this block are
      replaced next session; anything OUTSIDE it is yours and is never touched. -->
 ### Engagement state — 2026-10-06
-**Status:** at risk — Bulk insert blocked by platform safety check (6th time). User can import 10 rows manually via Email Studio; admin escalation needed.
+**Status:** blocked — Bulk insert blocked by platform safety check (7th time). Manual import via Email Studio required; admin escalation urgent.
 
 **Done this session**
 - Confirmed John_N_Orchestrate_Test still has 5 rows (TEST-CONTACT-001 to 005)
@@ -53,7 +53,7 @@
 - User imports 10 rows (TEST-CONTACT-006 to 015) manually via Email Studio → Subscribers → Data Extensions → John_N_Orchestrate_Test → Import
 - User uploads CSV with 10 rows; maps ContactKey, Name, Email, phone; leaves CreatedDate unmapped
 - User confirms import succeeded and table now has 15 total rows
-- Admin enables confirmation pop-up for Marketing Cloud writes in BUILD sessions (6 consecutive blocks)
+- Admin enables confirmation pop-up for Marketing Cloud writes in BUILD sessions (7 consecutive blocks)
 - User confirms template choice (A or B) for MCP_Email_Send_Test creation
 - Create MCP_Email_Send_Test in folder 49889 with external key MCP_Email_Send_Test
 - User manually updates TEST-CONTACT-001 phone to 12758750001 in Contact Builder, OR admin enables confirmation dialog
@@ -67,13 +67,13 @@
 - 10 new test contacts staged for John_N_Orchestrate_Test (TEST-CONTACT-006 to 015)
 
 **Blockers**
-- Confirmation dialog unavailable in BUILD session — platform requires irreversible modal click before upsert executes (6 consecutive sessions blocked)
+- Confirmation dialog unavailable in BUILD session — platform requires irreversible modal click before upsert executes (7 consecutive sessions blocked)
 
 **Next**
 - User imports 10 rows via Email Studio manually using provided CSV
 - User confirms import succeeded; table now has 15 rows
 - Read back John_N_Orchestrate_Test to verify all 15 rows present
-- Admin escalation: enable confirmation pop-up for Marketing Cloud writes in BUILD sessions
+- Admin escalation: enable confirmation pop-up for Marketing Cloud writes in BUILD sessions (critical — 7 blocks)
 
 **Checked live on 2026-10-06:** the Salesforce org
 ### Last session — 2026-10-06
@@ -86,17 +86,15 @@
 **In its own words (excerpt):**
 The 10 rows were **not added**. `John_N_Orchestrate_Test` still has 5 rows (TEST-CONTACT-001 to 005).
 
-**What happened:** I found the table and sent the insert, and the platform's safety check stopped it before it ran. The check treats any Marketing Cloud row write as permanent. It needs you to click Confirm in a separate on-screen pop-up, and I can't show that pop-up in this session. As I said I would, I stopped there and didn't try to get around it. Nothing in the table changed.
-
-**A correction:** last turn I gave you the wrong table in the import path. I wrote `John_Mike_Customers`, but the rows belong in `John_N_Orchestrate_Test`. The steps below use the right one.
+I sent the insert again after your "confirm all", and the safety check stopped it before it ran, the same as last time. The check only accepts a click on Confirm in its own on-screen pop-up. A typed reply doesn't count, even an explicit one like yours. This session doesn't have the tool that shows that pop-up, so I can't get the click the check needs. I didn't set the override flag myself, because that would skip the check you're supposed to control.
 
 **To add the rows yourself (about 2 minutes):**
 1. Go to **Email Studio → Subscribers → Data Extensions → John_N_Orchestrate_Test → Import**.
-2. Upload the CSV attached to this session. It has the 10 rows: ContactKey, Name, Email, phone.
-3. Choose **Add and Update** and map the columns by matching name. Leave CreatedDate unmapped so it fills in automatically.
-4. After it finishes, the table should have **15 rows**. Tell me and I'll read it back to check.
+2. Upload the CSV attached to this session. It has the 10 rows with ContactKey, Name, Email and phone.
+3. Choose **Add and Update** and match the columns by name. Leave CreatedDate unmapped so it fills in automatically.
+4. Tell me when it's done. I'll read the table back and check that it has 15 rows.
 
-**For a lasting fix:** an admin needs to turn on the confirma
+**To stop this happening again:** this is the seventh Marketing Cloud write blocked this way. An admin needs to turn on the confirmation pop-up for Build sessions. After that, a single click from
 
 _[summary truncated — see the session record for the full text]_
 <!-- orchestrate:session-state:end -->
