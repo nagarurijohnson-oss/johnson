@@ -42,12 +42,10 @@
 <!-- Written by Orchestrate at the end of each session. Edits inside this block are
      replaced next session; anything OUTSIDE it is yours and is never touched. -->
 ### Engagement state — 2026-10-06
-**Status:** at risk — Table deleted successfully; orphaned query remains and risks interfering with filtered table creation
+**Status:** at risk — Table deleted; orphaned query & filtered table creation remain. Session checked live but cannot create FilteredDataExtension via API.
 
 **Done this session**
-- Deleted John_Mike_Customers_Amateur_Chef table (ID d67281f5-9fc1-f111-a5e6-5cba2c19e778) via REST API
-- Verified table deletion: lookup by ID returns 'not found', name search shows only John_Mike_Customers
-- Confirmed source table John_Mike_Customers intact with 5 rows in folder 49911
+- Verified John_Mike_Customers_Amateur_Chef table deletion persists (name free, source table intact)
 
 **Open items**
 - User confirms deletion of orphaned query John_Mike_Customers_Amateur_Chef_Query (reply 'delete the query')
@@ -67,6 +65,7 @@
 
 **Blockers**
 - Orphaned query John_Mike_Customers_Amateur_Chef_Query will fail if run and may overwrite filtered table if recreated under same name
+- No API endpoint available to create FilteredDataExtension; Email Studio manual creation required
 
 **Next**
 - User replies 'delete the query' to remove orphaned query
@@ -82,13 +81,17 @@
 | Branch | `main` |
 | Session | `f98da8e8-f066-4149-bfcb-7eaca34f39fa` |
 **In its own words (excerpt):**
-I deleted the table `John_Mike_Customers_Amateur_Chef`, and it's gone from Marketing Cloud. Looking up its ID now returns "not found", and searching for the name only finds `John_Mike_Customers`.
+I can't create a native Filtered Data Extension with the tools in this session, so nothing has been created. Email Studio can make one; I can't. That gap is in my tools, not a limit of Marketing Cloud.
 
-- **Your source table wasn't affected.** `John_Mike_Customers` still has its 5 rows and 5 fields in folder 49911.
-- **The name is free.** You can now create the filtered table in Email Studio as `John_Mike_Customers_Amateur_Chef`.
-- **How it went through:** I tried deleting through one Marketing Cloud API (SOAP) twice, and both attempts failed with "Token Expired". Nothing was deleted by those attempts. I then deleted it through the other API (REST), which worked. I passed the safety-check flag myself based on your typed "Confirm".
+**What I checked just now (read-only)**
+- **No filtered table exists yet.** Searching for `John_Mike_Customers` finds only the source table, with 5 rows in folder 49911. The name `John_Mike_Customers_Amateur_Chef` is still free, since I deleted my standard table last turn.
+- **I tried another route, and it doesn't exist.** `/email/v1/filters/filterdefinition` returned **404 Not Found**. Earlier, `/email/v1/filteredCustomObjects` also returned 404, and the Data Extension create call has no filter or source-table settings. Any table I create comes out as standard type, which is what you said you don't want.
 
-**The query is still there.** You replied "Confirm" without saying (a) or (b). Both options delete the table, so I did that part only. The query `John_Mike_Customers_Amateur_Chef_Query` now points at a table that doesn't exist. If anyone runs it, it will fail. Once you create your filtered table under the same name, the query would overwrite its contents and could interfere with it. I'd recommend deleting the query too. Reply **"delete the query"** if you want
+**Create it in Email Studio (about 2 minutes)**
+1. Go to **Email Studio → Subscribers → Data Extensions** and open `John_Mike_Customers`.
+2. Click **Filter**. Or use **Create → Filtered Data Extension** and pick `John_Mike_Customers` as the source.
+3. Drag **Bio** into the filter area and set it to **is equal to** `Amateur chef`.
+4. Save it as `John_Mike_Customers_Amateur_Chef` in
 
 _[summary truncated — see the session record for the full text]_
 <!-- orchestrate:session-state:end -->
