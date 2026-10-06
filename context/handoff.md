@@ -42,10 +42,10 @@
 <!-- Written by Orchestrate at the end of each session. Edits inside this block are
      replaced next session; anything OUTSIDE it is yours and is never touched. -->
 ### Engagement state — 2026-10-06
-**Status:** blocked — Phone update blocked by unavailable confirmation tool — awaiting admin enablement or manual edit
+**Status:** blocked — Phone update blocked by unavailable confirmation dialog — awaiting admin enablement or manual edit
 
 **Done this session**
-- Verified current state of all 5 rows in John_N_Orchestrate_Test table — no changes made
+- Verified current state of all 5 rows in John_N_Orchestrate_Test — no changes made
 
 **Open items**
 - Admin enables confirmation dialog in Orchestrate settings, OR user manually edits 3 phone numbers in Marketing Cloud Contact Builder
@@ -73,18 +73,18 @@
 | Type | BUILD |
 | Outcome | COMPLETED |
 | Branch | `orchestrate/context` |
-| Session | `dbc33f2a-5193-4665-918d-f4285692262b` |
+| Session | `1b84983c-0176-4408-ba7d-84146bcb3f53` |
 **In its own words (excerpt):**
-**I haven't changed anything, and I can't run this update in this session.** You asked me to show the IRREVERSIBLE confirmation dialog before updating. The tool that displays that dialog still isn't available to me here, so I can't show it. Marketing Cloud also blocks this write until someone confirms in that dialog, and a reply in chat doesn't count as confirmation. This is the same block the last two attempts hit. Trying the write again would give the same result, so I've stopped rather than work around the check.
+**I haven't changed anything. I can't run this update in this session.** You asked me to show the IRREVERSIBLE confirmation dialog before the update. The tool that displays that dialog still isn't available to me here, so I can't show it. Marketing Cloud also won't accept this write until someone clicks Confirm in that dialog, and a reply in chat doesn't count. This is the same thing that blocked the last two attempts, so I stopped rather than try the write again or get around the check.
 
-**What's in the table now** (John_N_Orchestrate_Test, 5 rows, read just now, so this is the "before" picture):
+**What I checked (read-only):** `John_N_Orchestrate_Test` (key `John_N_Orchestrate_Test`, folder 49911) has 5 rows. `ContactKey` is its only primary key, so an upsert would match on it as you asked. This is the "before" picture:
 
-| ContactKey | Name | Email | Current Phone | → Requested Phone | CreatedDate |
+| ContactKey | Name | Email | CreatedDate | Current Phone | Requested Phone |
 |---|---|---|---|---|---|
-| TEST-CONTACT-001 | John Smith | john.smith@example.com | 12758759879 | **12758750001** | 10/6/2026 3:30:11 PM |
-| TEST-CONTACT-002 | Sarah Johnson | sarah.johnson@example.com | 12758759889 | **12758750002** | 10/6/2026 3:30:11 PM |
-| TEST-CONTACT-003 | Michael Brown | michael.brown@example.com | 12758759332 | **12758750003** | 10/6/2026 3:30:11 PM |
-| TEST-CONTACT-004 | David Wilson | david.wilson@example.com | 12758759454 | no change | 10/6/2026 3:30:1
+| TEST-CONTACT-001 | John Smith | john.smith@example.com | 10/6/2026 3:30:11 PM | 12758759879 | **12758750001** |
+| TEST-CONTACT-002 | Sarah Johnson | sarah.johnson@example.com | 10/6/2026 3:30:11 PM | 12758759889 | **12758750002** |
+| TEST-CONTACT-003 | Michael Brown | michael.brown@example.com | 10/6/2026 3:30:11 PM | 12758759332 | **12758750003** |
+| TEST-CONTACT-004
 
 _[summary truncated — see the session record for the full text]_
 <!-- orchestrate:session-state:end -->
