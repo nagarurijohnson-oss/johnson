@@ -42,17 +42,13 @@
 <!-- Written by Orchestrate at the end of each session. Edits inside this block are
      replaced next session; anything OUTSIDE it is yours and is never touched. -->
 ### Engagement state — 2026-10-06
-**Status:** on track — Query ready to run; awaiting user confirmation to execute or widen Bio field first
+**Status:** waiting — Query executed; waiting 2min for async completion before reading table back
 
 **Done this session**
-- Verified John_Mike_Customers_Amateur_Chef table exists, empty, 0 rows
-- Verified John_Mike_Customers has 1 matching row (JMC-0005, Lucas)
-- Confirmed query John_Mike_Customers_Amateur_Chef_Query is validated and ready
+- Executed John_Mike_Customers_Amateur_Chef_Query in Salesforce org
 
 **Open items**
-- User confirms: run query now or widen Bio field to unlimited first
-- Run query to populate John_Mike_Customers_Amateur_Chef with Lucas row
-- Read table back after query run to confirm 1 row populated
+- Wait for query async completion, then read John_Mike_Customers_Amateur_Chef to confirm Lucas row populated
 - Pick template (A or B) for MCP_Email_Send_Test creation
 - Update TEST-CONTACT-001 phone to 12758750001 in Contact Builder
 - Create MCP_Email_Send_Test in folder 49889 with external key MCP_Email_Send_Test
@@ -67,10 +63,9 @@
 - None
 
 **Next**
-- User replies: 'run it' or 'widen Bio, then run it'
-- Execute query to populate John_Mike_Customers_Amateur_Chef
-- Read table back to confirm Lucas row present and field types correct
-- Proceed with MCP_Email_Send_Test template selection and creation
+- Check John_Mike_Customers_Amateur_Chef after 2-minute timer expires
+- Confirm 1 row (Lucas, JMC-0005) present with correct field values
+- Proceed to MCP_Email_Send_Test template selection (A or B)
 
 **Checked live on 2026-10-06:** the Salesforce org
 ### Last session — 2026-10-06
@@ -81,17 +76,5 @@
 | Branch | `main` |
 | Session | `f98da8e8-f066-4149-bfcb-7eaca34f39fa` |
 **In its own words (excerpt):**
-`John_Mike_Customers_Amateur_Chef` is empty because the query that fills it hasn't run yet. Last turn I only created the table and the query, and I stopped to get your OK before running it. A table built this way only gets rows when the SQL Query Activity runs, unlike a native filtered table in Email Studio. Nothing is broken.
-
-I just checked both tables:
-- **`John_Mike_Customers_Amateur_Chef`:** 0 rows.
-- **`John_Mike_Customers`:** exactly 1 row where Bio = 'Amateur chef', which is **JMC-0005, Lucas, lucas.sample@example.com**. That's the row the query will copy across.
-
-**What I'll do once you confirm**
-1. **Run the query** `John_Mike_Customers_Amateur_Chef_Query`. Each run replaces everything in `John_Mike_Customers_Amateur_Chef`, but the table is empty now, so nothing is lost. `John_Mike_Customers` isn't touched.
-2. **Check the result.** The query runs in the background, so I'll read `John_Mike_Customers_Amateur_Chef` back and confirm it has 1 row with Lucas's values.
-
-**Optional:** the Bio field in the new table only holds 100 characters, but in the source it has no limit. Lucas's bio is 12 characters, so this run works either way. If you want, I can widen Bio first so a longe
-
-_[summary truncated — see the session record for the full text]_
+Waiting for the 2-minute timer before I check the table again.
 <!-- orchestrate:session-state:end -->
