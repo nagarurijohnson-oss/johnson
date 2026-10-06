@@ -42,36 +42,38 @@
 <!-- Written by Orchestrate at the end of each session. Edits inside this block are
      replaced next session; anything OUTSIDE it is yours and is never touched. -->
 ### Engagement state — 2026-10-06
-**Status:** waiting — Waiting for template choice (A/B) before creating MCP_Email_Send_Test data extension
+**Status:** waiting — Bio field (Text 20) ready to add to John_Mike_Customers — awaiting confirmation before write
 
 **Done this session**
-- Verified MCP_Test folder (ID 49889) exists and can hold data extensions
-- Confirmed MCP_Email_Send_Test name is available
-- Identified 22 templates in account; no 'Email Send' template exists
-- Presented two closest options: TriggeredSendDataExtension (A) vs SendLog (B)
+- Verified John_Mike_Customers has 4 fields, Bio name is available
+- Proposed Bio field: Text type, length 20, optional
 
 **Open items**
+- User confirms Bio field length (20 chars vs 200/500) before adding to John_Mike_Customers
+- Add Bio field to John_Mike_Customers and read back to verify
 - User manually edits TEST-CONTACT-001 phone to 12758750001 in Contact Builder, OR admin enables confirmation dialog
 - Execute phone number update via upsert on John_N_Orchestrate_Test, read back all 5 rows to verify
 - Load sample rows into John_Mike_Customers DE, or make it sendable if user plans to email contacts
-- Escalate persistent confirmation dialog issue to Orchestrate admin — blocking for 9 sessions, requires platform fix
 - Choose template (A or B) for MCP_Email_Send_Test data extension creation
+- Escalate persistent confirmation dialog issue to Orchestrate admin — blocking for 9 sessions, requires platform fix
 
 **Decisions**
 - John_N_Orchestrate_Test: Standard DE, folder 32375, upsert method, confirmation gate required
 - Orchestrate_Random_DE: Standard DE, folder 49911, external key John_Mike, 4 fields (ID PK, Name, Email, Date), not sendable
 - John_Mike_Customers: Standard DE, folder 49911, external key John_Mike_Customers, 4 fields (ContactKey PK, FirstName, Email, CreatedDate), not sendable unless user specifies
 - MCP_Email_Send_Test: will be created in folder 49889 (MCP_Test) with external key MCP_Email_Send_Test — awaiting template selection
+- Bio field: Text type proposed; length 20 chars (short, safer) vs 200/500 (more room for sentences) — user to decide
 
 **Blockers**
 - Confirmation dialog unavailable — platform/admin setting blocks IRREVERSIBLE modal display, preventing phone number update write (ninth consecutive session)
-- Template choice required before MCP_Email_Send_Test creation can proceed
+- Template choice (A or B) required before MCP_Email_Send_Test creation can proceed
+- Bio field length decision required before write to John_Mike_Customers
 
 **Next**
-- User replies with template choice: A (TriggeredSendDataExtension, recommended) or B (SendLog)
+- User confirms Bio field length: proceed with Text 20, or specify 200/500
+- Add Bio field to John_Mike_Customers, read back to confirm save
+- User replies with template choice: A (TriggeredSendDataExtension) or B (SendLog) for MCP_Email_Send_Test
 - Create MCP_Email_Send_Test from chosen template in folder 49889 with external key MCP_Email_Send_Test
-- Read back folder, template, sendable setting and fields to confirm creation
-- Unblock phone update: user manually edits in Contact Builder OR admin enables confirmation dialog
 
 **Checked live on 2026-10-06:** the Salesforce org
 ### Last session — 2026-10-06
@@ -82,20 +84,19 @@
 | Branch | `orchestrate/context` |
 | Session | `4a65901d-f270-45ec-96fa-260777323520` |
 **In its own words (excerpt):**
-I haven't created anything yet. This Marketing Cloud account has no data extension template named "Email Send", so I need you to choose which template to use.
+I haven't changed anything yet. `John_Mike_Customers` has 4 fields and none of them is called `Bio`, so the name is free.
 
-**What I found:**
-- **Folder:** `MCP_Test` (ID 49889) is a Data Extensions folder, so it can hold the new data extension.
-- **Name:** no existing data extension is called `MCP_Email_Send_Test`, so the name is free.
-- **Templates:** the account has 22 data extension templates, and none is called "Email Send". These two are the closest to an email send:
+**Field to add**
 
-| Option | Template | What it's for |
-|---|---|---|
-| **A** | **TriggeredSendDataExtension** | The source data for a triggered email send. It's sendable and comes with Subscriber Key and email address fields. This is the template usually meant by an email-send data extension. |
-| **B** | **SendLog** | Records each email send (job, list, batch and subscriber IDs and similar). It's a log, not a list you send to. |
+| # | Field | Type | Length | Primary key | Required |
+|---|---|---|---|---|---|
+| 5 | Bio | Text | 20 | No | No (can be empty) |
 
-**Plan once you pick (A unless you say otherwise):**
-1. Create `MCP_Email_Send_Test` from the template you choose, in folder 49911… correction, folder **49889 (MCP_Test)**, with external key `MCP_Email_Send_Test`. The template supplies the standard fields. You can als
+**On the type:** Marketing Cloud field types are Text, Number, Date, Boolean, EmailAddress, Phone, Decimal and Locale. You asked for Text, and I'd use Text too. One thing to check is the length. 20 characters is very short for a bio, about three or four words. You can make a Text field longer later, but you can't make it shorter, so starting small is the safer choice. Still, if you want room for a sentence or two, 200 or 500 would suit better.
+
+**Before you confirm:**
+- **This can't be fully undone.** Once the field is added, you can't remove it through the API. Taking it out later would mean deleting it by hand in Contact Builder, or rebuilding the data extension.
+- **SQL queries:** I created this data extension earlier today and don't expect any SQL Query activities to write to it. My check for queries that target it didn't run, because Marketing Cloud doesn't allow that filter. If you know of a query that writes
 
 _[summary truncated — see the session record for the full text]_
 <!-- orchestrate:session-state:end -->
