@@ -42,15 +42,14 @@
 <!-- Written by Orchestrate at the end of each session. Edits inside this block are
      replaced next session; anything OUTSIDE it is yours and is never touched. -->
 ### Engagement state — 2026-10-06
-**Status:** waiting — Awaiting three decisions on AUTO_Daily_Data_Load before build: step choice, time zone, folder
+**Status:** waiting — AUTO_Daily_Data_Load: awaiting three decisions (step, time zone, folder) before build
 
 **Done this session**
-- Confirmed AUTO_Daily_Data_Load name is available
-- Mapped existing automation folders and schedules
-- Identified Loyalty_Daily_Recognition stuck in Building (no steps)
+- Confirmed AUTO_Daily_Data_Load name is still available
+- Re-presented three required decisions with full context and examples
 
 **Open items**
-- User decides: step for AUTO_Daily_Data_Load (existing activity or shell only)
+- User decides: step for AUTO_Daily_Data_Load (existing query like John_Mike_Customers_Amateur_Chef_Query, or shell only)
 - User decides: time zone for 9:00 AM (IST or Central Standard Time)
 - User decides: folder for AUTO_Daily_Data_Load (32393 or other)
 - User creates filtered table JNOT_CreatedDate_0938_Filtered in Email Studio UI
@@ -72,10 +71,10 @@
 - None
 
 **Next**
-- User replies with three choices: step (1a/1b), time zone (IST/CST), folder (32393/other)
+- User replies with all three choices: step (a/b), time zone (IST/CST), folder (32393/other)
 - Create AUTO_Daily_Data_Load automation with chosen step and schedule
+- Read back automation name, step, schedule, and status to confirm
 - User creates filtered table JNOT_CreatedDate_0938_Filtered in Email Studio
-- Verify filtered table and clarify JMC-0004 FirstName restoration
 
 **Checked live on 2026-10-06:** the Salesforce org
 ### Last session — 2026-10-06
@@ -86,19 +85,21 @@
 | Branch | `orchestrate/context` |
 | Session | `58b3d8ba-c450-493f-9233-a0d9e3d2720f` |
 **In its own words (excerpt):**
-I haven't created anything yet. The name `AUTO_Daily_Data_Load` is free. Before I build it I need you to settle three things, because the answers change what gets created.
+I haven't created `AUTO_Daily_Data_Load` yet. I just checked again and the name is still free, but I need three decisions from you before I build it.
 
-**What I checked (read-only)**
-- No automation called `AUTO_Daily_Data_Load` exists in this business unit (27 automations in total).
-- Most automations here sit in folder **32393**, and the Re-Engagement ones are in 49860.
-- Existing schedules use either **Central Standard Time** or **India Standard Time**. You're on IST, so 9:00 AM could mean either.
-- `Loyalty_Daily_Recognition` was created with no steps and is stuck in **Building** status with no schedule. An automation needs at least one activity before its schedule can be switched on.
+**1. What should it run each day?** An automation can only be switched on once it has at least one step. `Loyalty_Daily_Recognition` is an example: it was created with no steps and has been stuck in **Building** ever since.
+- **(a) An existing SQL query.** For example, `John_Mike_Customers_Amateur_Chef_Query` refreshes `John_Mike_Customers_Amateur_Chef`, and `DE_Test_Customers_Gold_Refresh` refreshes the Gold table. There are 16 queries in this account, so name any of them. You can also name an import or file transfer.
+- **(b) No step for now.** I create the automation with the daily 9:00 AM schedule saved, and it stays inactive until a step is added.
 
-**Three choices (reply with all three together)**
-1. **What should it run?** Without a step it can be created but not actually scheduled to run.
-   - (a) An existing activity, e.g. the SQL query `John_Mike_Customers_Amateur_Chef_Query` (refreshes `John_Mike_Customers_Amateur_Chef`). Name any other query, import or file transfer you want instead.
-   - (b) No step for now. I create the shell with the Monday schedule saved but not active, and you or I add the step later.
-2. **Ti
+**2. Which time zone is 9:00 AM in?**
+- **India Standard Time.** This matches your session.
+- **Central Standard Time.** Other automations in this account use this one.
+
+**3. Which folder should it go in?**
+- **32393**, where most of the automations here live.
+- **Another folder.** Give me the name or ID.
+
+Reply with all three together, for example "**a: John_Mike_Customers_Amateur_Che
 
 _[summary truncated — see the session record for the full text]_
 <!-- orchestrate:session-state:end -->
