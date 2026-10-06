@@ -45,7 +45,7 @@
 **Status:** blocked — Phone update blocked by confirmation tool unavailable; awaiting admin enablement or manual edit
 
 **Done this session**
-- Confirmed 3 planned phone number changes ready to execute on John_N_Orchestrate_Test
+- Verified current state of all 5 rows in John_N_Orchestrate_Test table in Salesforce org
 
 **Open items**
 - User approves or modifies the 3 planned phone numbers
@@ -75,21 +75,19 @@
 | Branch | `orchestrate/context` |
 | Session | `dbc33f2a-5193-4665-918d-f4285692262b` |
 **In its own words (excerpt):**
-**Nothing has changed yet.** Marketing Cloud treats a row update as irreversible, so it blocked the write. It won't run until you tick a checkbox in a separate confirmation dialog, and a "proceed" typed in chat doesn't count.
+**I haven't changed anything.** You asked me to show the IRREVERSIBLE confirmation dialog first, but I can't open that dialog in this session because the tool that displays it isn't available to me. Marketing Cloud also blocks this write until you confirm in that dialog, so a reply in chat won't release it. I've stopped here rather than work around the check.
 
-The problem is that I can't show that dialog in this session. The confirmation tool isn't available here, and the earlier attempt to write CSV rows into this table was blocked the same way. I'm not going to work around the block, so I've stopped without writing anything.
+**What's in the table now** (John_N_Orchestrate_Test, 5 rows, all checked just now):
 
-**The update that's waiting** (John_N_Orchestrate_Test, Phone field only, 3 of 5 rows):
+| ContactKey | Name | Email | Current Phone | → New Phone | CreatedDate |
+|---|---|---|---|---|---|
+| TEST-CONTACT-001 | John Smith | john.smith@example.com | 12758759879 | **12758750001** | 10/6/2026 3:30:11 PM |
+| TEST-CONTACT-002 | Sarah Johnson | sarah.johnson@example.com | 12758759889 | **12758750002** | 10/6/2026 3:30:11 PM |
+| TEST-CONTACT-003 | Michael Brown | michael.brown@example.com | 12758759332 | **12758750003** | 10/6/2026 3:30:11 PM |
+| TEST-CONTACT-004 | David Wilson | david.wilson@example.com | 12758759454 | no change | 10/6/2026 3:30:11 PM |
+| TEST-CONTACT-005 | Emily Davis | emily.davis@example.com | 12758759667 | no change | 10/6/2026 3:30:11 PM |
 
-| ContactKey | Current Phone | New Phone |
-|---|---|---|
-| TEST-CONTACT-001 | 12758759879 | 12758750001 |
-| TEST-CONTACT-002 | 12758759889 | 12758750002 |
-| TEST-CONTACT-003 | 12758759332 | 12758750003 |
-
-**To get it done, you can:**
-1. **Ask your Orchestrate admin to turn on the confirmation dialog** for your sessions. After that, start a new Build session, say "proceed", tick Confirm in the dialog, and I'll update the 3 rows and read them back to check.
-2. **Edit the numbers yourself in Marketing Cloud.** Go to Contact Builder → Data Extensions → John Orchestrate Test → John_N_Orchestrate_Test → Record
+**What the update will do once you've confirmed:** it changes Phone on tho
 
 _[summary truncated — see the session record for the full text]_
 <!-- orchestrate:session-state:end -->
