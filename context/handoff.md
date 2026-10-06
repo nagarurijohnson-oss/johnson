@@ -42,13 +42,13 @@
 <!-- Written by Orchestrate at the end of each session. Edits inside this block are
      replaced next session; anything OUTSIDE it is yours and is never touched. -->
 ### Engagement state — 2026-10-06
-**Status:** at risk — Table deleted; orphaned query & filtered table creation remain. Session checked live but cannot create FilteredDataExtension via API.
+**Status:** at risk — Query deletion awaiting explicit confirmation; filtered table creation still pending user action in Email Studio.
 
 **Done this session**
-- Verified John_Mike_Customers_Amateur_Chef table deletion persists (name free, source table intact)
+- None
 
 **Open items**
-- User confirms deletion of orphaned query John_Mike_Customers_Amateur_Chef_Query (reply 'delete the query')
+- User confirms 'Confirm delete query' to remove orphaned John_Mike_Customers_Amateur_Chef_Query (ID 6aeb4e3d-2568-4f50-9acb-f469a7cce4c6)
 - User creates filtered table John_Mike_Customers_Amateur_Chef in Email Studio (Bio equals 'Amateur chef')
 - Verify filtered table is FilteredDataExtension type and contains JMC-0005 (Lucas)
 - Update TEST-CONTACT-001 phone to 12758750001 in Contact Builder
@@ -66,9 +66,10 @@
 **Blockers**
 - Orphaned query John_Mike_Customers_Amateur_Chef_Query will fail if run and may overwrite filtered table if recreated under same name
 - No API endpoint available to create FilteredDataExtension; Email Studio manual creation required
+- Query deletion requires explicit user confirmation before proceeding
 
 **Next**
-- User replies 'delete the query' to remove orphaned query
+- User replies 'Confirm delete query' to authorize deletion of John_Mike_Customers_Amateur_Chef_Query
 - User creates filtered table in Email Studio: Subscribers → Data Extensions → John_Mike_Customers → Filter → Bio equals 'Amateur chef' → save as John_Mike_Customers_Amateur_Chef in folder 49911
 - Verify filtered table creation and JMC-0005 presence
 
@@ -81,17 +82,19 @@
 | Branch | `main` |
 | Session | `f98da8e8-f066-4149-bfcb-7eaca34f39fa` |
 **In its own words (excerpt):**
-I can't create a native Filtered Data Extension with the tools in this session, so nothing has been created. Email Studio can make one; I can't. That gap is in my tools, not a limit of Marketing Cloud.
+I haven't deleted anything yet. The safety check stopped the delete because deleting the query is permanent, and it wants an explicit confirmation for this specific action. This session can't show the on-screen Confirm pop-up. Your "proceed" didn't name what to delete, so I'd rather ask once than assume.
 
-**What I checked just now (read-only)**
-- **No filtered table exists yet.** Searching for `John_Mike_Customers` finds only the source table, with 5 rows in folder 49911. The name `John_Mike_Customers_Amateur_Chef` is still free, since I deleted my standard table last turn.
-- **I tried another route, and it doesn't exist.** `/email/v1/filters/filterdefinition` returned **404 Not Found**. Earlier, `/email/v1/filteredCustomObjects` also returned 404, and the Data Extension create call has no filter or source-table settings. Any table I create comes out as standard type, which is what you said you don't want.
+**What would be deleted**
+- **Query:** SQL Query Activity `John_Mike_Customers_Amateur_Chef_Query`, ID `6aeb4e3d-2568-4f50-9acb-f469a7cce4c6`, in the root Query folder (32395) in Automation Studio. That's 1 query.
+- **What it does:** it copies rows from `John_Mike_Customers` where Bio = 'Amateur chef' into a table called `John_Mike_Customers_Amateur_Chef`, replacing that table's contents each run. That table was deleted last turn.
+- **Automations:** none of the 27 automations I looked at appear to use this query, and I never added it to one. That's based on their names and descriptions; I didn't open each one's steps.
+- **What stays:** `John_Mike_Customers` and its 5 rows aren't affected. You lose no data, because the query only copies rows.
 
-**Create it in Email Studio (about 2 minutes)**
-1. Go to **Email Studio → Subscribers → Data Extensions** and open `John_Mike_Customers`.
-2. Click **Filter**. Or use **Create → Filtered Data Extension** and pick `John_Mike_Customers` as the source.
-3. Drag **Bio** into the filter area and set it to **is equal to** `Amateur chef`.
-4. Save it as `John_Mike_Customers_Amateur_Chef` in
+**What I'll do once you confirm**
+1. Delete query `6aeb4e3d-2568-4f50-9acb-f469a7cce4c6`.
+2. Look it up again to confirm it's gone.
+
+Reply *
 
 _[summary truncated — see the session record for the full text]_
 <!-- orchestrate:session-state:end -->
