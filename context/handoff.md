@@ -42,21 +42,21 @@
 <!-- Written by Orchestrate at the end of each session. Edits inside this block are
      replaced next session; anything OUTSIDE it is yours and is never touched. -->
 ### Engagement state — 2026-10-06
-**Status:** waiting — Filtered table creation blocked by API limits; awaiting user decision on manual creation vs. deletion of standard table.
+**Status:** waiting — Located John_Mike_Customers_Amateur_Chef table; awaiting user confirmation to delete table ± query
 
 **Done this session**
-- Confirmed native FilteredDataExtension type cannot be created via API
-- Identified workaround: manual creation in Email Studio (~2 minutes)
-- Documented exact steps for user to create filtered table themselves
+- Located John_Mike_Customers_Amateur_Chef table (ID d67281f5-9fc1-f111-a5e6-5cba2c19e778) in folder 49911
+- Confirmed table contains 1 row (JMC-0005) and original data safe in John_Mike_Customers
+- Identified orphaned query John_Mike_Customers_Amateur_Chef_Query that writes to table
 
 **Open items**
-- User decision: will you create filtered table manually in Email Studio?
-- User decision: keep or delete standard table John_Mike_Customers_Amateur_Chef?
-- If keeping standard table: rename it to avoid conflict with filtered table name
-- If user creates filtered table: verify it is FilteredDataExtension type and contains JMC-0005
+- User confirms: delete table only (a) or delete table + query (b)?
+- If user confirms deletion: execute delete and verify name is freed
+- Create filtered table manually in Email Studio (FilteredDataExtension type)
+- Verify filtered table contains JMC-0005
 - Update TEST-CONTACT-001 phone to 12758750001 in Contact Builder
 - Create MCP_Email_Send_Test in folder 49889 with external key MCP_Email_Send_Test
-- Consider scheduling query automation for John_Mike_Customers_Amateur_Chef refresh
+- Consider scheduling query automation for John_Mike_Customers refresh
 
 **Decisions**
 - Option B selected: Standard table + SQL Query Activity for John_Mike_Customers_Amateur_Chef
@@ -66,12 +66,12 @@
 - Native FilteredDataExtension creation not available via API; manual Email Studio creation required
 
 **Blockers**
-- API does not support creating FilteredDataExtension type; only standard Data Extensions can be created programmatically
+- Awaiting user confirmation before permanent deletion of table and query
 
 **Next**
-- User confirms: create filtered table manually in Email Studio or proceed with standard table?
-- User confirms: delete standard table John_Mike_Customers_Amateur_Chef to free the name, or rename it?
-- Once user decides, proceed with TEST-CONTACT-001 phone update and MCP_Email_Send_Test creation
+- User replies with 'Confirm (a)', 'Confirm (b)', or 'Cancel'
+- If confirmed: delete table ± query and verify name is freed
+- User creates filtered table in Email Studio under name John_Mike_Customers_Amateur_Chef
 
 **Checked live on 2026-10-06:** the Salesforce org
 ### Last session — 2026-10-06
@@ -82,16 +82,20 @@
 | Branch | `main` |
 | Session | `f98da8e8-f066-4149-bfcb-7eaca34f39fa` |
 **In its own words (excerpt):**
-You're right. `John_Mike_Customers_Amateur_Chef` is a **standard** table filled by a SQL query, not a native Filtered Data Extension. I built it that way as Option B. It holds the right row, but it isn't the type you asked for. I haven't changed anything this turn.
+I found the table and haven't deleted anything yet. Deleting can't be undone, so I need your confirmation first.
 
-**What I checked (read-only)**
-- **How a native filtered table is built:** I looked at an existing one in the org, `Contacts_With_Gmail_Domain_Email_Id`. It's stored as type **`FilteredDataExtension`**. It's tied to a hidden filter definition, a Filter Activity (type 303) and a link back to its source table.
-- **Whether I can create that type:** I can't, with the tools I have. The Data Extension create call takes no filter or source-table settings, so it can only make standard tables. The filtered-table route I tried returned 404. The other route I considered, a filter definition plus a Filter Activity, fills a table, but that table is still standard type. That's the same result you have now, just with a filter instead of SQL.
+**What would be deleted**
+- **Table:** `John_Mike_Customers_Amateur_Chef`. It's the standard table I built earlier, with external key `John_Mike_Customers_Amateur_Chef`, ID `d67281f5-9fc1-f111-a5e6-5cba2c19e778`, in folder 49911.
+- **Its contents:** 5 fields and **1 row** (JMC-0005, Lucas, lucas.sample@example.com, Amateur chef). That row is a copy, and the original is still in `John_Mike_Customers`, so you don't lose any data.
+- **What stays:** `John_Mike_Customers` and its 5 rows aren't touched.
 
-That's a gap in what I can do here. Email Studio creates these tables itself; I just don't have a way to make one.
+**One decision before I delete:** the SQL query `John_Mike_Customers_Amateur_Chef_Query` writes into this table. Once the table is gone, the query has nowhere to write, and it will fail if anyone runs it. Your choices:
+- **(a) Delete the table only.** The query stays as it is.
+- **(b) Delete the table and the query.** I'd recommend this, since the query has no use without the table. It's also permanent.
 
-**Making it yourself in Email Studio (about 2 minutes)**
-1. Go to **Email Studi
+**What I'll do once you confirm**
+1. **Delete the table:** delete Data Extension `d67281f5-9fc1-f111-a5e6-5cba2c19e778`.
+2. **Delete the query (option b only):** delete Query
 
 _[summary truncated — see the session record for the full text]_
 <!-- orchestrate:session-state:end -->
