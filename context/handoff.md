@@ -42,14 +42,13 @@
 <!-- Written by Orchestrate at the end of each session. Edits inside this block are
      replaced next session; anything OUTSIDE it is yours and is never touched. -->
 ### Engagement state — 2026-10-06
-**Status:** on track — JMC-0004 FirstName updated to 'Updated'; awaiting template choice & phone update
+**Status:** waiting — Awaiting user choice (A/B/C) for filtered table build; JMC-0004 updated, 4 open items remain
 
 **Done this session**
-- Upsert JMC-0004: FirstName 'Meera' → 'Updated' (Email, Bio, CreatedDate unchanged)
-- Verified table still has 5 rows; other rows JMC-0001, 0002, 0003, 0005 unchanged
-- Safety check passed with confirmation flag; one format error corrected and retried successfully
+- None
 
 **Open items**
+- User selects option A, B, or C for filtered table (John_Mike_Customers_Amateur_Chef)
 - Pick template (A or B) for MCP_Email_Send_Test creation
 - Update TEST-CONTACT-001 phone to 12758750001 in Contact Builder
 - Create MCP_Email_Send_Test in folder 49889 with external key MCP_Email_Send_Test
@@ -65,9 +64,10 @@
 - None
 
 **Next**
-- User selects template (A or B) for MCP_Email_Send_Test
-- User updates TEST-CONTACT-001 phone in Contact Builder to 12758750001
-- Create MCP_Email_Send_Test in folder 49889 with selected template
+- User replies with A, B, or C (plus any name/folder changes) for filtered table
+- Once chosen: create target table, build filter or query, ask before running
+- User selects template for MCP_Email_Send_Test
+- User updates TEST-CONTACT-001 phone in Contact Builder
 
 **Checked live on 2026-10-06:** the Salesforce org
 ### Last session — 2026-10-06
@@ -78,23 +78,18 @@
 | Branch | `main` |
 | Session | `f98da8e8-f066-4149-bfcb-7eaca34f39fa` |
 **In its own words (excerpt):**
-I changed FirstName to "Updated" on the row with Email `meera.sample@example.com`, and reading the table back confirms it.
+Nothing has been created yet. Before I build, I need you to choose how to do it, because Marketing Cloud's "Filtered Data Extension" can mean more than one thing here.
 
-| ContactKey | FirstName | Email | Bio | CreatedDate |
-|---|---|---|---|---|
-| JMC-0004 | **Updated** (was Meera) | meera.sample@example.com | Avid reader | 10/6/2026 9:48 AM |
+**What I checked (read-only)**
+- `John_Mike_Customers` has exactly **1 row** where Bio = 'Amateur chef': **JMC-0005, Lucas, lucas.sample@example.com**. The new table will start with that one row.
+- The filtered table you see in Email Studio is built from a **filter definition** sitting on the source table. I don't have a dedicated tool for that type of table. I can reach the filter-definition object through the general SOAP access, but my API reference doesn't cover the create call. So this route is untested here and may need a few attempts.
 
-- **Other fields:** Email, Bio and CreatedDate didn't change.
-- **Other rows:** the table still has **5 rows**, and the other four (JMC-0001, 0002, 0003, 0005) are as they were.
+**Three ways to do it**
 
-**How it went through:**
-- **Safety check:** my first attempt went without the confirmation flag, as I said it would, and the check blocked it. This session can't show the on-screen Confirm pop-up the check waits for, so I passed the flag myself based on your typed "confirm". An admin can turn on that pop-up for Build sessions so these writes get your click directly.
-- **One failed attempt:** the next try was rejected because the request was in the wrong format ("Parameter {values} is required."). Nothing was written. I fixed the format and the next attempt succeeded.
-
-If you need to undo this, I can set FirstName back to "Meera".
-
-**Still open from earlier sessions:**
-- Choose template A or B for `MCP_Email_S
+| Option | What gets built | Notes |
+|---|---|---|
+| **A. Filter definition + Filter Activity** | A filter on `John_Mike_Customers` (Bio equals 'Amateur chef'), a new target table, and a Filter Activity that fills it | Closest to a native filtered table that I can make through the API. Untested in this session, so it may not work on the first try. |
+| **B. Standard table + SQL Query** *(my recommendation)* | A new table with the same 5 fields, plus a SQ
 
 _[summary truncated — see the session record for the full text]_
 <!-- orchestrate:session-state:end -->
