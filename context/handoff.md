@@ -42,15 +42,14 @@
 <!-- Written by Orchestrate at the end of each session. Edits inside this block are
      replaced next session; anything OUTSIDE it is yours and is never touched. -->
 ### Engagement state — 2026-10-06
-**Status:** on track — PK constraint on John_Mike_Customers confirmed via insert rejection (error 71005). Table intact, 5 rows.
+**Status:** on track — PK constraint on ContactKey confirmed twice via insert rejection (error 71005). Table stable at 5 rows.
 
 **Done this session**
-- Executed insert-only test with duplicate ContactKey JMC-0001
-- Confirmed primary key enforcement: insert rejected with error 71005
+- Re-ran insert-only test with duplicate ContactKey JMC-0001
+- Confirmed primary key enforcement repeatable: error 71005 both runs
 - Verified John_Mike_Customers unchanged: 5 rows, JMC-0001 still Aarav
 
 **Open items**
-- User approves or modifies PK duplicate test plan — COMPLETED, test executed
 - User creates filtered table JNOT_CreatedDate_0938_Filtered in Email Studio UI
 - Verify filtered table type, source, and row count (expect 10: TEST-CONTACT-006 to 015)
 - Confirm date condition matches; if empty, switch to within-the-minute filter
@@ -64,7 +63,7 @@
 - John_Mike_Customers: Standard DE, folder 49911, external key John_Mike_Customers, 5 fields, not sendable
 - Filter condition (1): within-the-minute (CreatedDate = 10/6/2026 9:38:48 AM) for 10 rows
 - API creation of filtered tables not viable; UI creation required
-- Test PK constraint via insert-only route (not upsert) — CONFIRMED effective
+- Test PK constraint via insert-only route (not upsert) — CONFIRMED effective both runs
 - Primary key ContactKey is enforced; insert-only rejects duplicates; upserts update instead
 
 **Blockers**
@@ -86,20 +85,18 @@
 | Branch | `orchestrate/context` |
 | Session | `58b3d8ba-c450-493f-9233-a0d9e3d2720f` |
 **In its own words (excerpt):**
-Marketing Cloud rejected the duplicate, and the table hasn't changed.
+I ran the test again and Marketing Cloud rejected the duplicate `ContactKey` a second time. The table hasn't changed.
 
-**Result**
-- **Insert rejected.** The request finished with `resultStatus: Error`, error code **71005**:
-  > Violation of PRIMARY KEY constraint 'PK_C546010305_4cac233d-86c1-f111-a5e6-5cba2c19e778'. Cannot insert duplicate key in object 'C546010305.John_Mike_Customers'. The duplicate key value is (JMC-0001).
-- **Table unchanged.** It still has **5 rows**. JMC-0001 still reads Aarav, aarav.sample@example.com, 10/6/2026 9:48:31 AM, "Loves hiking". The test row `DuplicateTest` was never written, so nothing needs restoring.
+**What I sent:** one row through the insert-only route, using ContactKey **`JMC-0001`** (that key already exists) with FirstName `DuplicateTest`, Email `duplicate.test@example.com` and Bio `PK duplicate test`. The request ID is `c14fefe7-7142-4264-831f-75b57a8e1bbc`.
 
-So the primary key on `ContactKey` is enforced. An insert with an existing key fails with error 71005.
+**What came back:** `status: Error`, error code **71005**:
+> Violation of PRIMARY KEY constraint 'PK_C546010305_4cac233d-86c1-f111-a5e6-5cba2c19e778'. Cannot insert duplicate key in object 'C546010305.John_Mike_Customers'. The duplicate key value is (JMC-0001). The statement has been terminated.
 
-**Upserts behave differently.** The upsert tools (and the Import "Add and Update" mode) don't raise this error. They update the existing row instead. Only insert-only routes report the conflict.
+**What I checked afterwards:** the table still has **5 rows**. JMC-0001 is still Aarav, aarav.sample@example.com, 10/6/2026 9:48:31 AM, "Loves hiking". The `DuplicateTest` row was never written, so there's nothing to clean up.
 
-**Separate thing I noticed.** Row **JMC-0004** has FirstName **"Updated"**, not a real name (email meera.sample@example.com). This test didn't touch that row because it only sent JMC-0001, so the value was probably left by an earlier test. Tell me if you want it set back to "Meera".
+This matches the first run: the primary key on `ContactKey` is enforced, and an insert with an existing key fails with error 71005. Upserts work differently. They don't raise this error and update the existing row instead.
 
-Sources: checked 
+Row JMC-0004 still has FirstName **"Updated"**. If you want it
 
 _[summary truncated — see the session record for the full text]_
 <!-- orchestrate:session-state:end -->
