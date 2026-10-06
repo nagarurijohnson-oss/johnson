@@ -42,19 +42,20 @@
 <!-- Written by Orchestrate at the end of each session. Edits inside this block are
      replaced next session; anything OUTSIDE it is yours and is never touched. -->
 ### Engagement state — 2026-10-06
-**Status:** at risk — John_N_Orchestrate_Test verified at 5 rows; 10 new rows staged for insert—platform safety check may block again.
+**Status:** at risk — Bulk insert blocked by platform safety check (6th time). User can import 10 rows manually via Email Studio; admin escalation needed.
 
 **Done this session**
-- Verified John_N_Orchestrate_Test has 5 existing rows (TEST-CONTACT-001 to 005)
-- Staged 10 new test contacts (TEST-CONTACT-006 to 015) with names, emails, phone numbers
+- Confirmed John_N_Orchestrate_Test still has 5 rows (TEST-CONTACT-001 to 005)
+- Attempted bulk insert of 10 new rows; platform safety check blocked before execution
+- Verified no table changes occurred; insert did not execute
 
 **Open items**
-- Admin enables confirmation pop-up for Marketing Cloud writes in BUILD sessions
-- OR user imports 5 rows manually via Email Studio → Subscribers → Data Extensions → John_Mike_Customers → Import
-- Read back all 5 rows from John_Mike_Customers to verify import succeeded
+- User imports 10 rows (TEST-CONTACT-006 to 015) manually via Email Studio → Subscribers → Data Extensions → John_N_Orchestrate_Test → Import
+- User uploads CSV with 10 rows; maps ContactKey, Name, Email, phone; leaves CreatedDate unmapped
+- User confirms import succeeded and table now has 15 total rows
+- Admin enables confirmation pop-up for Marketing Cloud writes in BUILD sessions (6 consecutive blocks)
 - User confirms template choice (A or B) for MCP_Email_Send_Test creation
 - Create MCP_Email_Send_Test in folder 49889 with external key MCP_Email_Send_Test
-- Execute bulk insert of 10 rows into John_N_Orchestrate_Test; read back to verify 15 total rows
 - User manually updates TEST-CONTACT-001 phone to 12758750001 in Contact Builder, OR admin enables confirmation dialog
 
 **Decisions**
@@ -66,12 +67,12 @@
 - 10 new test contacts staged for John_N_Orchestrate_Test (TEST-CONTACT-006 to 015)
 
 **Blockers**
-- Confirmation dialog unavailable in BUILD session — platform requires irreversible modal click before upsert executes (5 consecutive sessions blocked, 6th attempt pending)
+- Confirmation dialog unavailable in BUILD session — platform requires irreversible modal click before upsert executes (6 consecutive sessions blocked)
 
 **Next**
-- User confirms: proceed with bulk insert of 10 rows into John_N_Orchestrate_Test
-- If insert succeeds: read back table to confirm 15 total rows
-- If insert blocked again: user imports via Email Studio manually (CSV provided)
+- User imports 10 rows via Email Studio manually using provided CSV
+- User confirms import succeeded; table now has 15 rows
+- Read back John_N_Orchestrate_Test to verify all 15 rows present
 - Admin escalation: enable confirmation pop-up for Marketing Cloud writes in BUILD sessions
 
 **Checked live on 2026-10-06:** the Salesforce org
@@ -83,25 +84,19 @@
 | Branch | `main` |
 | Session | `f98da8e8-f066-4149-bfcb-7eaca34f39fa` |
 **In its own words (excerpt):**
-I checked `John_N_Orchestrate_Test`. It has **5 rows** right now (TEST-CONTACT-001 to 005) and 5 fields: ContactKey (primary key), Name, Email, phone, and CreatedDate (fills in automatically with today's date).
+The 10 rows were **not added**. `John_N_Orchestrate_Test` still has 5 rows (TEST-CONTACT-001 to 005).
 
-**The 10 rows I plan to add**
+**What happened:** I found the table and sent the insert, and the platform's safety check stopped it before it ran. The check treats any Marketing Cloud row write as permanent. It needs you to click Confirm in a separate on-screen pop-up, and I can't show that pop-up in this session. As I said I would, I stopped there and didn't try to get around it. Nothing in the table changed.
 
-| ContactKey | Name | Email | phone |
-|---|---|---|---|
-| TEST-CONTACT-006 | Olivia Martinez | olivia.martinez@example.com | 12758759101 |
-| TEST-CONTACT-007 | James Anderson | james.anderson@example.com | 12758759102 |
-| TEST-CONTACT-008 | Sophia Thomas | sophia.thomas@example.com | 12758759103 |
-| TEST-CONTACT-009 | Benjamin Taylor | benjamin.taylor@example.com | 12758759104 |
-| TEST-CONTACT-010 | Ava Moore | ava.moore@example.com | 12758759105 |
-| TEST-CONTACT-011 | Lucas Jackson | lucas.jackson@example.com | 12758759106 |
-| TEST-CONTACT-012 | Mia White | mia.white@example.com | 12758759107 |
-| TEST-CONTACT-013 | Henry Harris | henry.harris@example.com | 12758759108 |
-| TEST-CONTACT-014 | Charlotte Clark | charlotte.clark@example.com | 12758759109 |
-| TEST-CONTACT-015 | Daniel Lewis | daniel.lewis@example.com | 12758759110 |
+**A correction:** last turn I gave you the wrong table in the import path. I wrote `John_Mike_Customers`, but the rows belong in `John_N_Orchestrate_Test`. The steps below use the right one.
 
-**What I'll do once you confirm**
-- **Add the rows:** one bulk insert of the 10 rows into `John_N_Orchestrate_Test`.
+**To add the rows yourself (about 2 minutes):**
+1. Go to **Email Studio → Subscribers → Data Extensions → John_N_Orchestrate_Test → Import**.
+2. Upload the CSV attached to this session. It has the 10 rows: ContactKey, Name, Email, phone.
+3. Choose **Add and Update** and map the columns by matching name. Leave CreatedDate unmapped so it fills in automatically.
+4. After it finishes, the table should have **15 rows**. Tell me and I'll read it back to check.
+
+**For a lasting fix:** an admin needs to turn on the confirma
 
 _[summary truncated — see the session record for the full text]_
 <!-- orchestrate:session-state:end -->
