@@ -45,8 +45,7 @@
 **Status:** waiting — Awaiting user confirmation to import 5 sample rows into John_Mike_Customers via upsert
 
 **Done this session**
-- Verified CSV file structure and column mapping for 5 sample rows (JMC-0001 to JMC-0005)
-- Confirmed CreatedDate column will use GetDate() default since CSV values are blank
+- Verified CSV file structure and column mapping for 5 sample rows (JMC-0001 to JMC-0005) — no changes made
 
 **Open items**
 - User confirms or cancels upsert of 5 rows into John_Mike_Customers
@@ -83,17 +82,17 @@
 | Branch | `orchestrate/context` |
 | Session | `d2c94a85-3812-4b81-aae6-58f251fc82a5` |
 **In its own words (excerpt):**
-I haven't imported anything yet. The upsert is flagged as irreversible and needs your explicit confirmation first, and I can't raise the confirmation modal in this session. Please confirm here instead.
+I haven't imported anything yet. The upsert is blocked until you explicitly confirm it, and the confirmation pop-up it requires isn't available in this session.
 
 **What it will do**
 - **Target:** Data Extension `John_Mike_Customers`. It currently has 0 rows.
-- **Rows:** 5, keyed on the primary key `ContactKey` (JMC-0001 to JMC-0005). Existing keys are updated and new keys are added.
-- **Column mapping (all five CSV columns match):**
-  - `ContactKey` → `ContactKey` (Text, primary key)
-  - `FirstName` → `FirstName` (Text)
-  - `Email` → `Email` (EmailAddress)
-  - `CreatedDate` → `CreatedDate` (Date). The CSV values are blank, so I'll omit the column and the field's `GetDate()` default will fill in the import time.
-  - `Bio` → `Bio` (Text)
+- **Rows:** 5 rows, matched on the primary key `ContactKey` (JMC-0001 to JMC-0005). Existing keys are updated and new keys are added.
+- **Column mapping:**
+  - `ContactKey` → `ContactKey`
+  - `FirstName` → `FirstName`
+  - `Email` → `Email`
+  - `Bio` → `Bio`
+  - `CreatedDate` → `CreatedDate`. The CSV values are blank, so I'll leave this column out and the field's default will fill in the import time. Tell me if you'd rather I send a specific date instead.
 
 Reply **"Confirm"** and I'll run the import, then check that the 5 rows landed. Reply **"Cancel"** to stop.
 <!-- orchestrate:session-state:end -->
