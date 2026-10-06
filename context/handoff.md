@@ -42,17 +42,16 @@
 <!-- Written by Orchestrate at the end of each session. Edits inside this block are
      replaced next session; anything OUTSIDE it is yours and is never touched. -->
 ### Engagement state — 2026-10-06
-**Status:** blocked — 5-row upsert to John_Mike_Customers blocked by irreversible confirmation pop-up unavailable in BUILD session
+**Status:** blocked — 5-row upsert to John_Mike_Customers blocked by confirmation dialog unavailable in BUILD — recurring platform issue, 3 sessions
 
 **Done this session**
-- Confirmed John_Mike_Customers has 0 rows and is ready to receive 5 new rows
-- Verified all CSV values fit their target fields
-- Confirmed payload is mapped and ready to execute
+- Verified John_Mike_Customers still has 0 rows (live check)
+- Confirmed all 5 CSV rows (JMC-0001 to JMC-0005) are mapped and ready
+- Validated Bio field has no length limit, default "No Biography is Available here" won't affect load
 
 **Open items**
-- User clicks Confirm on platform's irreversible confirmation pop-up, then sends message to trigger upsert
-- OR user imports 5 rows manually via Marketing Cloud Data Extension Import UI
-- OR admin enables confirmation dialog for BUILD sessions
+- Admin enables confirmation pop-up for Marketing Cloud writes in BUILD sessions
+- OR user imports 5 rows manually via Marketing Cloud Data Extension Import UI (Email Studio → Subscribers → Data Extensions → John_Mike_Customers → Import)
 - Read back all 5 rows from John_Mike_Customers to verify import succeeded
 - User confirms template choice (A or B) for MCP_Email_Send_Test creation
 - Create MCP_Email_Send_Test in folder 49889 with external key MCP_Email_Send_Test
@@ -60,14 +59,14 @@
 - Execute phone number update via upsert on John_N_Orchestrate_Test, read back all 5 rows to verify
 
 **Decisions**
-- Bio field: Text type, length 20 chars, optional, added to John_Mike_Customers
+- Bio field: Text type, no length limit, optional, added to John_Mike_Customers
 - Sample rows: 5 test contacts (JMC-0001 to JMC-0005) with realistic names, test emails, and short bios
 - John_Mike_Customers: Standard DE, folder 49911, external key John_Mike_Customers, 5 fields, not sendable
 - MCP_Email_Send_Test: will be created in folder 49889 with external key MCP_Email_Send_Test — awaiting template selection
 - CreatedDate will populate with GetDate() default on import (CSV column blank)
 
 **Blockers**
-- Confirmation dialog unavailable in BUILD session — platform requires irreversible modal click before upsert executes (recurring blocker)
+- Confirmation dialog unavailable in BUILD session — platform requires irreversible modal click before upsert executes (recurring: 3 sessions)
 
 **Next**
 - Admin escalation: enable confirmation pop-up for Marketing Cloud writes in BUILD sessions
@@ -82,18 +81,25 @@
 | Type | BUILD |
 | Outcome | COMPLETED |
 | Branch | `orchestrate/context` |
-| Session | `bf54131c-6277-4134-a614-277bf4dd56cc` |
+| Session | `12629cfa-6d99-4ea3-abbd-184150d7d7d2` |
 **In its own words (excerpt):**
-I didn't load the rows. The Data Extension still has **0 rows**, which I confirmed with a read-back just now.
+I didn't load the rows, so there was nothing to verify. `John_Mike_Customers` still has **0 rows**; I checked that live just now.
 
-The platform treats this upsert as irreversible. It only runs after you click **Confirm** on a pop-up headed "IRREVERSIBLE". The tool that raises that pop-up isn't available in this session, so the call was blocked. I won't bypass the check, and a typed "yes" doesn't count as confirmation. This is the same blocker the previous session hit, so it's a recurring problem rather than a one-off.
+**Why:** the platform counts this upsert as irreversible. It only runs after you click **Confirm** on a pop-up headed "IRREVERSIBLE". The tool that raises that pop-up isn't available in this session, so the call was stopped before it wrote anything. I won't get around the check, and a typed "yes" in chat doesn't count. This is the third session in a row to hit this, so it's a platform setup problem, not something wrong with your data.
 
-**What I checked**
-- **Data Extension:** `John_Mike_Customers` in folder 49911. It currently has 0 rows, so this load would add 5 new rows and overwrite nothing.
-- **Primary key:** `ContactKey`, as you specified.
-- **Fields:** `FirstName`, `Email` and `Bio` all exist, and every CSV value fits its field.
-- **CreatedDate:** this is a Date field that fills itself in with the current date when it's left empty. All 5 CSV values are blank, so I left the column out of the payload. That way the field stamps the load time. Sending an empty string to a Date field can make the row fail.
-- **The payload:** the 5 rows (JMC-0001 to JMC-0005) are mapped and ready. If the upsert can run, it will go fir
+**What's checked and ready:**
+
+| Field | Type in the Data Extension | From the CSV |
+|---|---|---|
+| `ContactKey` (primary key) | Text, max 50 | JMC-0001 to JMC-0005 |
+| `FirstName` | Text, max 50 | Aarav, Priya, Daniel, Meera, Lucas |
+| `Email` | Email address | 5 `@example.com` addresses |
+| `Bio` | Text | longest value is 17 characters ("Coffee enthusiast") |
+| `CreatedDate` | Date, defaults to `GetDate()` | left out of the payload, as you asked, so the default fills it |
+
+The table is empty, so this load would add 5 new rows and overwrite nothing.
+
+One mismatch with the earlier session's notes: they recorded `Bio` as 
 
 _[summary truncated — see the session record for the full text]_
 <!-- orchestrate:session-state:end -->
