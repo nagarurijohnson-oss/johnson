@@ -42,21 +42,16 @@
 <!-- Written by Orchestrate at the end of each session. Edits inside this block are
      replaced next session; anything OUTSIDE it is yours and is never touched. -->
 ### Engagement state — 2026-10-06
-**Status:** at risk — API filtered table creation attempted; awaiting user confirmation on query deletion approach (a) or (b)
+**Status:** at risk — Saved filter created; filtered table API failed 500×2. User must finish in Email Studio (3 clicks).
 
 **Done this session**
-- Verified John_Mike_Customers has 5 rows; JMC-0005 (Lucas) matches Bio = 'Amateur chef'
-- Confirmed no filtered table exists yet
-- Located working FilteredDataExtension example (Filtered_DE_Test_Ashwin) to model format
-- Identified old query still present; will overwrite if filtered table uses same name
+- Created saved filter JMC_Amateur_Chef_Filter (ID 2a430961-6ca1-430a-bb16-67c370b0f713) on John_Mike_Customers for Bio equals 'Amateur chef'
+- Confirmed filter reads back correctly with source table and condition
+- Attempted filtered table creation via POST /automation/v1/filters twice; both returned 500 Internal Server Error
 
 **Open items**
-- User confirms approach (a) delete query or (b) rename filtered table to avoid overwrite
-- Create saved filter on John_Mike_Customers (Bio equals 'Amateur chef') via API
-- Create filtered table John_Mike_Customers_Amateur_Chef via API (uncertain endpoint)
-- If API creation fails: user creates filtered table manually in Email Studio
-- Verify filtered table type is FilteredDataExtension and contains JMC-0005
-- If (a) chosen: obtain explicit delete confirmation for query 6aeb4e3d-2568-4f50-9acb-f469a7cce4c6
+- User creates filtered table JMC_Amateur_Chef_Filtered in Email Studio (Subscribers → Data Extensions → John_Mike_Customers → Filter → Save As)
+- Verify filtered table type is FilteredDataExtension and contains JMC-0005 (Lucas)
 - Update TEST-CONTACT-001 phone to 12758750001 in Contact Builder
 - Create MCP_Email_Send_Test in folder 49889 with external key MCP_Email_Send_Test
 
@@ -64,17 +59,18 @@
 - Option B selected: Standard table + SQL Query Activity for John_Mike_Customers_Amateur_Chef
 - Bio field: Text(100) in new table; all current bios fit
 - John_Mike_Customers: Standard DE, folder 49911, external key John_Mike_Customers, 5 fields, not sendable
-- Query external key truncated by Marketing Cloud to John_Mike_Customers_Amateur_Chef_Que
 - Attempt API creation of FilteredDataExtension before falling back to Email Studio manual creation
+- New filtered table named JMC_Amateur_Chef_Filtered to avoid overwrite conflict with old query
 
 **Blockers**
-- Old query John_Mike_Customers_Amateur_Chef_Query will overwrite filtered table if both use same name
-- FilteredDataExtension creation endpoint uncertain; may require Email Studio fallback
+- FilteredDataExtension creation endpoint POST /automation/v1/filters returns 500 Internal Server Error; cause unknown (request format or service limitation)
+- SOAP route blocked by Orchestrate tool limitation (cannot send nested DataFilter)
 
 **Next**
-- User replies 'Proceed with (a)' or 'Proceed with (b)' to resolve query/table name conflict
-- Attempt API creation of saved filter and filtered table; report exact errors if rejected
-- If API fails: provide Email Studio manual creation steps (Subscribers → Data Extensions → John_Mike_Customers → Filter → Bio equals 'Amateur chef')
+- User completes filtered table creation in Email Studio (3 clicks as documented)
+- User replies 'done' once saved
+- Verify filtered table type, source, and row count (JMC-0005 present)
+- Proceed to TEST-CONTACT-001 phone update and MCP_Email_Send_Test creation
 
 **Checked live on 2026-10-06:** the Salesforce org
 ### Last session — 2026-10-06
@@ -85,17 +81,16 @@
 | Branch | `orchestrate/context` |
 | Session | `58b3d8ba-c450-493f-9233-a0d9e3d2720f` |
 **In its own words (excerpt):**
-I haven't created anything yet; I need your go-ahead first. Last session concluded this had to be done by hand in Email Studio, but I've now found an API path to try first.
+The filtered table `JMC_Amateur_Chef_Filtered` was not created. I created the saved filter, but the call that should create the filtered table failed twice. You'll need to finish it in Email Studio, which takes about three clicks.
 
-**What I checked (read-only)**
-- `John_Mike_Customers` has 5 rows. One matches Bio = 'Amateur chef': **JMC-0005 (Lucas)**.
-- No filtered table from it exists yet.
-- A working filtered table in your account (`Filtered_DE_Test_Ashwin`) shows how one is built: a table of type `FilteredDataExtension` linked to its source table and a saved filter. The filter endpoint for that example responds and returns the full filter definition, so I can copy its format exactly.
-- The old query `John_Mike_Customers_Amateur_Chef_Query` (ID `6aeb4e3d-…`) is still there. It writes to the old table name, which no longer exists.
+**Created and confirmed**
+- **Saved filter `JMC_Amateur_Chef_Filter`** (ID `2a430961-6ca1-430a-bb16-67c370b0f713`). It is a filter on `John_Mike_Customers` for Bio equals "Amateur chef". Reading it back after creation confirmed the source table and the condition.
 
-**Proposed plan**
-1. **Create the filter:** a saved filter on `John_Mike_Customers` with Bio equals "Amateur chef", modelled on the working example.
-2. **Create the filtered table:** `John_Mike_Customers_Amateur_Chef` from that filter, in the same folder as the source (49911). This is the uncertain step. No endpoint I've found so far creates the filtered-table record itself. I'll try the likely ones and show 
+**What failed**
+- **Creating the filtered table:** I tried this twice with `POST /automation/v1/filters`, which is the route the working example `Filtered_DE_Test_Ashwin` is built on. Both calls returned exactly: `500 Internal Server Error` (`errorcode: 0`).
+- That error doesn't say whether my request was wrong or the service doesn't support this, and there's no documentation for this endpoint. I stopped after two tries rather than keep guessing.
+- I also tried the SOAP route. It failed because Orchestrate's SOAP tool can't send the nested filter (`DataFilter is required for Create calls`). That's a gap in our tool, not a Marketing Cloud limitation.
+- Neither failed call left a partial table or
 
 _[summary truncated — see the session record for the full text]_
 <!-- orchestrate:session-state:end -->
