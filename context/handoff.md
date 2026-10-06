@@ -42,18 +42,17 @@
 <!-- Written by Orchestrate at the end of each session. Edits inside this block are
      replaced next session; anything OUTSIDE it is yours and is never touched. -->
 ### Engagement state — 2026-10-06
-**Status:** waiting — Located John_Mike_Customers_Amateur_Chef table; awaiting user confirmation to delete table ± query
+**Status:** at risk — Table deleted successfully; orphaned query remains and risks interfering with filtered table creation
 
 **Done this session**
-- Located John_Mike_Customers_Amateur_Chef table (ID d67281f5-9fc1-f111-a5e6-5cba2c19e778) in folder 49911
-- Confirmed table contains 1 row (JMC-0005) and original data safe in John_Mike_Customers
-- Identified orphaned query John_Mike_Customers_Amateur_Chef_Query that writes to table
+- Deleted John_Mike_Customers_Amateur_Chef table (ID d67281f5-9fc1-f111-a5e6-5cba2c19e778) via REST API
+- Verified table deletion: lookup by ID returns 'not found', name search shows only John_Mike_Customers
+- Confirmed source table John_Mike_Customers intact with 5 rows in folder 49911
 
 **Open items**
-- User confirms: delete table only (a) or delete table + query (b)?
-- If user confirms deletion: execute delete and verify name is freed
-- Create filtered table manually in Email Studio (FilteredDataExtension type)
-- Verify filtered table contains JMC-0005
+- User confirms deletion of orphaned query John_Mike_Customers_Amateur_Chef_Query (reply 'delete the query')
+- User creates filtered table John_Mike_Customers_Amateur_Chef in Email Studio (Bio equals 'Amateur chef')
+- Verify filtered table is FilteredDataExtension type and contains JMC-0005 (Lucas)
 - Update TEST-CONTACT-001 phone to 12758750001 in Contact Builder
 - Create MCP_Email_Send_Test in folder 49889 with external key MCP_Email_Send_Test
 - Consider scheduling query automation for John_Mike_Customers refresh
@@ -64,14 +63,15 @@
 - John_Mike_Customers: Standard DE, folder 49911, external key John_Mike_Customers, 5 fields, not sendable
 - Query external key truncated by Marketing Cloud to John_Mike_Customers_Amateur_Chef_Que
 - Native FilteredDataExtension creation not available via API; manual Email Studio creation required
+- Table deletion proceeded via REST API after SOAP attempts failed with Token Expired
 
 **Blockers**
-- Awaiting user confirmation before permanent deletion of table and query
+- Orphaned query John_Mike_Customers_Amateur_Chef_Query will fail if run and may overwrite filtered table if recreated under same name
 
 **Next**
-- User replies with 'Confirm (a)', 'Confirm (b)', or 'Cancel'
-- If confirmed: delete table ± query and verify name is freed
-- User creates filtered table in Email Studio under name John_Mike_Customers_Amateur_Chef
+- User replies 'delete the query' to remove orphaned query
+- User creates filtered table in Email Studio: Subscribers → Data Extensions → John_Mike_Customers → Filter → Bio equals 'Amateur chef' → save as John_Mike_Customers_Amateur_Chef in folder 49911
+- Verify filtered table creation and JMC-0005 presence
 
 **Checked live on 2026-10-06:** the Salesforce org
 ### Last session — 2026-10-06
@@ -82,20 +82,13 @@
 | Branch | `main` |
 | Session | `f98da8e8-f066-4149-bfcb-7eaca34f39fa` |
 **In its own words (excerpt):**
-I found the table and haven't deleted anything yet. Deleting can't be undone, so I need your confirmation first.
+I deleted the table `John_Mike_Customers_Amateur_Chef`, and it's gone from Marketing Cloud. Looking up its ID now returns "not found", and searching for the name only finds `John_Mike_Customers`.
 
-**What would be deleted**
-- **Table:** `John_Mike_Customers_Amateur_Chef`. It's the standard table I built earlier, with external key `John_Mike_Customers_Amateur_Chef`, ID `d67281f5-9fc1-f111-a5e6-5cba2c19e778`, in folder 49911.
-- **Its contents:** 5 fields and **1 row** (JMC-0005, Lucas, lucas.sample@example.com, Amateur chef). That row is a copy, and the original is still in `John_Mike_Customers`, so you don't lose any data.
-- **What stays:** `John_Mike_Customers` and its 5 rows aren't touched.
+- **Your source table wasn't affected.** `John_Mike_Customers` still has its 5 rows and 5 fields in folder 49911.
+- **The name is free.** You can now create the filtered table in Email Studio as `John_Mike_Customers_Amateur_Chef`.
+- **How it went through:** I tried deleting through one Marketing Cloud API (SOAP) twice, and both attempts failed with "Token Expired". Nothing was deleted by those attempts. I then deleted it through the other API (REST), which worked. I passed the safety-check flag myself based on your typed "Confirm".
 
-**One decision before I delete:** the SQL query `John_Mike_Customers_Amateur_Chef_Query` writes into this table. Once the table is gone, the query has nowhere to write, and it will fail if anyone runs it. Your choices:
-- **(a) Delete the table only.** The query stays as it is.
-- **(b) Delete the table and the query.** I'd recommend this, since the query has no use without the table. It's also permanent.
-
-**What I'll do once you confirm**
-1. **Delete the table:** delete Data Extension `d67281f5-9fc1-f111-a5e6-5cba2c19e778`.
-2. **Delete the query (option b only):** delete Query
+**The query is still there.** You replied "Confirm" without saying (a) or (b). Both options delete the table, so I did that part only. The query `John_Mike_Customers_Amateur_Chef_Query` now points at a table that doesn't exist. If anyone runs it, it will fail. Once you create your filtered table under the same name, the query would overwrite its contents and could interfere with it. I'd recommend deleting the query too. Reply **"delete the query"** if you want
 
 _[summary truncated — see the session record for the full text]_
 <!-- orchestrate:session-state:end -->
