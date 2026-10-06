@@ -42,36 +42,34 @@
 <!-- Written by Orchestrate at the end of each session. Edits inside this block are
      replaced next session; anything OUTSIDE it is yours and is never touched. -->
 ### Engagement state — 2026-10-06
-**Status:** on track — Table & query built, empty, awaiting user OK to run query & confirm Bio field width
+**Status:** on track — Query ready to run; awaiting user confirmation to execute or widen Bio field first
 
 **Done this session**
-- Created John_Mike_Customers_Amateur_Chef table in folder 49911 with 5 fields, not sendable, 0 rows
-- Created SQL Query Activity John_Mike_Customers_Amateur_Chef_Query in Automation Studio, validated, not yet run
-- Confirmed table structure matches source except Bio is Text(100) instead of unlimited
+- Verified John_Mike_Customers_Amateur_Chef table exists, empty, 0 rows
+- Verified John_Mike_Customers has 1 matching row (JMC-0005, Lucas)
+- Confirmed query John_Mike_Customers_Amateur_Chef_Query is validated and ready
 
 **Open items**
-- User confirms: run query now or widen Bio field first
-- Run query to populate table with 1 row (JMC-0005, Lucas)
-- Read table back after query run to confirm row populated
+- User confirms: run query now or widen Bio field to unlimited first
+- Run query to populate John_Mike_Customers_Amateur_Chef with Lucas row
+- Read table back after query run to confirm 1 row populated
 - Pick template (A or B) for MCP_Email_Send_Test creation
 - Update TEST-CONTACT-001 phone to 12758750001 in Contact Builder
 - Create MCP_Email_Send_Test in folder 49889 with external key MCP_Email_Send_Test
 
 **Decisions**
 - Option B selected: Standard table + SQL Query Activity for John_Mike_Customers_Amateur_Chef
-- Bio field: Text type, no length limit, optional, added to John_Mike_Customers
-- Sample rows: 5 test contacts (JMC-0001 to JMC-0005) with realistic names, test emails, short bios
+- Bio field: Text(100) in new table; source has no limit but all current bios fit
 - John_Mike_Customers: Standard DE, folder 49911, external key John_Mike_Customers, 5 fields, not sendable
-- CreatedDate populates with GetDate() default on import
 - Query external key truncated by Marketing Cloud to John_Mike_Customers_Amateur_Chef_Que
 
 **Blockers**
 - None
 
 **Next**
-- User confirms: proceed with query run or widen Bio to unlimited first
-- Run query to populate John_Mike_Customers_Amateur_Chef with 1 matching row
-- Read table back to confirm row present and field types correct
+- User replies: 'run it' or 'widen Bio, then run it'
+- Execute query to populate John_Mike_Customers_Amateur_Chef
+- Read table back to confirm Lucas row present and field types correct
 - Proceed with MCP_Email_Send_Test template selection and creation
 
 **Checked live on 2026-10-06:** the Salesforce org
@@ -83,16 +81,17 @@
 | Branch | `main` |
 | Session | `f98da8e8-f066-4149-bfcb-7eaca34f39fa` |
 **In its own words (excerpt):**
-I built the table and the query, and read both back from Marketing Cloud to confirm they exist. The query **hasn't run yet**, so the new table is still empty.
+`John_Mike_Customers_Amateur_Chef` is empty because the query that fills it hasn't run yet. Last turn I only created the table and the query, and I stopped to get your OK before running it. A table built this way only gets rows when the SQL Query Activity runs, unlike a native filtered table in Email Studio. Nothing is broken.
 
-**1. Table `John_Mike_Customers_Amateur_Chef`**
-- Created in folder 49911 with external key `John_Mike_Customers_Amateur_Chef`. It's not sendable and has 0 rows.
-- The 5 fields match the source: ContactKey is Text(50) and the primary key, FirstName is Text(50), Email is EmailAddress, and CreatedDate is Date.
-- **One difference:** Bio came out as **Text(100)**, but in the source it has no length limit. The create call didn't keep "no limit" when I left the length out. Every current bio is short ("Amateur chef" is 12 characters), so the query will work. If the source ever has a bio over 100 characters that matches the filter, the run would fail. I can widen the field if you want that covered.
+I just checked both tables:
+- **`John_Mike_Customers_Amateur_Chef`:** 0 rows.
+- **`John_Mike_Customers`:** exactly 1 row where Bio = 'Amateur chef', which is **JMC-0005, Lucas, lucas.sample@example.com**. That's the row the query will copy across.
 
-**2. SQL Query Activity `John_Mike_Customers_Amateur_Chef_Query`**
-- Saved in the root **Query** folder in Automation Studio (folder 32395). It overwrites the new table each run, and Marketing Cloud validated the SQL with no errors.
-- The query is `SELECT ContactKey, FirstName, Email, CreatedDate, Bio FROM [John_Mike_Customers] WHERE Bio
+**What I'll do once you confirm**
+1. **Run the query** `John_Mike_Customers_Amateur_Chef_Query`. Each run replaces everything in `John_Mike_Customers_Amateur_Chef`, but the table is empty now, so nothing is lost. `John_Mike_Customers` isn't touched.
+2. **Check the result.** The query runs in the background, so I'll read `John_Mike_Customers_Amateur_Chef` back and confirm it has 1 row with Lucas's values.
+
+**Optional:** the Bio field in the new table only holds 100 characters, but in the source it has no limit. Lucas's bio is 12 characters, so this run works either way. If you want, I can widen Bio first so a longe
 
 _[summary truncated — see the session record for the full text]_
 <!-- orchestrate:session-state:end -->
