@@ -42,16 +42,15 @@
 <!-- Written by Orchestrate at the end of each session. Edits inside this block are
      replaced next session; anything OUTSIDE it is yours and is never touched. -->
 ### Engagement state — 2026-10-06
-**Status:** on track — Bio field verified on John_Mike_Customers. Ready to load 5 sample rows; awaiting user approval to proceed.
+**Status:** blocked — 5 sample rows ready but blocked by confirmation dialog — user must import CSV manually or admin enables dialog
 
 **Done this session**
-- Verified John_Mike_Customers is empty (0 rows)
-- Prepared 5 sample rows with Bio values (all ≤20 chars)
-- Confirmed all ContactKey values unique, emails use example.com (safe for test)
+- Verified John_Mike_Customers still empty (0 rows)
+- Prepared 5 sample rows CSV with all fields and bios ≤20 chars
 
 **Open items**
-- User approves sample row load or provides alternative names/emails/dates/bios
-- Insert 5 rows into John_Mike_Customers and read back to verify
+- User imports John_Mike_Customers_sample_rows.csv manually via Contact Builder, or admin enables confirmation dialog
+- Read back all 5 rows from John_Mike_Customers to verify import succeeded
 - User confirms template choice (A or B) for MCP_Email_Send_Test creation
 - Create MCP_Email_Send_Test in folder 49889 with external key MCP_Email_Send_Test
 - User manually updates TEST-CONTACT-001 phone to 12758750001 in Contact Builder, OR admin enables confirmation dialog
@@ -65,14 +64,14 @@
 - MCP_Email_Send_Test: will be created in folder 49889 with external key MCP_Email_Send_Test — awaiting template selection
 
 **Blockers**
-- Confirmation dialog unavailable — platform/admin setting blocks IRREVERSIBLE modal display (tenth+ session)
+- Confirmation dialog unavailable — platform/admin setting blocks irreversible modal display (tenth+ session)
 - Template choice (A or B) required before MCP_Email_Send_Test creation can proceed
 
 **Next**
-- User approves sample row load (or provides alternatives)
-- Insert 5 rows into John_Mike_Customers, read back all 5 to verify
-- User replies with template choice: A (TriggeredSendDataExtension) or B (SendLog) for MCP_Email_Send_Test
-- Create MCP_Email_Send_Test from chosen template in folder 49889
+- User imports CSV via Contact Builder → Data Extensions → John_Mike_Customers → Import, or admin enables dialog
+- Read back all 5 rows to confirm import succeeded
+- User provides template choice (A or B) for MCP_Email_Send_Test
+- Escalate confirmation dialog blocker to Orchestrate admin
 
 **Checked live on 2026-10-06:** the Salesforce org
 ### Last session — 2026-10-06
@@ -83,24 +82,17 @@
 | Branch | `orchestrate/context` |
 | Session | `4a65901d-f270-45ec-96fa-260777323520` |
 **In its own words (excerpt):**
-I checked `John_Mike_Customers` and it's still empty (0 rows). I haven't written anything yet. These are the 5 rows I'd insert:
+The 5 rows are not in `John_Mike_Customers` yet. Nothing was written, and the data extension still has 0 rows.
 
-| ContactKey | FirstName | Email | CreatedDate | Bio (max 20 chars) |
-|---|---|---|---|---|
-| JMC-0001 | Aarav | aarav.sample@example.com | 2026-09-01 | Loves hiking |
-| JMC-0002 | Priya | priya.sample@example.com | 2026-09-08 | Coffee enthusiast |
-| JMC-0003 | Daniel | daniel.sample@example.com | 2026-09-15 | Weekend cyclist |
-| JMC-0004 | Meera | meera.sample@example.com | 2026-09-22 | Avid reader |
-| JMC-0005 | Lucas | lucas.sample@example.com | 2026-09-29 | Amateur chef |
+**Why it stopped:** Orchestrate treats a data extension row write as irreversible. Before it will run the insert, you have to click Confirm on an acknowledgement dialog, and I can't open that dialog in this session. It's the same blocker that has held up the TEST-CONTACT-001 phone change. I also didn't push the rows through a different write tool, because that would skip the check you're meant to approve.
 
-**About these rows:**
-- Every Bio fits within the 20-character limit. The longest is "Coffee enthusiast" at 17 characters.
-- The emails use `example.com`, which is reserved for testing, so nothing could ever go to a real inbox. The data extension also isn't sendable.
-- All ContactKey values are unique. Because ContactKey is the primary key, running this again would update these 5 rows instead of adding duplicates.
+**Import them yourself in about a minute.** I've attached a CSV with the 5 rows exactly as listed to this session.
+1. Open **Contact Builder → Data Extensions → John Orchestrate Test → John_Mike_Customers**.
+2. Click **Import**, choose the attached `John_Mike_Customers_sample_rows.csv`, and set the delimiter to comma.
+3. Choose **Add and Update**. Check that the 5 columns map to the matching fields; the names are identical. The dates are in YYYY-MM-DD format.
+4. Finish the import. Then tell me, and I'll read the rows back and confirm all 5 landed correctly.
 
-**How I'll do it:**
-1. Insert the 5 rows into `John_Mike_Customers` in one batch.
-2. Read the rows back and confirm all 5 are there with the right values before I tell yo
+**Or get the dialog fixed:** an Orchestrate admin can turn the confirmation dialog back on. After that, I can ins
 
 _[summary truncated — see the session record for the full text]_
 <!-- orchestrate:session-state:end -->
