@@ -42,32 +42,31 @@
 <!-- Written by Orchestrate at the end of each session. Edits inside this block are
      replaced next session; anything OUTSIDE it is yours and is never touched. -->
 ### Engagement state — 2026-10-06
-**Status:** blocked — Phone update blocked by confirmation dialog (8th session). User must manually edit or admin must enable dialog.
+**Status:** at risk — Phone update still blocked by confirmation dialog (9 sessions). New DE schema ready for approval.
 
 **Done this session**
-- Verified TEST-CONTACT-001 current state in Salesforce org — phone still 12758759879
-- Confirmed ContactKey is the data extension key, not Name
-- Attempted upsert on John_N_Orchestrate_Test — held by confirmation gate
+- Verified John_Mike_Customers name is available in Marketing Cloud
+- Designed John_Mike_Customers schema: ContactKey (PK), FirstName, Email, CreatedDate
 
 **Open items**
-- Admin enables confirmation dialog in Orchestrate settings, OR user manually edits phone in Contact Builder (TEST-CONTACT-001 12758759879→12758750001, TEST-CONTACT-002 12758759889→12758750002, TEST-CONTACT-003 12758759332→12758750003)
-- Execute phone number update via sfmc_bulk_upsert_data_extension_rows on TEST-CONTACT-001, 002, 003
-- Read all 5 rows back and verify 3 new numbers saved, 2 unchanged
-- User approves creation of Orchestrate_Random_DE DE with 4 fields (ID, Name, Email, Date)
-- Create Orchestrate_Random_DE in folder 49911, read back to verify schema and 0 rows
+- User manually edits TEST-CONTACT-001 phone to 12758750001 in Contact Builder, OR admin enables confirmation dialog
+- Execute phone number update via upsert on John_N_Orchestrate_Test, read back all 5 rows to verify
+- User approves John_Mike_Customers schema (ContactKey PK, FirstName, Email, CreatedDate) and folder 49911
+- Create John_Mike_Customers DE in folder 49911, read back to verify schema and 0 rows
 
 **Decisions**
 - John_N_Orchestrate_Test: Standard DE, folder 32375, upsert method, confirmation gate required
-- Orchestrate_Random_DE: Standard DE, folder 49911, external key John_Mike, 4 fields (ID primary key, Name, Email, Date), not sendable, no Subscriber Key link
-- Proposed update: TEST-CONTACT-001 12758759879→12758750001, TEST-CONTACT-002 12758759889→12758750002, TEST-CONTACT-003 12758759332→12758750003
+- Orchestrate_Random_DE: Standard DE, folder 49911, external key John_Mike, 4 fields (ID primary key, Name, Email, Date), not sendable
+- John_Mike_Customers: Standard DE, folder 49911, external key John_Mike_Customers, 4 fields (ContactKey PK, FirstName, Email, CreatedDate), not sendable unless user specifies
 
 **Blockers**
-- Confirmation dialog unavailable — platform/admin setting blocks IRREVERSIBLE modal display, preventing phone number update write (eighth consecutive session)
+- Confirmation dialog unavailable — platform/admin setting blocks IRREVERSIBLE modal display, preventing phone number update write (ninth consecutive session)
 
 **Next**
-- User manually edits TEST-CONTACT-001 phone to 12758750001 in Contact Builder (fastest path), OR admin enables confirmation dialog in Orchestrate settings
-- Once unblocked: start new Build session, execute upsert on John_N_Orchestrate_Test, read back all 5 rows to verify
-- Escalate persistent confirmation dialog issue to Orchestrate admin — blocking for 8 sessions, requires platform fix
+- User approves John_Mike_Customers schema or requests changes (folder, sendable flag, field nullability)
+- Once approved: create John_Mike_Customers, read back schema to verify all field types saved correctly
+- Unblock phone update: user manually edits in Contact Builder OR admin enables confirmation dialog in Orchestrate settings
+- Escalate persistent confirmation dialog issue to Orchestrate admin — blocking for 9 sessions, requires platform fix
 
 **Checked live on 2026-10-06:** the Salesforce org
 ### Last session — 2026-10-06
@@ -76,24 +75,28 @@
 | Type | BUILD |
 | Outcome | COMPLETED |
 | Branch | `orchestrate/context` |
-| Session | `fc66aba5-e1b4-4913-90ac-03ded943e7e5` |
+| Session | `4a65901d-f270-45ec-96fa-260777323520` |
 **In its own words (excerpt):**
-I didn't update the phone number. Nothing was written to `John_N_Orchestrate_Test`.
+I checked Marketing Cloud first, and there's no existing data extension that matches "John_Mike", so the name is free. I haven't created anything yet. Here's what I'll build once you confirm.
 
-**What I checked (live, just now):**
-- `ContactKey` is the data extension's key; `Name` is not. So I searched for `Name = 'John Smith'` first. Exactly **one row** matches out of the 5 in the data extension:
+**Data extension to create: `John_Mike_Customers`**
 
-| Field | Now | After the upsert |
-|---|---|---|
-| ContactKey | TEST-CONTACT-001 | unchanged (the key the upsert matches on) |
-| Name | John Smith | unchanged |
-| Email | john.smith@example.com | unchanged |
-| **Phone** | **12758759879** | **12758750001** |
+| # | Field | Type | Length | Primary key | Required |
+|---|---|---|---|---|---|
+| 1 | ContactKey | Text | 50 | Yes | Yes |
+| 2 | FirstName | Text | 50 | No | No |
+| 3 | Email | EmailAddress | 254 | No | No |
+| 4 | CreatedDate | Date | — | No | No |
 
-**What happened:** I sent the upsert with only the Phone value. The tool held it back because it needs you to click **Confirm** in an IRREVERSIBLE confirmation dialog first. The tool that shows that dialog isn't available to me in this session, so I can't show it to you. A "yes" in chat doesn't replace that click, and I won't skip the gate myself. This is the same block that has stopped this exact update in previous sessions. It's a gap on our side, not a Marketing Cloud limitation.
+**Settings I'll use unless you change them:**
+- **Folder:** "John Orchestrate Test" (ID 49911, under Data Extensions). It exists in the account, and your earlier sessions used it for new data extensions.
+- **External key:** `John_Mike_Customers`, the same as the name.
+- **Sendable:** no. If you plan to send email to it, I can make it sendable instead, with ContactKey linked to Subscriber Key.
+- **Description:** "Customer list with contact key, first name, email and created date."
 
-**Two ways to get it done:**
-1. **Edit it yourself (quickest):** in Marketing Cloud, go to Contact Builder → Data Extensions → `John_N_Orchestrate_Test` → Reco
+**How I'll do it:**
+1. Create the data extension with the field list above.
+2. Read the fields back and check that every type actually saved. Marketing Cloud can quietly turn an unrecognised type into Text, so I'll sp
 
 _[summary truncated — see the session record for the full text]_
 <!-- orchestrate:session-state:end -->
