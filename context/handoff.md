@@ -42,10 +42,12 @@
 <!-- Written by Orchestrate at the end of each session. Edits inside this block are
      replaced next session; anything OUTSIDE it is yours and is never touched. -->
 ### Engagement state — 2026-10-06
-**Status:** blocked — 5th attempt: confirmation dialog still unavailable in BUILD. John_Mike_Customers remains at 0 rows. Manual import or admin escalation requi…
+**Status:** blocked — 5th consecutive upsert blocked by confirmation dialog. Manual import or admin escalation required.
 
 **Done this session**
-- Verified John_Mike_Customers exists in folder 49911 with 5 fields and 0 rows (live check)
+- Attempted bulk upsert of 5 rows into John_Mike_Customers
+- Confirmed platform safety check blocked write (no confirmation dialog available)
+- Verified Data Extension still at 0 rows post-attempt
 
 **Open items**
 - Admin enables confirmation pop-up for Marketing Cloud writes in BUILD sessions
@@ -67,9 +69,9 @@
 - Confirmation dialog unavailable in BUILD session — platform requires irreversible modal click before upsert executes (5 consecutive sessions blocked)
 
 **Next**
-- Admin escalation: enable confirmation pop-up for Marketing Cloud writes in BUILD sessions (recurring blocker across 5 sessions)
-- User option: import 5 rows manually via Email Studio → Subscribers → Data Extensions → John_Mike_Customers → Import and report completion
-- Once import confirmed: read back all 5 rows to verify success
+- Admin escalation: enable confirmation pop-up for Marketing Cloud writes in BUILD sessions
+- User option: import 5 rows manually via Email Studio → Subscribers → Data Extensions → John_Mike_Customers → Import using provided CSV
+- Once import confirmed: read back all 5 rows to verify success and CreatedDate population
 - User provides template choice (A or B) for MCP_Email_Send_Test creation
 
 **Checked live on 2026-10-06:** the Salesforce org
@@ -81,25 +83,23 @@
 | Branch | `orchestrate/context` |
 | Session | `fbfbb63f-a609-4058-ba8f-dde5306290a3` |
 **In its own words (excerpt):**
-I checked the Data Extension live. `John_Mike_Customers` exists in folder 49911 and has **0 rows**. It has 5 fields: `ContactKey` (the primary key, required), `FirstName`, `Email`, `CreatedDate` (fills in automatically with today's date) and `Bio`.
+The 5 rows were not inserted. The platform blocked the write again, and `John_Mike_Customers` still has **0 rows**.
 
-**What I plan to insert:** 5 new rows, using one bulk upsert call into `John_Mike_Customers`.
+**What happened**
+- I sent the bulk upsert with the 5 rows exactly as listed, with `CreatedDate` left out.
+- The platform's safety check stopped it before anything reached Marketing Cloud. The write only runs after you click **Confirm** on an "IRREVERSIBLE" pop-up. I don't have a way to show you that pop-up in this session.
+- Your "proceed" message doesn't count as that confirmation. The platform specifically requires the pop-up click, so I haven't tried to get around it or retried.
+- I read the Data Extension back to check: it has 0 rows, so nothing was partly written.
 
-| ContactKey | FirstName | Email | Bio |
-|---|---|---|---|
-| JMC-0001 | Aarav | aarav.sample@example.com | Loves hiking |
-| JMC-0002 | Priya | priya.sample@example.com | Coffee enthusiast |
-| JMC-0003 | Daniel | daniel.sample@example.com | Weekend cyclist |
-| JMC-0004 | Meera | meera.sample@example.com | Avid reader |
-| JMC-0005 | Lucas | lucas.sample@example.com | Amateur chef |
+This is the fifth session in a row where this write has been blocked the same way.
 
-- Every name, email and key is different. The emails use `example.com`, which can't receive mail.
-- `CreatedDate` is left blank so it fills in with today's date.
-- The table is empty, so nothing gets overwritten. The Data Extension isn't sendable, so no email goes out.
-
-**Tool call I'll make:** Marketing Cloud bulk upsert on Data Extension `4cac233d-86c1-f111-a5e6-5cba2c19e778` with the 5 rows above. Afterwards I'll read the rows back to check all 5 arrived.
-
-**One t
+**Two ways to get the rows in**
+1. **Import them manually (about 2 minutes).** Go to **Email Studio → Subscribers → Data Extensions → John_Mike_Customers → Import** and upload this CSV. Leave out the `CreatedDate` column so it fills in with today's date:
+   ```
+   ContactKey,FirstName,Email,Bio
+   JMC-0001,Aarav,aarav.sample@example.com,Loves hiking
+   JMC-0002,Priya,priya.sample@example.com,Coffee enthusiast
+   JMC-0
 
 _[summary truncated — see the session record for the full text]_
 <!-- orchestrate:session-state:end -->
