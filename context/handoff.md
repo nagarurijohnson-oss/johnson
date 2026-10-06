@@ -42,31 +42,31 @@
 <!-- Written by Orchestrate at the end of each session. Edits inside this block are
      replaced next session; anything OUTSIDE it is yours and is never touched. -->
 ### Engagement state — 2026-10-06
-**Status:** at risk — Phone update still blocked by confirmation dialog (9 sessions). New DE schema ready for approval.
+**Status:** on track — John_Mike_Customers DE created & verified in Marketing Cloud. Phone update still blocked (9 sessions).
 
 **Done this session**
-- Verified John_Mike_Customers name is available in Marketing Cloud
-- Designed John_Mike_Customers schema: ContactKey (PK), FirstName, Email, CreatedDate
+- Created John_Mike_Customers data extension in folder 49911 with 4 fields
+- Verified all field types saved correctly (ContactKey Text PK, FirstName Text, Email EmailAddress, CreatedDate Date)
+- Confirmed DE is empty (0 rows) and ready for data
 
 **Open items**
 - User manually edits TEST-CONTACT-001 phone to 12758750001 in Contact Builder, OR admin enables confirmation dialog
 - Execute phone number update via upsert on John_N_Orchestrate_Test, read back all 5 rows to verify
-- User approves John_Mike_Customers schema (ContactKey PK, FirstName, Email, CreatedDate) and folder 49911
-- Create John_Mike_Customers DE in folder 49911, read back to verify schema and 0 rows
+- Load sample rows into John_Mike_Customers DE, or make it sendable if user plans to email contacts
+- Escalate persistent confirmation dialog issue to Orchestrate admin — blocking for 9 sessions, requires platform fix
 
 **Decisions**
 - John_N_Orchestrate_Test: Standard DE, folder 32375, upsert method, confirmation gate required
-- Orchestrate_Random_DE: Standard DE, folder 49911, external key John_Mike, 4 fields (ID primary key, Name, Email, Date), not sendable
+- Orchestrate_Random_DE: Standard DE, folder 49911, external key John_Mike, 4 fields (ID PK, Name, Email, Date), not sendable
 - John_Mike_Customers: Standard DE, folder 49911, external key John_Mike_Customers, 4 fields (ContactKey PK, FirstName, Email, CreatedDate), not sendable unless user specifies
 
 **Blockers**
 - Confirmation dialog unavailable — platform/admin setting blocks IRREVERSIBLE modal display, preventing phone number update write (ninth consecutive session)
 
 **Next**
-- User approves John_Mike_Customers schema or requests changes (folder, sendable flag, field nullability)
-- Once approved: create John_Mike_Customers, read back schema to verify all field types saved correctly
+- Load sample rows into John_Mike_Customers DE, or make it sendable if user plans to email contacts
 - Unblock phone update: user manually edits in Contact Builder OR admin enables confirmation dialog in Orchestrate settings
-- Escalate persistent confirmation dialog issue to Orchestrate admin — blocking for 9 sessions, requires platform fix
+- Escalate confirmation dialog issue to Orchestrate admin for platform fix
 
 **Checked live on 2026-10-06:** the Salesforce org
 ### Last session — 2026-10-06
@@ -77,26 +77,29 @@
 | Branch | `orchestrate/context` |
 | Session | `4a65901d-f270-45ec-96fa-260777323520` |
 **In its own words (excerpt):**
-I checked Marketing Cloud first, and there's no existing data extension that matches "John_Mike", so the name is free. I haven't created anything yet. Here's what I'll build once you confirm.
+I created `John_Mike_Customers` in Marketing Cloud and read it back to check. All four fields saved with the right types.
 
-**Data extension to create: `John_Mike_Customers`**
+**Fields (as read back from Marketing Cloud)**
 
 | # | Field | Type | Length | Primary key | Required |
 |---|---|---|---|---|---|
 | 1 | ContactKey | Text | 50 | Yes | Yes |
 | 2 | FirstName | Text | 50 | No | No |
 | 3 | Email | EmailAddress | 254 | No | No |
-| 4 | CreatedDate | Date | — | No | No |
+| 4 | CreatedDate | **Date** | — | No | No |
 
-**Settings I'll use unless you change them:**
-- **Folder:** "John Orchestrate Test" (ID 49911, under Data Extensions). It exists in the account, and your earlier sessions used it for new data extensions.
-- **External key:** `John_Mike_Customers`, the same as the name.
-- **Sendable:** no. If you plan to send email to it, I can make it sendable instead, with ContactKey linked to Subscriber Key.
-- **Description:** "Customer list with contact key, first name, email and created date."
+CreatedDate came back as a real Date and Email as EmailAddress, so neither was turned into Text.
 
-**How I'll do it:**
-1. Create the data extension with the field list above.
-2. Read the fields back and check that every type actually saved. Marketing Cloud can quietly turn an unrecognised type into Text, so I'll sp
+**Settings**
+- **Folder:** John Orchestrate Test (ID 49911)
+- **External key:** `John_Mike_Customers`
+- **Sendable:** no
+- **Description:** saved as planned
+- **Rows:** 0. It's empty and ready for data.
+
+**Finding it:** it's owned by the Orchestrate app user, so your default view in Contact Builder may hide it. Open **Contact Builder → Data Extensions → John Orchestrate Test**, or use [this direct link](https://mc.s13.exacttarget.com/cloud/#app/Contact%20Builder/contactsmeta/admin.html#admin/data-extension/4cac233d-86c1-f111-a5e6-5cba2c19e778/properties/).
+
+**Still open from earlier sessions:** the phone number change for TEST-CONTACT-001 on `John_N_Orchestrate_Test` 
 
 _[summary truncated — see the session record for the full text]_
 <!-- orchestrate:session-state:end -->
