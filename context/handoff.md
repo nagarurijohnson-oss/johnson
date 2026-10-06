@@ -42,12 +42,11 @@
 <!-- Written by Orchestrate at the end of each session. Edits inside this block are
      replaced next session; anything OUTSIDE it is yours and is never touched. -->
 ### Engagement state — 2026-10-06
-**Status:** blocked — 5th consecutive upsert blocked by confirmation dialog. Manual import or admin escalation required.
+**Status:** at risk — John_N_Orchestrate_Test verified at 5 rows; 10 new rows staged for insert—platform safety check may block again.
 
 **Done this session**
-- Attempted bulk upsert of 5 rows into John_Mike_Customers
-- Confirmed platform safety check blocked write (no confirmation dialog available)
-- Verified Data Extension still at 0 rows post-attempt
+- Verified John_N_Orchestrate_Test has 5 existing rows (TEST-CONTACT-001 to 005)
+- Staged 10 new test contacts (TEST-CONTACT-006 to 015) with names, emails, phone numbers
 
 **Open items**
 - Admin enables confirmation pop-up for Marketing Cloud writes in BUILD sessions
@@ -55,8 +54,8 @@
 - Read back all 5 rows from John_Mike_Customers to verify import succeeded
 - User confirms template choice (A or B) for MCP_Email_Send_Test creation
 - Create MCP_Email_Send_Test in folder 49889 with external key MCP_Email_Send_Test
+- Execute bulk insert of 10 rows into John_N_Orchestrate_Test; read back to verify 15 total rows
 - User manually updates TEST-CONTACT-001 phone to 12758750001 in Contact Builder, OR admin enables confirmation dialog
-- Execute phone number update via upsert on John_N_Orchestrate_Test, read back all 5 rows to verify
 
 **Decisions**
 - Bio field: Text type, no length limit, optional, added to John_Mike_Customers
@@ -64,15 +63,16 @@
 - John_Mike_Customers: Standard DE, folder 49911, external key John_Mike_Customers, 5 fields, not sendable
 - MCP_Email_Send_Test: will be created in folder 49889 with external key MCP_Email_Send_Test — awaiting template selection
 - CreatedDate will populate with GetDate() default on import (CSV column blank)
+- 10 new test contacts staged for John_N_Orchestrate_Test (TEST-CONTACT-006 to 015)
 
 **Blockers**
-- Confirmation dialog unavailable in BUILD session — platform requires irreversible modal click before upsert executes (5 consecutive sessions blocked)
+- Confirmation dialog unavailable in BUILD session — platform requires irreversible modal click before upsert executes (5 consecutive sessions blocked, 6th attempt pending)
 
 **Next**
+- User confirms: proceed with bulk insert of 10 rows into John_N_Orchestrate_Test
+- If insert succeeds: read back table to confirm 15 total rows
+- If insert blocked again: user imports via Email Studio manually (CSV provided)
 - Admin escalation: enable confirmation pop-up for Marketing Cloud writes in BUILD sessions
-- User option: import 5 rows manually via Email Studio → Subscribers → Data Extensions → John_Mike_Customers → Import using provided CSV
-- Once import confirmed: read back all 5 rows to verify success and CreatedDate population
-- User provides template choice (A or B) for MCP_Email_Send_Test creation
 
 **Checked live on 2026-10-06:** the Salesforce org
 ### Last session — 2026-10-06
@@ -80,26 +80,28 @@
 |---|---|
 | Type | BUILD |
 | Outcome | COMPLETED |
-| Branch | `orchestrate/context` |
-| Session | `fbfbb63f-a609-4058-ba8f-dde5306290a3` |
+| Branch | `main` |
+| Session | `f98da8e8-f066-4149-bfcb-7eaca34f39fa` |
 **In its own words (excerpt):**
-The 5 rows were not inserted. The platform blocked the write again, and `John_Mike_Customers` still has **0 rows**.
+I checked `John_N_Orchestrate_Test`. It has **5 rows** right now (TEST-CONTACT-001 to 005) and 5 fields: ContactKey (primary key), Name, Email, phone, and CreatedDate (fills in automatically with today's date).
 
-**What happened**
-- I sent the bulk upsert with the 5 rows exactly as listed, with `CreatedDate` left out.
-- The platform's safety check stopped it before anything reached Marketing Cloud. The write only runs after you click **Confirm** on an "IRREVERSIBLE" pop-up. I don't have a way to show you that pop-up in this session.
-- Your "proceed" message doesn't count as that confirmation. The platform specifically requires the pop-up click, so I haven't tried to get around it or retried.
-- I read the Data Extension back to check: it has 0 rows, so nothing was partly written.
+**The 10 rows I plan to add**
 
-This is the fifth session in a row where this write has been blocked the same way.
+| ContactKey | Name | Email | phone |
+|---|---|---|---|
+| TEST-CONTACT-006 | Olivia Martinez | olivia.martinez@example.com | 12758759101 |
+| TEST-CONTACT-007 | James Anderson | james.anderson@example.com | 12758759102 |
+| TEST-CONTACT-008 | Sophia Thomas | sophia.thomas@example.com | 12758759103 |
+| TEST-CONTACT-009 | Benjamin Taylor | benjamin.taylor@example.com | 12758759104 |
+| TEST-CONTACT-010 | Ava Moore | ava.moore@example.com | 12758759105 |
+| TEST-CONTACT-011 | Lucas Jackson | lucas.jackson@example.com | 12758759106 |
+| TEST-CONTACT-012 | Mia White | mia.white@example.com | 12758759107 |
+| TEST-CONTACT-013 | Henry Harris | henry.harris@example.com | 12758759108 |
+| TEST-CONTACT-014 | Charlotte Clark | charlotte.clark@example.com | 12758759109 |
+| TEST-CONTACT-015 | Daniel Lewis | daniel.lewis@example.com | 12758759110 |
 
-**Two ways to get the rows in**
-1. **Import them manually (about 2 minutes).** Go to **Email Studio → Subscribers → Data Extensions → John_Mike_Customers → Import** and upload this CSV. Leave out the `CreatedDate` column so it fills in with today's date:
-   ```
-   ContactKey,FirstName,Email,Bio
-   JMC-0001,Aarav,aarav.sample@example.com,Loves hiking
-   JMC-0002,Priya,priya.sample@example.com,Coffee enthusiast
-   JMC-0
+**What I'll do once you confirm**
+- **Add the rows:** one bulk insert of the 10 rows into `John_N_Orchestrate_Test`.
 
 _[summary truncated — see the session record for the full text]_
 <!-- orchestrate:session-state:end -->
