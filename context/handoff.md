@@ -42,12 +42,11 @@
 <!-- Written by Orchestrate at the end of each session. Edits inside this block are
      replaced next session; anything OUTSIDE it is yours and is never touched. -->
 ### Engagement state — 2026-10-06
-**Status:** blocked — 5-row upsert to John_Mike_Customers blocked by confirmation dialog unavailable in BUILD — recurring platform issue, 3 sessions
+**Status:** blocked — 4th consecutive upsert blocked by unavailable confirmation dialog in BUILD — admin escalation or manual import required
 
 **Done this session**
-- Verified John_Mike_Customers still has 0 rows (live check)
-- Confirmed all 5 CSV rows (JMC-0001 to JMC-0005) are mapped and ready
-- Validated Bio field has no length limit, default "No Biography is Available here" won't affect load
+- Verified John_Mike_Customers still has 0 rows (live check before and after attempt)
+- Confirmed all 5 CSV rows ready for insert (JMC-0001 to JMC-0005)
 
 **Open items**
 - Admin enables confirmation pop-up for Marketing Cloud writes in BUILD sessions
@@ -66,10 +65,10 @@
 - CreatedDate will populate with GetDate() default on import (CSV column blank)
 
 **Blockers**
-- Confirmation dialog unavailable in BUILD session — platform requires irreversible modal click before upsert executes (recurring: 3 sessions)
+- Confirmation dialog unavailable in BUILD session — platform requires irreversible modal click before upsert executes (4 consecutive sessions blocked)
 
 **Next**
-- Admin escalation: enable confirmation pop-up for Marketing Cloud writes in BUILD sessions
+- Admin escalation: enable confirmation pop-up for Marketing Cloud writes in BUILD sessions (recurring blocker)
 - User option: import 5 rows manually via Marketing Cloud Data Extension Import UI and report completion
 - Once import confirmed: read back all 5 rows to verify success
 - User provides template choice (A or B) for MCP_Email_Send_Test creation
@@ -83,23 +82,21 @@
 | Branch | `orchestrate/context` |
 | Session | `12629cfa-6d99-4ea3-abbd-184150d7d7d2` |
 **In its own words (excerpt):**
-I didn't load the rows, so there was nothing to verify. `John_Mike_Customers` still has **0 rows**; I checked that live just now.
+The 5 rows were not inserted. `John_Mike_Customers` still has **0 rows**; I checked that live just before and after the attempt.
 
-**Why:** the platform counts this upsert as irreversible. It only runs after you click **Confirm** on a pop-up headed "IRREVERSIBLE". The tool that raises that pop-up isn't available in this session, so the call was stopped before it wrote anything. I won't get around the check, and a typed "yes" in chat doesn't count. This is the third session in a row to hit this, so it's a platform setup problem, not something wrong with your data.
+**Why it stopped:** the platform treats this write as permanent. It only runs after you click **Confirm** on a pop-up headed "IRREVERSIBLE". I can't raise that pop-up in this session, so the call was stopped before anything was written. A "yes" typed in chat doesn't count as that confirmation, and I won't skip the check. This is the fourth time in a row a write here has been stopped this way, which points to how this session type is set up, not to your data.
 
-**What's checked and ready:**
+**The 5 rows I submitted:**
 
-| Field | Type in the Data Extension | From the CSV |
-|---|---|---|
-| `ContactKey` (primary key) | Text, max 50 | JMC-0001 to JMC-0005 |
-| `FirstName` | Text, max 50 | Aarav, Priya, Daniel, Meera, Lucas |
-| `Email` | Email address | 5 `@example.com` addresses |
-| `Bio` | Text | longest value is 17 characters ("Coffee enthusiast") |
-| `CreatedDate` | Date, defaults to `GetDate()` | left out of the payload, as you asked, so the default fills it |
+| ContactKey (primary key) | FirstName | Email | Bio |
+|---|---|---|---|
+| JMC-0001 | Aarav | aarav.sample@example.com | Loves hiking |
+| JMC-0002 | Priya | priya.sample@example.com | Coffee enthusiast |
+| JMC-0003 | Daniel | daniel.sample@example.com | Weekend cyclist |
+| JMC-0004 | Meera | meera.sample@example.com | Avid reader |
+| JMC-0005 | Lucas | lucas.sample@example.com | Amateur chef |
 
-The table is empty, so this load would add 5 new rows and overwrite nothing.
-
-One mismatch with the earlier session's notes: they recorded `Bio` as 
+These come from your attached CSV. Every name, email and key is different, and `CreatedDate` is left out so its default (`GetDate()`) fills it in. The table is empty, so this woul
 
 _[summary truncated — see the session record for the full text]_
 <!-- orchestrate:session-state:end -->
