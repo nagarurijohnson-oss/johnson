@@ -42,23 +42,23 @@
 <!-- Written by Orchestrate at the end of each session. Edits inside this block are
      replaced next session; anything OUTSIDE it is yours and is never touched. -->
 ### Engagement state — 2026-10-06
-**Status:** waiting — AUTO_Daily_Data_Load: awaiting three decisions (step, time zone, folder) before build
+**Status:** waiting — AUTO_Daily_Data_Load: confirmed step exists, awaiting time zone + folder decisions
 
 **Done this session**
-- Confirmed AUTO_Daily_Data_Load name is still available
-- Re-presented three required decisions with full context and examples
+- Verified John_Mike_Customers_Amateur_Chef_Query exists and is viable as daily step
 
 **Open items**
-- User decides: step for AUTO_Daily_Data_Load (existing query like John_Mike_Customers_Amateur_Chef_Query, or shell only)
 - User decides: time zone for 9:00 AM (IST or Central Standard Time)
 - User decides: folder for AUTO_Daily_Data_Load (32393 or other)
+- Create AUTO_Daily_Data_Load automation with chosen step, time zone, and folder
+- Read back automation name, step, schedule, and status to confirm
 - User creates filtered table JNOT_CreatedDate_0938_Filtered in Email Studio UI
 - Verify filtered table type, source, and row count (expect 10: TEST-CONTACT-006 to 015)
 - Clarify: restore JMC-0004 FirstName from 'Updated' to 'Meera' or leave as-is
 - Execute two-step method on JMC_Amateur_Chef_Filtered
-- Update TEST-CONTACT-001 phone to 12758750001 in Contact Builder
 
 **Decisions**
+- Step for AUTO_Daily_Data_Load: John_Mike_Customers_Amateur_Chef_Query (SQL Query Activity, ID 6aeb4e3d-2568-4f50-9acb-f469a7cce4c6)
 - Option B: Standard table + SQL Query Activity for John_Mike_Customers_Amateur_Chef
 - Bio field: Text(100); all current bios fit
 - John_Mike_Customers: Standard DE, folder 49911, external key John_Mike_Customers, 5 fields, not sendable
@@ -71,10 +71,9 @@
 - None
 
 **Next**
-- User replies with all three choices: step (a/b), time zone (IST/CST), folder (32393/other)
-- Create AUTO_Daily_Data_Load automation with chosen step and schedule
+- User replies with time zone (IST or CST) and folder (32393 or other)
+- Create AUTO_Daily_Data_Load automation with John_Mike_Customers_Amateur_Chef_Query step and chosen schedule
 - Read back automation name, step, schedule, and status to confirm
-- User creates filtered table JNOT_CreatedDate_0938_Filtered in Email Studio
 
 **Checked live on 2026-10-06:** the Salesforce org
 ### Last session — 2026-10-06
@@ -85,21 +84,26 @@
 | Branch | `orchestrate/context` |
 | Session | `58b3d8ba-c450-493f-9233-a0d9e3d2720f` |
 **In its own words (excerpt):**
-I haven't created `AUTO_Daily_Data_Load` yet. I just checked again and the name is still free, but I need three decisions from you before I build it.
+Yes, it exists. `John_Mike_Customers_Amateur_Chef_Query` is a SQL Query Activity in Automation Studio, not a file, and it's in the account now.
 
-**1. What should it run each day?** An automation can only be switched on once it has at least one step. `Loyalty_Daily_Recognition` is an example: it was created with no steps and has been stuck in **Building** ever since.
-- **(a) An existing SQL query.** For example, `John_Mike_Customers_Amateur_Chef_Query` refreshes `John_Mike_Customers_Amateur_Chef`, and `DE_Test_Customers_Gold_Refresh` refreshes the Gold table. There are 16 queries in this account, so name any of them. You can also name an import or file transfer.
-- **(b) No step for now.** I create the automation with the daily 9:00 AM schedule saved, and it stays inactive until a step is added.
+| | |
+|---|---|
+| Name | `John_Mike_Customers_Amateur_Chef_Query` |
+| ID | `6aeb4e3d-2568-4f50-9acb-f469a7cce4c6` |
+| External key | `John_Mike_Customers_Amateur_Chef_Que` (Marketing Cloud shortened it) |
+| Query | `SELECT ContactKey, FirstName, Email, CreatedDate, Bio FROM [John_Mike_Customers] WHERE Bio = 'Amateur chef'` |
+| Writes to | `John_Mike_Customers_Amateur_Chef` |
+| Update type | **Overwrite** (the target table is cleared and refilled on each run) |
+| Folder | 32395 |
+| Created | 2026-10-06 10:07 (it hasn't been changed since) |
 
-**2. Which time zone is 9:00 AM in?**
-- **India Standard Time.** This matches your session.
-- **Central Standard Time.** Other automations in this account use this one.
+It can be the daily step for `AUTO_Daily_Data_Load`. I still need two more answers to build the automation:
+- **Time zone for 9:00 AM:** India Standard Time or Central Standard Time
+- **Automation folder:** 32393 or another one
 
-**3. Which folder should it go in?**
-- **32393**, where most of the automations here live.
-- **Another folder.** Give me the name or ID.
+You could reply "**a: John_Mike_Customers_Amateur_Chef_Query, IST, 32393**", for example. I'll take that as your go-ahead to create the automation, switch on its schedule and read it back to confirm.
 
-Reply with all three together, for example "**a: John_Mike_Customers_Amateur_Che
+Sources: checked live: Marketing Cloud (SQL Query activities filtered by name)
 
 _[summary truncated — see the session record for the full text]_
 <!-- orchestrate:session-state:end -->
