@@ -42,12 +42,10 @@
 <!-- Written by Orchestrate at the end of each session. Edits inside this block are
      replaced next session; anything OUTSIDE it is yours and is never touched. -->
 ### Engagement state — 2026-10-06
-**Status:** blocked — Two-step filtered table method failed (500 error). Empty table created; awaiting user choice (a/b/c) to proceed.
+**Status:** blocked — Awaiting user choice (a/b/c) on empty filtered table JNOT_CreatedDate_0938_Filtered; 10 matching rows confirmed in source.
 
 **Done this session**
-- Created saved filter JNOT_CreatedDate_0938_Filter (ID a7dfb812-…) on John_N_Orchestrate_Test, condition CreatedDate = 10/6/2026 9:38:48 AM
-- Created empty table JNOT_CreatedDate_0938_Filtered (ID a95b95c8-…, folder 49911) with correct 5 fields and types
-- Confirmed POST /automation/v1/filters with destinationObjectId returns 500 Internal Server Error; two-step method does not work
+- Verified John_N_Orchestrate_Test contains 15 rows: TEST-CONTACT-001–005 (3:30:11 PM) and TEST-CONTACT-006–015 (9:38:48 AM)
 
 **Open items**
 - User decision: (a) delete empty table and finish in Email Studio, (b) fill table with SQL query, or (c) save under different name
@@ -65,7 +63,6 @@
 - Filtered table API route /automation/v1/filters is not workable; use Email Studio or SQL query instead
 
 **Blockers**
-- POST /automation/v1/filters with destinationObjectId returns 500 Internal Server Error; filtered table creation via API not viable
 - Empty table JNOT_CreatedDate_0938_Filtered blocks Email Studio save under same name; user must choose delete, query fill, or rename
 
 **Next**
@@ -73,7 +70,6 @@
 - If (a): delete table, then in Email Studio open John_N_Orchestrate_Test → Filter → load JNOT_CreatedDate_0938_Filter → Save As JNOT_CreatedDate_0938_Filtered
 - If (b): create SQL query writing 10 matching rows into JNOT_CreatedDate_0938_Filtered
 - If (c): save Email Studio filtered table under new name (e.g. JNOT_CreatedDate_0938_FDE)
-- For JMC_Amateur_Chef_Filtered: apply Email Studio steps from previous session (no API route available)
 
 **Checked live on 2026-10-06:** the Salesforce org
 ### Last session — 2026-10-06
@@ -84,14 +80,14 @@
 | Branch | `orchestrate/context` |
 | Session | `58b3d8ba-c450-493f-9233-a0d9e3d2720f` |
 **In its own words (excerpt):**
-The filtered table wasn't created. The two-step method failed with the same `500 Internal Server Error` as the earlier attempts. I created the saved filter, but the table that now exists is a plain, empty table, not a filtered one.
+`John_N_Orchestrate_Test` currently has **15 rows**.
 
-**Created and confirmed by reading back**
-- **Saved filter `JNOT_CreatedDate_0938_Filter`** (ID `a7dfb812-d8c6-493c-80d2-efe521ecd3ac`). Its source is `John_N_Orchestrate_Test` and its condition is CreatedDate equals `10/6/2026 9:38:48 AM`, as you chose. The first create attempt was rejected because the description contained `/` and `:` ("Description cannot contain illegal characters"). The second attempt, with a plain-text description, worked.
-- **Table `JNOT_CreatedDate_0938_Filtered`** (ID `a95b95c8-…`, folder 49911). It has the 5 source fields with the right types: CreatedDate is Date, ContactKey is the primary key. It is **type `DataExtension`, not `FilteredDataExtension`, and has 0 rows.**
+- **TEST-CONTACT-001 to 005 (5 rows):** CreatedDate is 10/6/2026 3:30:11 PM
+- **TEST-CONTACT-006 to 015 (10 rows):** CreatedDate is 10/6/2026 9:38:48 AM
 
-**What failed**
-- **Linking them:** `POST /automation/v1/filters` with `destinationObjectId` set to the new table, matching the working example field for field. It returned `500 Internal Server Error` (`errorcode: 0`). No filter activity was created; there are 
+That's the same count as earlier in this session, so nothing has been added or removed.
 
-_[summary truncated — see the session record for the full text]_
+The empty `JNOT_CreatedDate_0938_Filtered` table is still waiting on your choice of (a), (b) or (c) from my last message.
+
+Sources: checked live: Marketing Cloud (row query on `John_N_Orchestrate_Test`) · not checked: nothing
 <!-- orchestrate:session-state:end -->
