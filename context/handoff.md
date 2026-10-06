@@ -42,16 +42,17 @@
 <!-- Written by Orchestrate at the end of each session. Edits inside this block are
      replaced next session; anything OUTSIDE it is yours and is never touched. -->
 ### Engagement state — 2026-10-06
-**Status:** waiting — Awaiting user instruction: which contact phone number(s) to update and new values
+**Status:** on track — Phone update planned for 3 contacts in John_N_Orchestrate_Test — awaiting user approval to proceed
 
 **Done this session**
-- Re-read John_N_Orchestrate_Test current phone numbers to confirm before update
+- Re-read all 5 rows in John_N_Orchestrate_Test to confirm current phone numbers
+- Proposed 3 new test phone numbers matching existing format (127587 prefix)
+- Built before → after table for user confirmation
 
 **Open items**
-- User specifies which contact(s) and new phone number(s) for update
-- Display before → after confirmation table
-- Execute phone number update via sfmc_bulk_upsert_data_extension_rows
-- Read rows back and verify new phone numbers saved
+- User approves or modifies the 3 planned phone number changes
+- Execute phone number update via sfmc_bulk_upsert_data_extension_rows on TEST-CONTACT-001, 002, 003
+- Read all 5 rows back and verify 3 new numbers saved, 2 unchanged
 - User approves creation of Orchestrate_Random_DE DE with 4 fields (ID, Name, Email, Date)
 - Create Orchestrate_Random_DE in folder 49911, read back to verify schema and 0 rows
 - Enable confirmation tool in session — required to display IRREVERSIBLE dialog before CSV insert
@@ -60,14 +61,15 @@
 **Decisions**
 - John_N_Orchestrate_Test: Standard DE, folder 32375, upsert method, confirmation gate required
 - Orchestrate_Random_DE: Standard DE, folder 49911, external key John_Mike, 4 fields (ID primary key, Name, Email, Date), not sendable, no Subscriber Key link
+- Proposed update: TEST-CONTACT-001 12758759879→12758750001, TEST-CONTACT-002 12758759889→12758750002, TEST-CONTACT-003 12758759332→12758750003
 
 **Blockers**
 - Confirmation tool not available — platform/admin setting blocks IRREVERSIBLE modal display
 
 **Next**
-- User replies with contact identifier(s) and new phone number(s)
-- Show before → after table for confirmation
-- Execute update and verify in live system
+- User confirms or modifies the 3 proposed phone numbers
+- Execute upsert on John_N_Orchestrate_Test with new phone values
+- Read back all 5 rows to verify changes persisted correctly
 
 **Checked live on 2026-10-06:** the Salesforce org
 ### Last session — 2026-10-06
@@ -78,25 +80,24 @@
 | Branch | `orchestrate/context` |
 | Session | `dbc33f2a-5193-4665-918d-f4285692262b` |
 **In its own words (excerpt):**
-I can do that, but I need to know which row to change and what the new number should be. I haven't changed anything yet.
+I've picked three new test numbers. They use the same 11-digit format and `127587` prefix as your existing ones, so each is easy to recognise. I haven't changed anything yet, and the current values below are from a read I just did.
 
-These are the current phone numbers in **John_N_Orchestrate_Test** (I just re-read them):
+**Planned update: John_N_Orchestrate_Test, Phone field only**
 
-| ContactKey | Name | Current Phone |
-|---|---|---|
-| TEST-CONTACT-001 | John Smith | 12758759879 |
-| TEST-CONTACT-002 | Sarah Johnson | 12758759889 |
-| TEST-CONTACT-003 | Michael Brown | 12758759332 |
-| TEST-CONTACT-004 | David Wilson | 12758759454 |
-| TEST-CONTACT-005 | Emily Davis | 12758759667 |
+| ContactKey | Name | Current Phone | → New Phone |
+|---|---|---|---|
+| TEST-CONTACT-001 | John Smith | 12758759879 | **12758750001** |
+| TEST-CONTACT-002 | Sarah Johnson | 12758759889 | **12758750002** |
+| TEST-CONTACT-003 | Michael Brown | 12758759332 | **12758750003** |
 
-**Please reply with:**
-1. **Which contact(s):** a ContactKey or name, several of them, or "all".
-2. **The new phone number** for each one.
+**What happens:**
+- **One Marketing Cloud update** on these 3 rows, matched on ContactKey. Name, Email and CreatedDate stay as they are.
+- **TEST-CONTACT-004 and 005** won't be touched.
+- **The update overwrites the old numbers.** The current values are listed above, so you can put them back later if you need to.
+- **Afterwards I'll read all 5 rows back** to check the 3 new numbers saved and the other 2 didn't change.
+- **John filter** (001, 002) and **Segment 0** (003) are built from this table, so they'll show the new numbers after their next refresh.
 
-For example: *"Sarah Johnson → 12758750000"* or *"001 → 12750000001, 004 → 12750000004"*.
+**Proceed with these numbers?** If you'd like different ones, send t
 
-When you reply, I'll show you a before → after table to confirm. After the update I'll read the rows back to check the new numbers saved. Only the Phone field will change. **John filter** and **Segment 0** are built from this table, so they'll show the new numbers after their next refresh.
-
-Sources: engagement context (context/handoff.md) · checked live: Marketing Cloud (John_N_Orchestrate_Test rows) · not checked: nothing
+_[summary truncated — see the session record for the full text]_
 <!-- orchestrate:session-state:end -->
