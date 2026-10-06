@@ -42,17 +42,21 @@
 <!-- Written by Orchestrate at the end of each session. Edits inside this block are
      replaced next session; anything OUTSIDE it is yours and is never touched. -->
 ### Engagement state — 2026-10-06
-**Status:** at risk — Filtered table creation blocked by 500 errors; two-step retry proposed with risk of orphaned table
+**Status:** waiting — Two-step filtered table method ready; awaiting user choice on CreatedDate filter condition (1/2/3) and approval to proceed
 
 **Done this session**
-- Third API attempt confirmed same 500 Internal Server Error
-- Root cause identified: prior attempts created filter activity without pre-existing destination table
-- Two-step retry strategy designed based on working example Filtered_DE_Test_Ashwin
+- Analyzed John_N_Orchestrate_Test: 15 rows, 5 fields, CreatedDate stored in seconds
+- Identified 10 rows with CreatedDate 9:38:48 AM (TEST-CONTACT-006 to 015)
+- Confirmed 5 rows with CreatedDate 3:30:11 PM (TEST-CONTACT-001 to 005)
+- Ruled out John_N_Orchestrate_Test Segment 0 (random-split segment, not filtered table)
+- Designed three filter condition options for user decision
 
 **Open items**
-- Execute two-step retry: create standard table JMC_Amateur_Chef_Filtered, then link via filter activity
-- Verify filtered table type is FilteredDataExtension and contains JMC-0005 (Lucas)
-- User creates filtered table in Email Studio if API retry fails (fallback)
+- User decision: proceed with filter condition (1) within-the-minute, (2) exactly 9:38:48 AM, or (3) whole day
+- User approval: confirm table name or provide alternative
+- Execute two-step retry on JMC_Amateur_Chef_Filtered: create standard table, then POST filter activity with destinationObjectId
+- Execute two-step method on JNOT_CreatedDate_0938_Filtered with chosen condition
+- Verify both filtered tables report type FilteredDataExtension and correct row counts
 - Update TEST-CONTACT-001 phone to 12758750001 in Contact Builder
 - Create MCP_Email_Send_Test in folder 49889 with external key MCP_Email_Send_Test
 
@@ -62,15 +66,16 @@
 - John_Mike_Customers: Standard DE, folder 49911, external key John_Mike_Customers, 5 fields, not sendable
 - Two-step creation: table first, then filter activity with destinationObjectId
 - Filtered table named JMC_Amateur_Chef_Filtered to avoid overwrite conflict
+- Recommended filter condition: (1) within-the-minute (9:38:00–9:39:00 AM) for 10 rows
 
 **Blockers**
-- FilteredDataExtension creation via single-step POST /automation/v1/filters returns 500 Internal Server Error; root cause now identified as missing pre-created destination table
+- FilteredDataExtension creation via single-step POST /automation/v1/filters returns 500 Internal Server Error; two-step method not yet tested
 
 **Next**
-- Await user reply: 'Proceed' or 'Proceed, use a test name'
-- If Proceed: create table JMC_Amateur_Chef_Filtered, then POST filter activity with destinationObjectId
-- If Proceed, use a test name: create table JMC_Amateur_Chef_Filtered_TEST, then link and verify before renaming
-- Verify result reports type FilteredDataExtension and row count includes JMC-0005
+- Await user reply: 'Proceed with (1)', (2), or (3)', optionally with alternative table name
+- If approved: create JNOT_CreatedDate_0938_Filtered table, then POST filter activity with destinationObjectId
+- In same pass: execute two-step method on JMC_Amateur_Chef_Filtered
+- Verify both tables report type FilteredDataExtension and expected row counts
 
 **Checked live on 2026-10-06:** the Salesforce org
 ### Last session — 2026-10-06
@@ -81,16 +86,19 @@
 | Branch | `orchestrate/context` |
 | Session | `58b3d8ba-c450-493f-9233-a0d9e3d2720f` |
 **In its own words (excerpt):**
-Still not created: the third attempt returned the same `500 Internal Server Error`. The filtered table `JMC_Amateur_Chef_Filtered` doesn't exist yet, and nothing partial was left behind.
+I haven't created anything yet. The filter needs one decision from you, because no row is stamped exactly 9:38 AM. The API route for filtered tables is also still unproven.
 
-**What I found this time.** The working example `Filtered_DE_Test_Ashwin` was built in two steps. Its table was created at 05:18:32.777, and its filter activity 0.2 seconds later at 05:18:33.01, linked to that table through `destinationObjectId`. Each of my attempts asked the filter activity to create the table itself. That is the most likely reason they fail.
+**What I checked (read-only)**
+- `John_N_Orchestrate_Test` (folder 49911) has 15 rows and 5 fields. `CreatedDate` is a Date field that stores seconds.
+- **10 rows** have `CreatedDate` = 10/6/2026 **9:38:48 AM**: TEST-CONTACT-006 to 015 (Olivia Martinez to Daniel Lewis).
+- The other **5 rows** (001 to 005) are 10/6/2026 3:30:11 PM.
+- A filter of "equals 9:38:00 AM" would match **0 rows**, because of the 48 seconds.
+- There's also a table called `John_N_Orchestrate_Test Segment 0`. It's a random-split segment, not a filtered table, so it doesn't meet this request.
 
-**Proposed two-step retry**
-1. **Create the table:** `sfmc_create_data_extension` with name and key `JMC_Amateur_Chef_Filtered` in folder 49911, using the same 5 fields as the source (ContactKey as primary key, FirstName, Email, CreatedDate, Bio), not sendable.
-2. **Link it:** `sfmc_rest_create` POST `/automation/v1/filters` with `destinationObjectId` set to the new table, `filterDefinitionId` = `2a430961-…`, `sourceObjectId` = `John_Mike_Customers`, and folder 49102, as in the example.
-3. **Check:** read the table back and confirm it reports type `FilteredDataExtension` and contains JMC-0005 (Lucas).
+**Open from your last request.** `JMC_Amateur_Chef_Filtered` still doesn't exist. Every API attempt to create a filtered table has returned `500 Internal Server Error`. The best lead so far is the two-step method: create the table first, then link the filter activity to it. That method hasn't been tested yet, and this table would use it too.
 
-**The risk.** If step 2 still fails, o
+**Proposed plan**
+1. **Saved filter** `JNOT_CreatedDate_0938_Filter` on `John_N_Orchestrate_Test`, using the co
 
 _[summary truncated — see the session record for the full text]_
 <!-- orchestrate:session-state:end -->
