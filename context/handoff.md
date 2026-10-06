@@ -42,7 +42,7 @@
 <!-- Written by Orchestrate at the end of each session. Edits inside this block are
      replaced next session; anything OUTSIDE it is yours and is never touched. -->
 ### Engagement state — 2026-10-06
-**Status:** blocked — Phone update blocked by confirmation dialog (5th session). User must manually edit or admin must enable dialog.
+**Status:** blocked — Phone update blocked by confirmation dialog (6th session). User must manually edit or admin must enable dialog.
 
 **Done this session**
 - Verified TEST-CONTACT-001 current state in Salesforce org — phone still 12758759879
@@ -60,11 +60,12 @@
 - Proposed update: TEST-CONTACT-001 12758759879→12758750001, TEST-CONTACT-002 12758759889→12758750002, TEST-CONTACT-003 12758759332→12758750003
 
 **Blockers**
-- Confirmation dialog unavailable — platform/admin setting blocks IRREVERSIBLE modal display, preventing phone number update write (fifth consecutive session)
+- Confirmation dialog unavailable — platform/admin setting blocks IRREVERSIBLE modal display, preventing phone number update write (sixth consecutive session)
 
 **Next**
 - User manually edits 3 phone numbers in Contact Builder (fastest path), OR admin enables confirmation dialog in Orchestrate settings
 - Once unblocked: start new Build session, execute upsert on John_N_Orchestrate_Test, read back all 5 rows to verify
+- Report persistent confirmation dialog issue to Orchestrate admin
 
 **Checked live on 2026-10-06:** the Salesforce org
 ### Last session — 2026-10-06
@@ -73,24 +74,27 @@
 | Type | BUILD |
 | Outcome | COMPLETED |
 | Branch | `orchestrate/context` |
-| Session | `1b84983c-0176-4408-ba7d-84146bcb3f53` |
+| Session | `8bb1887d-2bc2-4469-81bf-4d08f931d256` |
 **In its own words (excerpt):**
-**I haven't updated the phone number. Nothing was written.** Marketing Cloud blocked the upsert because it needs you to click **Confirm** in the IRREVERSIBLE confirmation dialog. The tool that shows that dialog isn't available to me in this session, so I can't show it to you. A reply in chat doesn't count as that confirmation, and I won't set the flag without it. This is the fifth attempt that has hit the same block.
+I haven't updated the phone number. Nothing was written to `John_N_Orchestrate_Test`.
 
-**Current row (checked just now):**
+The gate on the upsert tool blocked the write. It requires you to click **Confirm** in an IRREVERSIBLE confirmation dialog, and the tool that shows that dialog isn't available to me in this session. A "yes" in chat doesn't count as that confirmation, so I won't set the confirmation flag myself. Earlier sessions hit the same block.
 
-| Field | Current value | After the upsert |
+**What the upsert would change (I read the row just now):**
+
+| Field | Now | After |
 |---|---|---|
-| ContactKey | TEST-CONTACT-001 | unchanged (the match key) |
+| ContactKey | TEST-CONTACT-001 | unchanged (the key it matches on) |
 | Name | John Smith | unchanged |
 | Email | john.smith@example.com | unchanged |
 | CreatedDate | 10/6/2026 3:30:11 PM | unchanged |
-| Phone | 12758759879 | **12758750001** |
+| **Phone** | **12758759879** | **12758750001** |
 
-**What the upsert would do:** change 1 existing row in `John_N_Orchestrate_Test`, matched on ContactKey. The only value sent would be `phone`, so no other field and no other row would change.
+It affects exactly 1 row. Only the Phone value is sent, so nothing else changes.
 
-**Ways to get this done:**
-1. **Make the change yourself (quickest):** in Marketing Cloud, go to Contact Builder → Data Extensions → `John_N_Orchestrate_Test` → Records and set Phone on TEST-CONTACT-001 to `12758750001`. Tell me when it's done and I'll
+**Ways to get it done:**
+1. **Edit it yourself (quickest):** in Marketing Cloud, go to Contact Builder → Data Extensions → `John_N_Orchestrate_Test` → Records, and set Phone on TEST-CONTACT-001 to `12758750001`. Tell me when it's saved and I'll read the row back to check it.
+2. **Fix the confirmation step:** an Orchestrate admin needs to turn 
 
 _[summary truncated — see the session record for the full text]_
 <!-- orchestrate:session-state:end -->
