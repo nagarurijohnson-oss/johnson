@@ -42,35 +42,37 @@
 <!-- Written by Orchestrate at the end of each session. Edits inside this block are
      replaced next session; anything OUTSIDE it is yours and is never touched. -->
 ### Engagement state — 2026-10-06
-**Status:** on track — Bio field added to John_Mike_Customers (Text 20). Awaiting template choice for MCP_Email_Send_Test and phone number confirmation.
+**Status:** on track — Bio field verified on John_Mike_Customers. Ready to load 5 sample rows; awaiting user approval to proceed.
 
 **Done this session**
-- Added Bio field (Text, length 20, optional) to John_Mike_Customers
-- Read back all 5 fields from John_Mike_Customers to verify save
+- Verified John_Mike_Customers is empty (0 rows)
+- Prepared 5 sample rows with Bio values (all ≤20 chars)
+- Confirmed all ContactKey values unique, emails use example.com (safe for test)
 
 **Open items**
+- User approves sample row load or provides alternative names/emails/dates/bios
+- Insert 5 rows into John_Mike_Customers and read back to verify
 - User confirms template choice (A or B) for MCP_Email_Send_Test creation
-- Create MCP_Email_Send_Test in folder 49889 with external key MCP_Email_Send_Test from chosen template
-- User manually edits TEST-CONTACT-001 phone to 12758750001 in Contact Builder, OR admin enables confirmation dialog
+- Create MCP_Email_Send_Test in folder 49889 with external key MCP_Email_Send_Test
+- User manually updates TEST-CONTACT-001 phone to 12758750001 in Contact Builder, OR admin enables confirmation dialog
 - Execute phone number update via upsert on John_N_Orchestrate_Test, read back all 5 rows to verify
-- Load sample rows into John_Mike_Customers DE, or make it sendable if user plans to email contacts
-- Escalate persistent confirmation dialog issue to Orchestrate admin — blocking for 10 sessions, requires platform fix
+- Escalate persistent confirmation dialog issue to Orchestrate admin (blocking 10+ sessions)
 
 **Decisions**
 - Bio field: Text type, length 20 chars, optional, added to John_Mike_Customers
-- John_N_Orchestrate_Test: Standard DE, folder 32375, upsert method, confirmation gate required
-- Orchestrate_Random_DE: Standard DE, folder 49911, external key John_Mike, 4 fields, not sendable
-- John_Mike_Customers: Standard DE, folder 49911, external key John_Mike_Customers, 5 fields (added Bio), not sendable unless user specifies
+- Sample rows: 5 test contacts (JMC-0001 to JMC-0005) with realistic names, test emails, and short bios
+- John_Mike_Customers: Standard DE, folder 49911, external key John_Mike_Customers, 5 fields, not sendable
 - MCP_Email_Send_Test: will be created in folder 49889 with external key MCP_Email_Send_Test — awaiting template selection
 
 **Blockers**
-- Confirmation dialog unavailable — platform/admin setting blocks IRREVERSIBLE modal display, preventing phone number update write (tenth consecutive session)
+- Confirmation dialog unavailable — platform/admin setting blocks IRREVERSIBLE modal display (tenth+ session)
 - Template choice (A or B) required before MCP_Email_Send_Test creation can proceed
 
 **Next**
+- User approves sample row load (or provides alternatives)
+- Insert 5 rows into John_Mike_Customers, read back all 5 to verify
 - User replies with template choice: A (TriggeredSendDataExtension) or B (SendLog) for MCP_Email_Send_Test
-- Create MCP_Email_Send_Test from chosen template in folder 49889 with external key MCP_Email_Send_Test
-- User manually updates TEST-CONTACT-001 phone in Contact Builder or requests admin enable confirmation dialog
+- Create MCP_Email_Send_Test from chosen template in folder 49889
 
 **Checked live on 2026-10-06:** the Salesforce org
 ### Last session — 2026-10-06
@@ -81,25 +83,24 @@
 | Branch | `orchestrate/context` |
 | Session | `4a65901d-f270-45ec-96fa-260777323520` |
 **In its own words (excerpt):**
-I added `Bio` to `John_Mike_Customers` and read the fields back to check it. It saved as you asked: Text, length 20, not a primary key, and can be left empty.
+I checked `John_Mike_Customers` and it's still empty (0 rows). I haven't written anything yet. These are the 5 rows I'd insert:
 
-**Fields now on `John_Mike_Customers` (read back from Marketing Cloud)**
+| ContactKey | FirstName | Email | CreatedDate | Bio (max 20 chars) |
+|---|---|---|---|---|
+| JMC-0001 | Aarav | aarav.sample@example.com | 2026-09-01 | Loves hiking |
+| JMC-0002 | Priya | priya.sample@example.com | 2026-09-08 | Coffee enthusiast |
+| JMC-0003 | Daniel | daniel.sample@example.com | 2026-09-15 | Weekend cyclist |
+| JMC-0004 | Meera | meera.sample@example.com | 2026-09-22 | Avid reader |
+| JMC-0005 | Lucas | lucas.sample@example.com | 2026-09-29 | Amateur chef |
 
-| # | Field | Type | Length | Primary key | Required |
-|---|---|---|---|---|---|
-| 1 | ContactKey | Text | 50 | Yes | Yes |
-| 2 | FirstName | Text | 50 | No | No |
-| 3 | Email | EmailAddress | 254 | No | No |
-| 4 | CreatedDate | Date | — | No | No |
-| 5 | **Bio** | **Text** | **20** | **No** | **No** |
+**About these rows:**
+- Every Bio fits within the 20-character limit. The longest is "Coffee enthusiast" at 17 characters.
+- The emails use `example.com`, which is reserved for testing, so nothing could ever go to a real inbox. The data extension also isn't sendable.
+- All ContactKey values are unique. Because ContactKey is the primary key, running this again would update these 5 rows instead of adding duplicates.
 
-The data extension now has 5 fields. The other four didn't change. I didn't touch any SQL queries.
-
-**Still open:**
-- **MCP_Email_Send_Test:** I'm still waiting for you to pick a template. Reply **A** for TriggeredSendDataExtension or **B** for SendLog.
-- **TEST-CONTACT-001 phone number:** this change on `John_N_Orchestrate_Test` is still blocked because the confirmation step it needs isn't available here. You can change it to 12758750001 by hand in Contact Builder, or an Orchestrate admin can turn that confirmation step on.
-
-Sources: engagement context (`context/handoff.md`, for the open items) · checked live: Marketing Cloud (added the field, then rea
+**How I'll do it:**
+1. Insert the 5 rows into `John_Mike_Customers` in one batch.
+2. Read the rows back and confirm all 5 are there with the right values before I tell yo
 
 _[summary truncated — see the session record for the full text]_
 <!-- orchestrate:session-state:end -->
