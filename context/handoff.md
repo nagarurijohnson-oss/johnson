@@ -42,13 +42,13 @@
 <!-- Written by Orchestrate at the end of each session. Edits inside this block are
      replaced next session; anything OUTSIDE it is yours and is never touched. -->
 ### Engagement state — 2026-10-06
-**Status:** blocked — Phone update blocked by confirmation tool unavailable; awaiting admin enablement or manual edit
+**Status:** blocked — Phone update blocked by unavailable confirmation tool — awaiting admin enablement or manual edit
 
 **Done this session**
-- Verified current state of all 5 rows in John_N_Orchestrate_Test table in Salesforce org
+- Verified current state of all 5 rows in John_N_Orchestrate_Test table — no changes made
 
 **Open items**
-- User approves or modifies the 3 planned phone numbers
+- Admin enables confirmation dialog in Orchestrate settings, OR user manually edits 3 phone numbers in Marketing Cloud Contact Builder
 - Execute phone number update via sfmc_bulk_upsert_data_extension_rows on TEST-CONTACT-001, 002, 003
 - Read all 5 rows back and verify 3 new numbers saved, 2 unchanged
 - User approves creation of Orchestrate_Random_DE DE with 4 fields (ID, Name, Email, Date)
@@ -63,7 +63,7 @@
 - Confirmation tool not available — platform/admin setting blocks IRREVERSIBLE modal display, preventing phone number update write
 
 **Next**
-- Admin enables confirmation dialog in Orchestrate settings, OR user manually edits 3 phone numbers in Marketing Cloud Contact Builder
+- Admin enables confirmation dialog in Orchestrate settings, OR user manually edits 3 phone numbers in Contact Builder
 - Once unblocked: start new Build session, execute upsert on John_N_Orchestrate_Test, read back all 5 rows to verify
 
 **Checked live on 2026-10-06:** the Salesforce org
@@ -75,19 +75,16 @@
 | Branch | `orchestrate/context` |
 | Session | `dbc33f2a-5193-4665-918d-f4285692262b` |
 **In its own words (excerpt):**
-**I haven't changed anything.** You asked me to show the IRREVERSIBLE confirmation dialog first, but I can't open that dialog in this session because the tool that displays it isn't available to me. Marketing Cloud also blocks this write until you confirm in that dialog, so a reply in chat won't release it. I've stopped here rather than work around the check.
+**I haven't changed anything, and I can't run this update in this session.** You asked me to show the IRREVERSIBLE confirmation dialog before updating. The tool that displays that dialog still isn't available to me here, so I can't show it. Marketing Cloud also blocks this write until someone confirms in that dialog, and a reply in chat doesn't count as confirmation. This is the same block the last two attempts hit. Trying the write again would give the same result, so I've stopped rather than work around the check.
 
-**What's in the table now** (John_N_Orchestrate_Test, 5 rows, all checked just now):
+**What's in the table now** (John_N_Orchestrate_Test, 5 rows, read just now, so this is the "before" picture):
 
-| ContactKey | Name | Email | Current Phone | → New Phone | CreatedDate |
+| ContactKey | Name | Email | Current Phone | → Requested Phone | CreatedDate |
 |---|---|---|---|---|---|
 | TEST-CONTACT-001 | John Smith | john.smith@example.com | 12758759879 | **12758750001** | 10/6/2026 3:30:11 PM |
 | TEST-CONTACT-002 | Sarah Johnson | sarah.johnson@example.com | 12758759889 | **12758750002** | 10/6/2026 3:30:11 PM |
 | TEST-CONTACT-003 | Michael Brown | michael.brown@example.com | 12758759332 | **12758750003** | 10/6/2026 3:30:11 PM |
-| TEST-CONTACT-004 | David Wilson | david.wilson@example.com | 12758759454 | no change | 10/6/2026 3:30:11 PM |
-| TEST-CONTACT-005 | Emily Davis | emily.davis@example.com | 12758759667 | no change | 10/6/2026 3:30:11 PM |
-
-**What the update will do once you've confirmed:** it changes Phone on tho
+| TEST-CONTACT-004 | David Wilson | david.wilson@example.com | 12758759454 | no change | 10/6/2026 3:30:1
 
 _[summary truncated — see the session record for the full text]_
 <!-- orchestrate:session-state:end -->
