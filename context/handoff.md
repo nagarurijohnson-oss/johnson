@@ -41,66 +41,71 @@
 <!-- orchestrate:session-state:start -->
 <!-- Written by Orchestrate at the end of each session. Edits inside this block are
      replaced next session; anything OUTSIDE it is yours and is never touched. -->
-### Engagement state — 2026-10-05
-**Status:** blocked — CSV valid & DE ready; confirmation dialog tool still unavailable — cannot proceed with insert
+### Engagement state — 2026-10-06
+**Status:** blocked — Two separate DE tasks blocked: CSV import awaits confirmation tool; new DE creation awaits user approval
 
 **Done this session**
-- Validated CSV: 5 records (TEST-CONTACT-001 to 005), all headers and emails well-formed, no duplicates
-- Confirmed DE schema matches mapping and has 0 rows
-- Verified CreatedDate will auto-populate via GetDate() default
+- Verified folder 'John Orchestrate Test' exists (category 49911)
+- Confirmed 'Orchestrate_Random_DE' name and 'John_Mike' key are available
+- Checked live Salesforce org — no conflicts found
 
 **Open items**
-- Enable confirmation (question) tool in session — required to display IRREVERSIBLE dialog before write
+- Enable confirmation tool in session — required to display IRREVERSIBLE dialog before CSV insert
+- User approves creation of Orchestrate_Random_DE DE with 4 fields (ID, Name, Email, Date)
+- Create Orchestrate_Random_DE in folder 49911, read back to verify schema and 0 rows
+- Display IRREVERSIBLE dialog for 5-row CSV insert into John_N_Orchestrate_Test
 - User clicks Confirm in modal
-- Execute sfmc_bulk_upsert_data_extension_rows for 5 rows
+- Execute sfmc_bulk_upsert_data_extension_rows for 5 CSV rows
 - Read rows back and verify all 5 match CSV with CreatedDate populated
 - Report final import counts: CSV rows, inserted, rejected, rejection reasons
 
 **Decisions**
-- DE type: Standard, folder: Data Extensions (32375), Business Unit: MID 546010305
-- Fields: ContactId (Text 50, nullable), Email (EmailAddress 254, required), CreatedDate (Date, required, GetDate() default)
-- Import method: upsert (insert-only, no primary key, DE empty)
-- Confirmation gate required: irreversible bulk write must be gated by explicit user confirmation dialog
-- Undo method: delete the 5 test rows manually post-import
+- John_N_Orchestrate_Test: Standard DE, folder 32375, upsert method, confirmation gate required
+- Orchestrate_Random_DE: Standard DE, folder 49911, external key John_Mike, 4 fields (ID primary key, Name, Email, Date), not sendable, no Subscriber Key link
 
 **Blockers**
-- Confirmation (question) tool not available in this session — platform/admin setting blocks IRREVERSIBLE modal display (second session in a row)
+- Confirmation (question) tool not available — platform/admin setting blocks IRREVERSIBLE modal display (third session in a row)
+- User approval required before creating Orchestrate_Random_DE
 
 **Next**
 - Raise with Orchestrate admin: enable confirmation tool for next BUILD session
+- User confirms: proceed with Orchestrate_Random_DE creation
+- Create DE, read back to verify schema and 0 rows
 - Start new BUILD session with confirmation dialog capability enabled
-- Display IRREVERSIBLE dialog with Confirm/Cancel buttons
-- On user Confirm: run insert of 5 rows, read back all rows, verify CreatedDate filled, report counts
+- Display IRREVERSIBLE dialog for CSV insert, execute on user Confirm, verify and report
 
-**Checked live on 2026-10-05:** the Salesforce org
-### Last session — 2026-10-05
+**Checked live on 2026-10-06:** the Salesforce org
+### Last session — 2026-10-06
 | | |
 |---|---|
 | Type | BUILD |
 | Outcome | COMPLETED |
 | Branch | `orchestrate/context` |
-| Session | `e2c66d4c-e6b4-4b88-b068-193896c6617c` |
+| Session | `dbc33f2a-5193-4665-918d-f4285692262b` |
 **In its own words (excerpt):**
-I haven't written anything, and the Data Extension still has 0 rows. The CSV is valid, but I couldn't show the IRREVERSIBLE confirmation dialog, so the insert is stopped before it ran.
+The checks passed and I haven't created anything yet.
 
-**CSV check: 5 records ready to insert**
-- The headers are `ContactId,Email`, which match your mapping.
-- **5 rows, all valid:**
-  - None has an empty ContactId.
-  - No value is longer than its field allows.
-  - Every email is well-formed.
-  - No ContactId or email appears twice.
-- The rows are TEST-CONTACT-001 to 005, with emails from john.smith@ to emily.davis@example.com.
+**What I checked**
+- **Folder:** "John Orchestrate Test" exists. It's a Data Extension folder with category ID **49911**, inside the "Data Extensions" folder (32375).
+- **Name:** no Data Extension is called `Orchestrate_Random_DE` yet.
+- **External key:** `John_Mike` isn't used by any other Data Extension.
 
-**Target check: `John_N_Orchestrate_Test`**
-- ID `2c6c5dc5-…e778`, folder 32375, not sendable, currently **0 rows**.
+**What I'll create** (one Marketing Cloud call to create a Data Extension)
+- **Name / key:** `Orchestrate_Random_DE`, external key `John_Mike`, in folder 49911.
+- **Settings:** a standard Data Extension. It won't be sendable and won't be linked to Subscriber Key.
 - **Fields:**
-  - `ContactId` is Text(50) and can be blank.
-  - `Email` is EmailAddress(254) and required.
-  - `CreatedDate` is a required Date with a default of `GetDate()`, so leaving it unmapped is fine.
-- There's no primary key, so this write can only add rows. It won't update or delete anything, and the schema stays as it is.
 
-**Why it stopped:** I called the insert tool without the confirmation flag. The platform blocked it, as it should, and said I must first raise the IRREVERSIBLE modal through the questi
+| # | Field | Type | Length | Required | Primary Key |
+|---|---|---|---|---|---|
+| 1 | ID | Text | 50 | Yes | Yes |
+| 2 | Name | Text | 100 | No | No |
+| 3 | Email | EmailAddress | 254 | No | No |
+| 4 | Date | Date | – | No | No |
+
+- **What I won't touch:** I won't insert any records or change any existing Data Extension.
+- **After creating it:** I'll read it back to confirm the name, key, ID and folder, check each field's type (making sure Date really saved as Date and not Text), confirm the primary key, and check that it has 0 rows.
+
+This adds a new
 
 _[summary truncated — see the session record for the full text]_
 <!-- orchestrate:session-state:end -->
