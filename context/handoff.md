@@ -42,21 +42,17 @@
 <!-- Written by Orchestrate at the end of each session. Edits inside this block are
      replaced next session; anything OUTSIDE it is yours and is never touched. -->
 ### Engagement state — 2026-10-06
-**Status:** on track — Phone update planned for 3 contacts in John_N_Orchestrate_Test — awaiting user approval to proceed
+**Status:** blocked — Phone update blocked by confirmation tool unavailable; awaiting admin enablement or manual edit
 
 **Done this session**
-- Re-read all 5 rows in John_N_Orchestrate_Test to confirm current phone numbers
-- Proposed 3 new test phone numbers matching existing format (127587 prefix)
-- Built before → after table for user confirmation
+- Confirmed 3 planned phone number changes ready to execute on John_N_Orchestrate_Test
 
 **Open items**
-- User approves or modifies the 3 planned phone number changes
+- User approves or modifies the 3 planned phone numbers
 - Execute phone number update via sfmc_bulk_upsert_data_extension_rows on TEST-CONTACT-001, 002, 003
 - Read all 5 rows back and verify 3 new numbers saved, 2 unchanged
 - User approves creation of Orchestrate_Random_DE DE with 4 fields (ID, Name, Email, Date)
 - Create Orchestrate_Random_DE in folder 49911, read back to verify schema and 0 rows
-- Enable confirmation tool in session — required to display IRREVERSIBLE dialog before CSV insert
-- Display IRREVERSIBLE dialog for 5-row CSV insert into John_N_Orchestrate_Test
 
 **Decisions**
 - John_N_Orchestrate_Test: Standard DE, folder 32375, upsert method, confirmation gate required
@@ -64,12 +60,11 @@
 - Proposed update: TEST-CONTACT-001 12758759879→12758750001, TEST-CONTACT-002 12758759889→12758750002, TEST-CONTACT-003 12758759332→12758750003
 
 **Blockers**
-- Confirmation tool not available — platform/admin setting blocks IRREVERSIBLE modal display
+- Confirmation tool not available — platform/admin setting blocks IRREVERSIBLE modal display, preventing phone number update write
 
 **Next**
-- User confirms or modifies the 3 proposed phone numbers
-- Execute upsert on John_N_Orchestrate_Test with new phone values
-- Read back all 5 rows to verify changes persisted correctly
+- Admin enables confirmation dialog in Orchestrate settings, OR user manually edits 3 phone numbers in Marketing Cloud Contact Builder
+- Once unblocked: start new Build session, execute upsert on John_N_Orchestrate_Test, read back all 5 rows to verify
 
 **Checked live on 2026-10-06:** the Salesforce org
 ### Last session — 2026-10-06
@@ -80,24 +75,21 @@
 | Branch | `orchestrate/context` |
 | Session | `dbc33f2a-5193-4665-918d-f4285692262b` |
 **In its own words (excerpt):**
-I've picked three new test numbers. They use the same 11-digit format and `127587` prefix as your existing ones, so each is easy to recognise. I haven't changed anything yet, and the current values below are from a read I just did.
+**Nothing has changed yet.** Marketing Cloud treats a row update as irreversible, so it blocked the write. It won't run until you tick a checkbox in a separate confirmation dialog, and a "proceed" typed in chat doesn't count.
 
-**Planned update: John_N_Orchestrate_Test, Phone field only**
+The problem is that I can't show that dialog in this session. The confirmation tool isn't available here, and the earlier attempt to write CSV rows into this table was blocked the same way. I'm not going to work around the block, so I've stopped without writing anything.
 
-| ContactKey | Name | Current Phone | → New Phone |
-|---|---|---|---|
-| TEST-CONTACT-001 | John Smith | 12758759879 | **12758750001** |
-| TEST-CONTACT-002 | Sarah Johnson | 12758759889 | **12758750002** |
-| TEST-CONTACT-003 | Michael Brown | 12758759332 | **12758750003** |
+**The update that's waiting** (John_N_Orchestrate_Test, Phone field only, 3 of 5 rows):
 
-**What happens:**
-- **One Marketing Cloud update** on these 3 rows, matched on ContactKey. Name, Email and CreatedDate stay as they are.
-- **TEST-CONTACT-004 and 005** won't be touched.
-- **The update overwrites the old numbers.** The current values are listed above, so you can put them back later if you need to.
-- **Afterwards I'll read all 5 rows back** to check the 3 new numbers saved and the other 2 didn't change.
-- **John filter** (001, 002) and **Segment 0** (003) are built from this table, so they'll show the new numbers after their next refresh.
+| ContactKey | Current Phone | New Phone |
+|---|---|---|
+| TEST-CONTACT-001 | 12758759879 | 12758750001 |
+| TEST-CONTACT-002 | 12758759889 | 12758750002 |
+| TEST-CONTACT-003 | 12758759332 | 12758750003 |
 
-**Proceed with these numbers?** If you'd like different ones, send t
+**To get it done, you can:**
+1. **Ask your Orchestrate admin to turn on the confirmation dialog** for your sessions. After that, start a new Build session, say "proceed", tick Confirm in the dialog, and I'll update the 3 rows and read them back to check.
+2. **Edit the numbers yourself in Marketing Cloud.** Go to Contact Builder → Data Extensions → John Orchestrate Test → John_N_Orchestrate_Test → Record
 
 _[summary truncated — see the session record for the full text]_
 <!-- orchestrate:session-state:end -->
