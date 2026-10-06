@@ -42,15 +42,14 @@
 <!-- Written by Orchestrate at the end of each session. Edits inside this block are
      replaced next session; anything OUTSIDE it is yours and is never touched. -->
 ### Engagement state — 2026-10-06
-**Status:** blocked — 4th consecutive upsert blocked by unavailable confirmation dialog in BUILD — admin escalation or manual import required
+**Status:** blocked — 5th attempt: confirmation dialog still unavailable in BUILD. John_Mike_Customers remains at 0 rows. Manual import or admin escalation requi…
 
 **Done this session**
-- Verified John_Mike_Customers still has 0 rows (live check before and after attempt)
-- Confirmed all 5 CSV rows ready for insert (JMC-0001 to JMC-0005)
+- Verified John_Mike_Customers exists in folder 49911 with 5 fields and 0 rows (live check)
 
 **Open items**
 - Admin enables confirmation pop-up for Marketing Cloud writes in BUILD sessions
-- OR user imports 5 rows manually via Marketing Cloud Data Extension Import UI (Email Studio → Subscribers → Data Extensions → John_Mike_Customers → Import)
+- OR user imports 5 rows manually via Email Studio → Subscribers → Data Extensions → John_Mike_Customers → Import
 - Read back all 5 rows from John_Mike_Customers to verify import succeeded
 - User confirms template choice (A or B) for MCP_Email_Send_Test creation
 - Create MCP_Email_Send_Test in folder 49889 with external key MCP_Email_Send_Test
@@ -65,11 +64,11 @@
 - CreatedDate will populate with GetDate() default on import (CSV column blank)
 
 **Blockers**
-- Confirmation dialog unavailable in BUILD session — platform requires irreversible modal click before upsert executes (4 consecutive sessions blocked)
+- Confirmation dialog unavailable in BUILD session — platform requires irreversible modal click before upsert executes (5 consecutive sessions blocked)
 
 **Next**
-- Admin escalation: enable confirmation pop-up for Marketing Cloud writes in BUILD sessions (recurring blocker)
-- User option: import 5 rows manually via Marketing Cloud Data Extension Import UI and report completion
+- Admin escalation: enable confirmation pop-up for Marketing Cloud writes in BUILD sessions (recurring blocker across 5 sessions)
+- User option: import 5 rows manually via Email Studio → Subscribers → Data Extensions → John_Mike_Customers → Import and report completion
 - Once import confirmed: read back all 5 rows to verify success
 - User provides template choice (A or B) for MCP_Email_Send_Test creation
 
@@ -80,15 +79,13 @@
 | Type | BUILD |
 | Outcome | COMPLETED |
 | Branch | `orchestrate/context` |
-| Session | `12629cfa-6d99-4ea3-abbd-184150d7d7d2` |
+| Session | `fbfbb63f-a609-4058-ba8f-dde5306290a3` |
 **In its own words (excerpt):**
-The 5 rows were not inserted. `John_Mike_Customers` still has **0 rows**; I checked that live just before and after the attempt.
+I checked the Data Extension live. `John_Mike_Customers` exists in folder 49911 and has **0 rows**. It has 5 fields: `ContactKey` (the primary key, required), `FirstName`, `Email`, `CreatedDate` (fills in automatically with today's date) and `Bio`.
 
-**Why it stopped:** the platform treats this write as permanent. It only runs after you click **Confirm** on a pop-up headed "IRREVERSIBLE". I can't raise that pop-up in this session, so the call was stopped before anything was written. A "yes" typed in chat doesn't count as that confirmation, and I won't skip the check. This is the fourth time in a row a write here has been stopped this way, which points to how this session type is set up, not to your data.
+**What I plan to insert:** 5 new rows, using one bulk upsert call into `John_Mike_Customers`.
 
-**The 5 rows I submitted:**
-
-| ContactKey (primary key) | FirstName | Email | Bio |
+| ContactKey | FirstName | Email | Bio |
 |---|---|---|---|
 | JMC-0001 | Aarav | aarav.sample@example.com | Loves hiking |
 | JMC-0002 | Priya | priya.sample@example.com | Coffee enthusiast |
@@ -96,7 +93,13 @@ The 5 rows were not inserted. `John_Mike_Customers` still has **0 rows**; I chec
 | JMC-0004 | Meera | meera.sample@example.com | Avid reader |
 | JMC-0005 | Lucas | lucas.sample@example.com | Amateur chef |
 
-These come from your attached CSV. Every name, email and key is different, and `CreatedDate` is left out so its default (`GetDate()`) fills it in. The table is empty, so this woul
+- Every name, email and key is different. The emails use `example.com`, which can't receive mail.
+- `CreatedDate` is left blank so it fills in with today's date.
+- The table is empty, so nothing gets overwritten. The Data Extension isn't sendable, so no email goes out.
+
+**Tool call I'll make:** Marketing Cloud bulk upsert on Data Extension `4cac233d-86c1-f111-a5e6-5cba2c19e778` with the 5 rows above. Afterwards I'll read the rows back to check all 5 arrived.
+
+**One t
 
 _[summary truncated — see the session record for the full text]_
 <!-- orchestrate:session-state:end -->
