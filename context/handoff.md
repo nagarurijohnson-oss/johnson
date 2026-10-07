@@ -42,18 +42,18 @@
 <!-- Written by Orchestrate at the end of each session. Edits inside this block are
      replaced next session; anything OUTSIDE it is yours and is never touched. -->
 ### Engagement state — 2026-10-07
-**Status:** waiting — Fresh run started; monitoring for completion. All 6 steps configured and ready.
+**Status:** on track — All 6 automation steps complete, all checks pass. File export unconfirmed (no FTP access). Send Email step and description label remain.
 
 **Done this session**
-- Started fresh run of AUTO_Orchestrate_Full_Test
+- Ran automation to completion (6.5 min, all steps ✅)
+- Verified TEST_SQL_Output: 5 rows, cutoff filter working
+- Verified TEST_FullTest_Script_Log: Success row with SQLOutputRows=20, DataCopyRows=5
+- Confirmed WSProxy row counting fix is working
 
 **Open items**
-- Monitor run to completion (expect ~7.5 minutes)
-- Verify TEST_SQL_Output shows 5 rows with cutoff CreatedDate >= '2026-10-06 09:38:49'
-- Verify TEST_FullTest_Script_Log has new row: SQLOutputRows=20, DataCopyRows=5, Status=Success
-- Confirm JNOT_FullTest_YYYYMMDD.csv in Enhanced FTP Export folder
-- Update TEST_SQL_Output description (label only, non-blocking)
-- Add Send Email activity as final step (deferred)
+- Confirm JNOT_FullTest_20261007.csv exists in Enhanced FTP Export folder (manual check needed)
+- Update TEST_SQL_Output description label (old cutoff text, non-blocking)
+- Add Send Email activity as final step 7 (deferred, manual UI creation)
 
 **Decisions**
 - Cutoff filter: CreatedDate >= '2026-10-06 09:38:49'
@@ -66,10 +66,9 @@
 - None
 
 **Next**
-- Monitor run to completion
-- Check TEST_SQL_Output for 5 rows
-- Check TEST_FullTest_Script_Log for Success row with counts 20 and 5
-- Verify JNOT_FullTest_YYYYMMDD.csv exists in Enhanced FTP
+- Manually verify JNOT_FullTest_20261007.csv in Enhanced FTP Export folder
+- Update TEST_SQL_Output description to reflect new cutoff (label only)
+- Create Send Email step in Automation Studio UI as final step
 
 **Checked live on 2026-10-07:** the Salesforce org
 ### Last session — 2026-10-07
@@ -80,5 +79,27 @@
 | Branch | `orchestrate/context` |
 | Session | `f203b158-e2aa-4e90-b9af-ee68c9f98be8` |
 **In its own words (excerpt):**
-Waiting for the run.
+Yes, a new run instance was created at 22:56 IST. It finished with status **Complete**, so there's no error message to report. All your checks pass, and nothing was started or changed this turn.
+
+## The run (`0b3f33c7…`)
+- **Started:** 22:56:19 IST, about 11 seconds after the run request.
+- **Completed:** 23:02:53 IST, about 6.5 minutes later. That's in line with the earlier ~7.5-minute run.
+- Marketing Cloud stores these times in server time (UTC−6), as 11:26:19 and 11:32:53. I converted them to IST.
+
+| Step | Activity | Status |
+|---|---|---|
+| 1 | `SQL_FullTest_Combine_Sources` | ✅ Complete |
+| 2 | `SQL_FullTest_DataCopy_JMC` | ✅ Complete |
+| 3 | `DX_FullTest_JNOT_Extract` | ✅ Complete |
+| 4 | `FT_FullTest_JNOT_Export` | ✅ Complete |
+| 5 | `SSJS_FullTest_Log_Run` | ✅ Complete |
+| 6 | `ACT_SQL_Test` | ✅ Complete |
+
+## Your checks
+| Check | Result |
+|---|---|
+| `TEST_SQL_Output` has exactly 5 rows | ✅ **5 rows**: TEST-CONTACT-001 to 005, all with CreatedDate 3:30:11 PM. The new `>=` cutoff fixed the 15-row problem. |
+| New log row with Status Success, SQLOutputRows 20, DataCopyRows 5 | ✅ A new row was logged at 11:30:28 server time (23:00 IST). It reads **Success, 20, 5**, with th
+
+_[summary truncated — see the session record for the full text]_
 <!-- orchestrate:session-state:end -->
