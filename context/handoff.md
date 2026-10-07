@@ -42,38 +42,38 @@
 <!-- Written by Orchestrate at the end of each session. Edits inside this block are
      replaced next session; anything OUTSIDE it is yours and is never touched. -->
 ### Engagement state — 2026-10-07
-**Status:** waiting — Automation 5/6 steps built & paused. Awaiting cutoff decision (A: 15 rows | B: 5 rows) + step order confirmation before adding SQL Query st…
+**Status:** on track — SQL Query step 6 added to automation. TEST_SQL_Output table & ACT_SQL_Test query created & verified. Ready for first test run.
 
 **Done this session**
-- Verified John_N_Orchestrate_Test has 15 rows with two CreatedDate timestamps (10/6/2026 9:38:48 AM and 3:30:11 PM)
-- Confirmed AUTO_Orchestrate_Full_Test remains paused with 5 steps intact, daily 9:00 AM IST schedule unchanged
+- Created TEST_SQL_Output table (folder 49911, 5 fields, ContactKey primary key)
+- Created ACT_SQL_Test query with cutoff '2026-10-06 09:38:48' (option B: 5 rows)
+- Added ACT_SQL_Test as step 6 to AUTO_Orchestrate_Full_Test automation
+- Verified all three objects read back correctly post-creation
 
 **Open items**
-- User decision: cutoff filter option A (15 rows) or B (5 rows) for SQL Query
-- User decision: add SQL Query as step 6 at end or move before Script step 5 for logging
-- Create TEST_SQL_Output table in folder 49911 with ContactKey, Name, Email, phone, CreatedDate
-- Create ACT_SQL_Test query with chosen cutoff, targeting TEST_SQL_Output
-- Add ACT_SQL_Test to AUTO_Orchestrate_Full_Test at confirmed step position
-- Add Send Email activity as step (manual UI creation required)
-- Run automation once to test all steps end-to-end
-- Verify TEST_FullTest_Script_Log row counts and TEST_SQL_Output results
+- Run automation once to test all 6 steps end-to-end
+- Verify TEST_SQL_Output receives 5 rows (TEST-CONTACT-001 to 005) after first run
+- Verify TEST_FullTest_Script_Log row counts (step 5 runs before step 6, so won't count SQL output)
+- Add Send Email activity as step 7 manually in Automation Studio UI
+- Restore step labels if needed (SQL Query - Combine Sources, etc.)
 
 **Decisions**
+- Cutoff filter: CreatedDate > '2026-10-06 09:38:48' (option B, 5 rows only)
+- SQL Query step 6 position: at end of automation, after Script step 5
 - Data Copy implemented as SQL query (table-to-table), not Import activity
 - Send Email step deferred to manual UI creation due to API limitation
 - Script logs row counts for SQL output and Data Copy only
-- Automation schedule: daily 9:00 AM IST, status Paused, first run 8 Oct
 
 **Blockers**
-- Send Email activity cannot be created via API—nested send classification settings rejected; manual UI step required
-- Cutoff timestamp ambiguity: CreatedDate boundary at 2026-10-06 09:38:48 AM determines 15 vs 5 rows—awaiting user choice
+- Send Email activity cannot be created via API—manual UI step required
+- Step labels removed during automation update (side effect of 500 error retry)
 
 **Next**
-- User replies with cutoff choice (A or B) and step 6 position confirmation
-- Create TEST_SQL_Output table and ACT_SQL_Test query with chosen parameters
-- Add SQL Query step to automation at confirmed position
-- Read back table, query, and automation to verify configuration
-- User adds Send Email step 6 (or 7) manually in Automation Studio UI
+- Click Run Once on AUTO_Orchestrate_Full_Test to execute all 6 steps
+- Check TEST_SQL_Output for 5 rows with correct ContactKey, Name, Email, phone, CreatedDate
+- Review TEST_FullTest_Script_Log to confirm row counts logged by step 5
+- Add Send Email activity manually in Automation Studio as step 7
+- Restore step labels in automation if required by your workflow
 
 **Checked live on 2026-10-07:** the Salesforce org
 ### Last session — 2026-10-07
@@ -84,27 +84,24 @@
 | Branch | `orchestrate/context` |
 | Session | `f203b158-e2aa-4e90-b9af-ee68c9f98be8` |
 **In its own words (excerpt):**
-I haven't created anything yet. There's one decision for you first, because "after 9:38 AM" catches either every row in the table or only a third of them.
+I created the table and the query and added the query to the automation as step 6. I read all three back to check them. Nothing has been run, so `TEST_SQL_Output` has 0 rows. When you next click Run Once, it should get 5 rows (TEST-CONTACT-001 to 005).
 
-## What I found
-- **`TEST_SQL_Output` doesn't exist**, so I'd create it. `ACT_SQL_Test` doesn't exist yet either.
-- **`John_N_Orchestrate_Test` has 15 rows, with only two CreatedDate values:**
-  - 10 rows (TEST-CONTACT-006 to 015) at **10/6/2026 9:38:48 AM**
-  - 5 rows (TEST-CONTACT-001 to 005) at **10/6/2026 3:30:11 PM**
-- **The automation** has 5 steps and is still Paused, with the daily 9:00 AM IST schedule unchanged.
+## The table `TEST_SQL_Output`
+- It's in folder 49911 with the external key `TEST_SQL_Output`, and it can't be sent to.
+- It has 5 fields: ContactKey (Text 50, primary key), Name (Text 50), Email (EmailAddress), phone (Phone) and CreatedDate. CreatedDate is a real Date field, not text.
 
-## The cutoff question
-Your cutoff lands in the same minute as those 10 rows, so the exact boundary decides the result:
+## The query `ACT_SQL_Test`
+- Query text: `SELECT ContactKey, Name, Email, phone, CreatedDate FROM [John_N_Orchestrate_Test] WHERE CreatedDate > '2026-10-06 09:38:48'`
+- It writes to `TEST_SQL_Output` and **overwrites** it on every run.
+- It passed Marketing Cloud's syntax check. It's saved in folder 32395, the same folder as your other query activities.
 
-| Option | Filter | Rows returned |
+## The automation `AUTO_Orchestrate_Full_Test`
+| Step | Activity | Target |
 |---|---|---|
-| **A** | `CreatedDate > '2026-10-06 09:38:00'` (from the start of the minute) | **15**, which is the whole table |
-| **B** | `CreatedDate > '2026-10-06 09:38:48'` (strictly after those 10 rows) | **5**, only the 3:30 PM rows |
-
-I'll compare against the timestamps exactly as they're stored in the table, with no time-zone conversion. That matches how the values above were loaded.
-
-## What I'll do once you choose
-1. **Create the table `TEST_SQL_
+| 1 | SQL_FullTest_Combine_Sources | TEST_FullTest_SQL_Output |
+| 2 | SQL_FullTest_DataCopy_JMC | TEST_FullTest_DataCopy |
+| 3 | DX_FullTest_JNOT_Extract | export file |
+| 4 | FT_FullTest_JNOT_Export | Enhanced
 
 _[summary truncated — see the session record for the full text]_
 <!-- orchestrate:session-state:end -->
