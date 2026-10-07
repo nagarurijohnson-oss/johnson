@@ -42,33 +42,32 @@
 <!-- Written by Orchestrate at the end of each session. Edits inside this block are
      replaced next session; anything OUTSIDE it is yours and is never touched. -->
 ### Engagement state — 2026-10-07
-**Status:** waiting — User chose to add File Transfer→Import→Query chain to AUTO_Daily_Data_Load; awaiting position confirmation (steps 1–3 or 6–8)
+**Status:** waiting — Switched from scheduled to file-triggered model; awaiting user's three decisions on trigger file name, match type, and activation
 
 **Done this session**
-- Confirmed both automations readable in Marketing Cloud
-- Mapped the three-step chain from AUTO_FT_Import_Query to AUTO_Daily_Data_Load structure
-- Presented two recommended positions with impact analysis
+- Confirmed AUTO_Daily_Data_Load can switch from scheduled to file-triggered
+- Identified AUTO_Daily_Import as working example using File Drop trigger
+- Presented three-decision plan: trigger file name, match type, activation status
 
 **Open items**
-- User fixes AUTO_Daily_Data_Load schedule to 9:00 AM IST and resumes it
-- User confirms position for File Transfer→Import→Query chain: steps 1–3 (start) or 6–8 (end)
-- Add the three steps to AUTO_Daily_Data_Load at confirmed position and read back to verify
-- Verify csvUpload.csv exists in FTP Import folder before first run
+- User confirms trigger file name: AUTO_Daily_Data_Load_trigger.csv or custom name
+- User confirms match type: Exact name or Begins with
+- User confirms activation: Yes (run on next matching upload) or No (inactive until manual turn-on)
+- Update AUTO_Daily_Data_Load from scheduled to file-triggered once decisions received
+- Read back automation to verify trigger type, file name, folder, all 5 steps, and trigger state
 
 **Decisions**
-- AUTO_Daily_Data_Load: cut-off 2026-10-06 09:38:00, output table JNOT_CreatedAfter_0938, step 5, 9 AM IST daily
-- Direction chosen: integrate AUTO_FT_Import_Query chain into AUTO_Daily_Data_Load (not build separate automation)
-- Chain will overwrite CSV_Incoming_Override and append to Import_Audit_Log on each daily run
+- AUTO_Daily_Data_Load: switch from 7:00 AM IST schedule to file-triggered model (replaces earlier chain-addition plan)
+- Trigger source: Enhanced FTP Import folder, file queuing on
+- Avoid csvUpload.csv as trigger file name (AUTO_Daily_Import already uses it; conflict risk if both activated)
 
 **Blockers**
-- AUTO_Daily_Data_Load schedule still set to 7:00 AM IST instead of 9:00 AM IST
-- AUTO_Daily_Data_Load status still PausedSchedule
+- None
 
 **Next**
-- User replies with position choice: (1) add as steps 6–8 at end, or (2) add as steps 1–3 at start
-- Once position confirmed, add the three steps and read back the full step order
-- User fixes schedule to 9:00 AM IST in Automation Studio and resumes
-- Verify csvUpload.csv is in FTP Import folder before resuming
+- User replies with all three decisions in one message (e.g., 'a, exact, yes')
+- Once confirmed, update AUTO_Daily_Data_Load trigger and remove schedule
+- Read back full automation configuration and confirm with user
 
 **Checked live on 2026-10-07:** the Salesforce org
 ### Last session — 2026-10-07
@@ -79,23 +78,13 @@
 | Branch | `orchestrate/context` |
 | Session | `58b3d8ba-c450-493f-9233-a0d9e3d2720f` |
 **In its own words (excerpt):**
-I haven't changed anything. Your reply only names the automation, so I'm reading it as: **add the File Transfer → Import → Query chain to `AUTO_Daily_Data_Load`**, not build a new automation. I've just read both automations to check that's possible.
+I haven't changed anything yet. The switch is doable, and your account already has a working example to copy: **`AUTO_Daily_Import`** runs on a File Drop trigger. It listens for `csvUpload.csv` in the Enhanced FTP **Import** folder, with file queuing on. Before I switch `AUTO_Daily_Data_Load`, there are a few things you should know and three decisions I need from you.
 
-**`AUTO_Daily_Data_Load` right now** (paused, still set to 7:00 AM IST instead of 9:00 AM):
-1. `John_Mike_Customers_Amateur_Chef_Query`
-2. `DX_John_N_Orchestrate_Test` (export to CSV)
-3. `FT_John_N_Orchestrate_Test_Export` (move the CSV to FTP Export)
-4. `DX_Zip_John_N_Orchestrate_Test` (zip it)
-5. `JNOT_CreatedAfter_0938_Query`
-
-**The chain I would add** (the same three activities `AUTO_FT_Import_Query` uses):
-- File Transfer `FT_csvUpload_Import`: picks up `csvUpload.csv` from the FTP Import folder
-- Import `csv import Activity`: overwrites `CSV_Incoming_Override`, which has 10 rows now
-- SQL Query `SFTP Import - Append Audit Row`: adds one row to `Import_Audit_Log`
-
-Two things to know:
-- **Every daily run would then replace all of `CSV_Incoming_Override` and add a row to the audit log.** That's how the import is built. Adding these steps changes no data on its own. It only takes effect once the automation is resumed and runs.
-- **If
+**What changes when it switches**
+- **The daily schedule is removed.** It's paused right now and still set to 7:00 AM IST. Once switched, the automation runs only when a matching file lands on the FTP, so you won't need the 9:00 AM fix in Automation Studio any more.
+- **None of the 5 steps reads the dropped file.** Steps 1 and 5 are SQL queries, and steps 2–4 export `John_N_Orchestrate_Test`. The file would only act as a "go" signal. That's fine if that's what you want, but it means the file's contents don't matter.
+- **Avoid `csvUpload.csv` as the trigger file.** `AUTO_Daily_Import` already uses that name in the same folder. Its trigger is off at the moment, but if it's ever switched on, one upload would start both automations. A dedicated file name keeps them apart.
+- I'm treating this as replacing my earlier quest
 
 _[summary truncated — see the session record for the full text]_
 <!-- orchestrate:session-state:end -->
