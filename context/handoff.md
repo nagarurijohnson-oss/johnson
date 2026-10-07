@@ -42,12 +42,10 @@
 <!-- Written by Orchestrate at the end of each session. Edits inside this block are
      replaced next session; anything OUTSIDE it is yours and is never touched. -->
 ### Engagement state — 2026-10-07
-**Status:** at risk — Both fixes applied & read back OK; automation paused pending test run to verify outputs
+**Status:** waiting — Both fixes applied & read back OK; automation paused pending test run to verify outputs
 
 **Done this session**
-- Updated ACT_SQL_Test query: CreatedDate >= '2026-10-06 09:38:49' (syntax passed)
-- Replaced DataExtensionRowCount with WSProxy countRows() in SSJS_FullTest_Log_Run
-- Read back both activities; changes confirmed in Salesforce org
+- None
 
 **Open items**
 - Run automation once more and verify TEST_SQL_Output shows 5 rows
@@ -81,24 +79,5 @@
 | Branch | `orchestrate/context` |
 | Session | `f203b158-e2aa-4e90-b9af-ee68c9f98be8` |
 **In its own words (excerpt):**
-I updated both activities and read each one back. The automation is still **Paused** and hasn't been run, so neither fix has been tested yet.
-
-## 1. `ACT_SQL_Test`
-| | Read back |
-|---|---|
-| Query | `SELECT ContactKey, Name, Email, phone, CreatedDate FROM [John_N_Orchestrate_Test] WHERE CreatedDate >= '2026-10-06 09:38:49'` |
-| Target | `TEST_SQL_Output` |
-| Update type | **Overwrite** |
-| Syntax check | Passed, no errors or warnings |
-| Modified | 2026-10-07 11:13 UTC |
-
-On the next run it should return 5 rows (TEST-CONTACT-001 to 005). `TEST_SQL_Output` still holds the 15 rows from the last run until then.
-
-## 2. `SSJS_FullTest_Log_Run`
-- **What changed:** I took out both `Platform.Function.DataExtensionRowCount` calls. A new `countRows()` function retrieves each table's ContactKey column through WSProxy and adds up the rows, reading more batches until none are left.
-- **What stayed the same:**
-  - It still writes one row per run to `TEST_FullTest_Script_Log`, with the run ID, timestamp, `SQLOutputRows`, `DataCopyRows`, Status = `Success` and a note.
-  - The error path is unchanged: on any failure it still writes a `Status = Error` row with the message. If a WSProxy retrieve its
-
-_[summary truncated — see the session record for the full text]_
+Waiting for the run.
 <!-- orchestrate:session-state:end -->
