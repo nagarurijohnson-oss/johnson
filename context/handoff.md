@@ -42,20 +42,20 @@
 <!-- Written by Orchestrate at the end of each session. Edits inside this block are
      replaced next session; anything OUTSIDE it is yours and is never touched. -->
 ### Engagement state — 2026-10-07
-**Status:** on track — SQL Query step 6 added to automation. TEST_SQL_Output table & ACT_SQL_Test query created & verified. Ready for first test run.
+**Status:** waiting — Ready to test table-sourced import. Awaiting decision: new step 7 (a) or replace step 2 (b)?
 
 **Done this session**
-- Created TEST_SQL_Output table (folder 49911, 5 fields, ContactKey primary key)
-- Created ACT_SQL_Test query with cutoff '2026-10-06 09:38:48' (option B: 5 rows)
-- Added ACT_SQL_Test as step 6 to AUTO_Orchestrate_Full_Test automation
-- Verified all three objects read back correctly post-creation
+- None
 
 **Open items**
-- Run automation once to test all 6 steps end-to-end
-- Verify TEST_SQL_Output receives 5 rows (TEST-CONTACT-001 to 005) after first run
-- Verify TEST_FullTest_Script_Log row counts (step 5 runs before step 6, so won't count SQL output)
-- Add Send Email activity as step 7 manually in Automation Studio UI
-- Restore step labels if needed (SQL Query - Combine Sources, etc.)
+- Decision: add ACT_DataCopy_Test as step 7 (a) or replace step 2 (b)
+- Create ACT_DataCopy_Test via SOAP with table source John_Mike_Customers → TEST_FullTest_DataCopy
+- Read ACT_DataCopy_Test back to verify table source saved (not file-based)
+- Add to automation if it passes; keep automation Paused
+- Run automation once to test all steps end-to-end
+- Verify TEST_SQL_Output receives 5 rows after first run
+- Add Send Email activity as final step manually in Automation Studio UI
+- Restore step labels if needed
 
 **Decisions**
 - Cutoff filter: CreatedDate > '2026-10-06 09:38:48' (option B, 5 rows only)
@@ -66,14 +66,12 @@
 
 **Blockers**
 - Send Email activity cannot be created via API—manual UI step required
-- Step labels removed during automation update (side effect of 500 error retry)
+- Table-sourced import API behavior unknown—requires test to confirm Marketing Cloud accepts it
 
 **Next**
-- Click Run Once on AUTO_Orchestrate_Full_Test to execute all 6 steps
-- Check TEST_SQL_Output for 5 rows with correct ContactKey, Name, Email, phone, CreatedDate
-- Review TEST_FullTest_Script_Log to confirm row counts logged by step 5
-- Add Send Email activity manually in Automation Studio as step 7
-- Restore step labels in automation if required by your workflow
+- Reply (a) or (b) to confirm ACT_DataCopy_Test placement
+- Create and read back ACT_DataCopy_Test to verify table source persists
+- Proceed with automation test run once import validation is complete
 
 **Checked live on 2026-10-07:** the Salesforce org
 ### Last session — 2026-10-07
@@ -84,24 +82,18 @@
 | Branch | `orchestrate/context` |
 | Session | `f203b158-e2aa-4e90-b9af-ee68c9f98be8` |
 **In its own words (excerpt):**
-I created the table and the query and added the query to the automation as step 6. I read all three back to check them. Nothing has been run, so `TEST_SQL_Output` has 0 rows. When you next click Run Once, it should get 5 rows (TEST-CONTACT-001 to 005).
+Checks are done and nothing has been created yet. Before I make changes I need your go-ahead, plus one decision.
 
-## The table `TEST_SQL_Output`
-- It's in folder 49911 with the external key `TEST_SQL_Output`, and it can't be sent to.
-- It has 5 fields: ContactKey (Text 50, primary key), Name (Text 50), Email (EmailAddress), phone (Phone) and CreatedDate. CreatedDate is a real Date field, not text.
+## What I found
+- **Source** `John_Mike_Customers` has 5 rows. **Target** `TEST_FullTest_DataCopy` has the same 5 fields (ContactKey as key, FirstName, Email, CreatedDate, Bio), so the columns can be matched by name.
+- **The automation** has 6 steps and is still **Paused**, on its daily 9:00 AM IST schedule.
+- **None of the 5 imports in this account reads from a table.** All of them, including `IMP_FullTest_DataCopy_JMC` from earlier, read a file from the Enhanced FTP. So I have no working example to copy.
 
-## The query `ACT_SQL_Test`
-- Query text: `SELECT ContactKey, Name, Email, phone, CreatedDate FROM [John_N_Orchestrate_Test] WHERE CreatedDate > '2026-10-06 09:38:48'`
-- It writes to `TEST_SQL_Output` and **overwrites** it on every run.
-- It passed Marketing Cloud's syntax check. It's saved in folder 32395, the same folder as your other query activities.
+## The risk
+Earlier today Marketing Cloud's REST API rejected a table-sourced import with "File naming pattern cannot be blank". The SOAP import object does have a `SourceObject` property for a table source, but it also lists the file name and FTP location as required. I can't tell in advance whether Marketing Cloud will accept an import with no file. The only way to find out is to try it and read the result back.
 
-## The automation `AUTO_Orchestrate_Full_Test`
-| Step | Activity | Target |
-|---|---|---|
-| 1 | SQL_FullTest_Combine_Sources | TEST_FullTest_SQL_Output |
-| 2 | SQL_FullTest_DataCopy_JMC | TEST_FullTest_DataCopy |
-| 3 | DX_FullTest_JNOT_Extract | export file |
-| 4 | FT_FullTest_JNOT_Export | Enhanced
+## Plan
+1. **Create `ACT_DataCopy_Test`** through SOAP: source `John_Mike_Customers`, destination `TEST_FullTest_DataCopy`, **Overwrite**, columns matched
 
 _[summary truncated — see the session record for the full text]_
 <!-- orchestrate:session-state:end -->
