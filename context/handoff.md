@@ -42,18 +42,19 @@
 <!-- Written by Orchestrate at the end of each session. Edits inside this block are
      replaced next session; anything OUTSIDE it is yours and is never touched. -->
 ### Engagement state — 2026-10-07
-**Status:** waiting — Switched from scheduled to file-triggered model; awaiting user's three decisions on trigger file name, match type, and activation
+**Status:** waiting — AUTO_Daily_Data_Load paused; step 1 changed to testOrchestrateMap import. Awaiting user choice: resume now (7 AM), pause-resume cycle, or f…
 
 **Done this session**
-- Confirmed AUTO_Daily_Data_Load can switch from scheduled to file-triggered
-- Identified AUTO_Daily_Import as working example using File Drop trigger
-- Presented three-decision plan: trigger file name, match type, activation status
+- Confirmed AUTO_Daily_Data_Load is paused (PausedSchedule status)
+- Detected step 1 changed from SQL query to testOrchestrateMap import into John_Mike_Customers
+- Identified resume would run all 5 steps daily starting 8 Oct 7:00 AM IST
 
 **Open items**
-- User confirms trigger file name: AUTO_Daily_Data_Load_trigger.csv or custom name
+- User confirms trigger file name for file-triggered model: AUTO_Daily_Data_Load_trigger.csv or custom name
 - User confirms match type: Exact name or Begins with
 - User confirms activation: Yes (run on next matching upload) or No (inactive until manual turn-on)
-- Update AUTO_Daily_Data_Load from scheduled to file-triggered once decisions received
+- User chooses: (a) resume now at 7 AM, (b) pause-resume cycle, or (c) fix time to 9 AM and/or verify step 1 first
+- Update AUTO_Daily_Data_Load from scheduled to file-triggered once three decisions received
 - Read back automation to verify trigger type, file name, folder, all 5 steps, and trigger state
 
 **Decisions**
@@ -65,9 +66,10 @@
 - None
 
 **Next**
-- User replies with all three decisions in one message (e.g., 'a, exact, yes')
-- Once confirmed, update AUTO_Daily_Data_Load trigger and remove schedule
-- Read back full automation configuration and confirm with user
+- User replies with one choice: (a), (b), or (c)
+- If (a) or (b): resume schedule, read back status and stored start time
+- If (c): user fixes time in Automation Studio and/or verifies step 1, then confirm to proceed
+- Once resume/pause-resume complete or (c) resolved, proceed with file-triggered conversion and three-decision plan
 
 **Checked live on 2026-10-07:** the Salesforce org
 ### Last session — 2026-10-07
@@ -78,13 +80,25 @@
 | Branch | `orchestrate/context` |
 | Session | `58b3d8ba-c450-493f-9233-a0d9e3d2720f` |
 **In its own words (excerpt):**
-I haven't changed anything yet. The switch is doable, and your account already has a working example to copy: **`AUTO_Daily_Import`** runs on a File Drop trigger. It listens for `csvUpload.csv` in the Enhanced FTP **Import** folder, with file queuing on. Before I switch `AUTO_Daily_Data_Load`, there are a few things you should know and three decisions I need from you.
+I haven't changed anything yet. Before I do, there are two things you should know, and one of them changes what a resume would do.
 
-**What changes when it switches**
-- **The daily schedule is removed.** It's paused right now and still set to 7:00 AM IST. Once switched, the automation runs only when a matching file lands on the FTP, so you won't need the 9:00 AM fix in Automation Studio any more.
-- **None of the 5 steps reads the dropped file.** Steps 1 and 5 are SQL queries, and steps 2–4 export `John_N_Orchestrate_Test`. The file would only act as a "go" signal. That's fine if that's what you want, but it means the file's contents don't matter.
-- **Avoid `csvUpload.csv` as the trigger file.** `AUTO_Daily_Import` already uses that name in the same folder. Its trigger is off at the moment, but if it's ever switched on, one upload would start both automations. A dedicated file name keeps them apart.
-- I'm treating this as replacing my earlier quest
+**1. It's already paused.** I just read `AUTO_Daily_Data_Load` back and its status is `PausedSchedule`. A pause call would do nothing, so "pause then resume" here really just means **resume**.
+
+**2. The steps have changed since my last read, and I didn't make the change.**
+
+| Step | Earlier this session | Now |
+|---|---|---|
+| 1 | `John_Mike_Customers_Amateur_Chef_Query` (SQL) | **`testOrchestrateMap`**, an **Import** into `John_Mike_Customers` (5 rows) |
+| 2 | `DX_John_N_Orchestrate_Test` | same |
+| 3 | `FT_John_N_Orchestrate_Test_Export` | same |
+| 4 | `DX_Zip_John_N_Orchestrate_Test` | same |
+| 5 | `JNOT_CreatedAfter_0938_Query` | same |
+
+The Amateur Chef query is no longer in the automation. Someone probably edited it in Automation Studio, and I've left that change alone.
+
+**What a resume would do**
+- It switches the daily schedule back on. The next run would be **8 Oct at 7:00 AM IST**, because the stored start is still 2 hours earlier than the 9:00 AM you wanted.
+- From then on it runs all 5 steps every day. That includes the new import into `Joh
 
 _[summary truncated — see the session record for the full text]_
 <!-- orchestrate:session-state:end -->
