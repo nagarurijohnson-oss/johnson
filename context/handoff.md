@@ -41,14 +41,11 @@
 <!-- orchestrate:session-state:start -->
 <!-- Written by Orchestrate at the end of each session. Edits inside this block are
      replaced next session; anything OUTSIDE it is yours and is never touched. -->
-### Engagement state — 2026-10-06
-**Status:** at risk — AUTO_Daily_Data_Load created but two blockers remain: wrong run time (7 AM not 9 AM IST) and target table missing
+### Engagement state — 2026-10-07
+**Status:** at risk — I haven't created anything yet.
 
 **Done this session**
-- Confirmed AUTO_Daily_Data_Load exists and is Scheduled in folder 32393
-- Verified step John_Mike_Customers_Amateur_Chef_Query is attached
-- Identified target table deletion: query writes to ___John_Mike_Customers_Amateur_Chef_1
-- Provided navigation path to automation in Automation Studio
+- I haven't created anything yet. Here's what I found and what I'd build. **What I checked (read-only)** - `John_N_Orchestrate_Test` exists: 15 rows, 5 fields (Email, CreatedDate, ContactKey, phone, Name), folder 49911. - **A Data Extension…
 
 **Open items**
 - Fix automation run time: user to open Schedule UI, set 9:00 AM India Standard Time, click Done and Save
@@ -78,30 +75,26 @@
 - Verify query John_Mike_Customers_Amateur_Chef_Query points to recreated table
 - Read back automation schedule to confirm 9:00 AM IST is now stored correctly
 
-**Checked live on 2026-10-06:** the Salesforce org
-### Last session — 2026-10-06
+**Checked live on 2026-10-07:** the Salesforce org
+### Last session — 2026-10-07
 | | |
 |---|---|
 | Type | BUILD |
-| Outcome | COMPLETED |
+| Outcome | FAILED |
 | Branch | `orchestrate/context` |
 | Session | `58b3d8ba-c450-493f-9233-a0d9e3d2720f` |
 **In its own words (excerpt):**
-I can't give you a direct link to `AUTO_Daily_Data_Load`. Marketing Cloud web links include your account's server stack (for example `mc.s11.exacttarget.com`), and nothing I can read from here tells me which stack yours is on. I'd rather not guess a URL that might not open.
+I haven't created anything yet. Here's what I found and what I'd build.
 
-This gets you there:
+**What I checked (read-only)**
+- `John_N_Orchestrate_Test` exists: 15 rows, 5 fields (Email, CreatedDate, ContactKey, phone, Name), folder 49911.
+- **A Data Extension Extract writes a plain CSV only.** Its only compression setting is `Create_TarGz_OutputFile`, which makes a .tar.gz, not a .zip. A zipped CSV needs a separate **Zip** extract after it.
+- This account already has a three-step export that works: `DX_DE_Test_Customers` → `FT_DE_Test_Customers_Export` → `DX_Zip_DE_Test_Customers`. The Zip extract can only read files on the Enhanced FTP, not files in the Safehouse, so the CSV has to be moved there first. I'll copy that pattern exactly. None of the names below are in use.
 
-1. Log in at **https://mc.exacttarget.com**. It sends you to your own stack automatically.
-2. Go to **Journey Builder → Automation Studio**.
-3. Open folder **32393** and click **`AUTO_Daily_Data_Load`**. You can also search for that name.
-
-Once it's open, you can copy the address from your browser to keep as a direct link.
-
-I just checked it again (ID `21f21dab-f5f1-4ef9-950c-21ebd13e7cbb`). Both problems from last time are still there:
-- **Run time:** the stored start is `2026-10-07T19:30` server time, which is 8 Oct at 7:00 AM IST, not 9:00 AM. While you have it open, click **Schedule**, set **9:00 AM, India Standard Time**, then **Done** and **Save**.
-- **Target table:** the query still writes to `___John_Mike_Customers_Amateur_Chef_1`. That name usually means the original table was deleted. Reply **"recreate the table"** and I'll rebuild `John_Mike_Customers_Amateur_Chef`.
-
-If you mean
+**Plan: 3 activities**
+1. **`DX_John_N_Orchestrate_Test`** (Data Extension Extract): exports `John_N_Orchestrate_Test` to `John_N_Orchestrate_Test.csv` with a header row, comma delimiter, text qualifiers and UTF-8, the same settings as the example.
+2. **`FT_John_N_Orchestrate_Test_Export`** (File Transfer): moves that CSV from the Safehouse to the Enhanced FTP **Export** folder.
+3. **`DX_Zip_John_N_Orchestrate_Test`** (Zip extract): 
 
 _[summary truncated — see the session record for the full text]_
 <!-- orchestrate:session-state:end -->
