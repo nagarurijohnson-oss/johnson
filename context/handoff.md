@@ -42,35 +42,38 @@
 <!-- Written by Orchestrate at the end of each session. Edits inside this block are
      replaced next session; anything OUTSIDE it is yours and is never touched. -->
 ### Engagement state — 2026-10-07
-**Status:** waiting — AUTO_Daily_Data_Load paused; step 1 now testOrchestrateMap import. Awaiting user file clarification.
+**Status:** waiting — Build plan ready for AUTO_Orchestrate_Full_Test. Awaiting 4 user decisions before creation.
 
 **Done this session**
-- Confirmed testOrchestrateMap import (step 1) writes 5 rows to John_Mike_Customers
-- Searched Content Builder, all imports, file transfers, and tables for uploaded CSV
-- Read John_Mike_Customers table: 5 rows, all dated 6 Oct (before import creation)
+- Discovered folder 32393 (my automations) and source tables John_N_Orchestrate_Test (15 rows) and John_Mike_Customers (5 rows)
+- Located csvUpload.csv in Enhanced FTP Import folder
+- Designed 7-step automation with SQL Query, Data Copy, Import File, Data Extract, File Transfer, Script, and Send Email
+- Planned 5 new test tables in folder 49911
 
 **Open items**
-- User confirms trigger file name: AUTO_Daily_Data_Load_trigger.csv or custom
-- User confirms match type: Exact name or Begins with
-- User confirms activation: Yes or No
-- User chooses resume timing: (a) now 7 AM, (b) pause-resume cycle, or (c) fix time/verify step 1
-- Clarify actual CSV file: attach to chat OR name the table it was imported into
-- Verify whether testOrchestrateMap has loaded user's file or contains older data
+- User chooses test recipient: (a) internal address OR (b) leave table empty
+- User chooses schedule state: (a) turn on now OR (b) save paused for manual test run
+- User chooses email content: create new test email OR reuse existing ORCH_TEST Welcome 1
+- User confirms: proceed with creation of tables, activities, and automation
 
 **Decisions**
 - AUTO_Daily_Data_Load: switch from 7:00 AM IST schedule to file-triggered model
 - Trigger source: Enhanced FTP Import folder, file queuing on
 - Avoid csvUpload.csv as trigger file name (conflict with AUTO_Daily_Import)
+- New automation AUTO_Orchestrate_Full_Test: daily 9:00 AM IST, folder 32393, 7 sequential steps
+- Email send classification: Default Transactional (no unsubscribe/footer required)
+- Data Copy implemented as Import activity with table source (not separate activity type)
 
 **Blockers**
-- Cannot access uploaded CSV (John_N_test_records_UTF8_b860c369-bbbb-47f5-abd1-2bd6cb490d02.csv) — not in Content Builder, FTP, or Safehouse
+- None
 
 **Next**
-- User attaches CSV to chat OR names the destination table for the import
-- Verify testOrchestrateMap file contents and row count
-- User provides three decisions (trigger name, match type, activation)
-- User chooses resume timing option (a), (b), or (c)
-- Convert AUTO_Daily_Data_Load to file-triggered and read back full automation
+- User provides answer to question 1: test recipient choice and address if (a)
+- User provides answer to question 2: schedule state (a) or (b)
+- User provides answer to question 3: new email or reuse existing
+- User confirms proceed with creation
+- Create 5 test tables and load audience row if applicable
+- Create email and 7 activities, build automation, read back all items to verify
 
 **Checked live on 2026-10-07:** the Salesforce org
 ### Last session — 2026-10-07
@@ -79,19 +82,23 @@
 | Type | BUILD |
 | Outcome | COMPLETED |
 | Branch | `orchestrate/context` |
-| Session | `58b3d8ba-c450-493f-9233-a0d9e3d2720f` |
+| Session | `f203b158-e2aa-4e90-b9af-ee68c9f98be8` |
 **In its own words (excerpt):**
-I can't open `John_N_test_records_UTF8_b860c369-bbbb-47f5-abd1-2bd6cb490d02.csv`. It isn't anywhere I can read: it isn't in Content Builder, it isn't attached to this chat, and no import or file transfer refers to it by name. A name made of a file name plus a GUID is what Marketing Cloud gives a file uploaded from a computer through the Import wizard. It keeps that file in its internal Safehouse, and I have no tool that can read files there or on the FTP.
+Discovery is done. Below is the build plan with real IDs from your tenant. Nothing has been created yet. I need four answers from you before I create anything.
 
-**The closest data I can read.** The import `testOrchestrateMap`, created today and now step 1 of `AUTO_Daily_Data_Load`, uses an uploaded file and writes to `John_Mike_Customers`. That table has 5 rows right now:
+## What I found
+- **Folder 32393** is the Automation Studio folder "my automations". Your other `AUTO_*` automations are in it too.
+- **John_N_Orchestrate_Test** has 15 rows. Fields: ContactKey (key), Name, Email, phone, CreatedDate.
+- **John_Mike_Customers** has 5 rows. Fields: ContactKey (key), FirstName, Email, CreatedDate, Bio.
+- **csvUpload.csv** is in the Enhanced FTP Import folder. Two imports read it successfully today at 09:29, and they don't delete the file, so it should still be there. I'll use it for the Import File test.
 
-| ContactKey | FirstName | Email | CreatedDate (server time) | Bio |
-|---|---|---|---|---|
-| JMC-0001 | Aarav | aarav.sample@example.com | 10/6/2026 9:48:31 AM | Loves hiking |
-| JMC-0002 | Priya | priya.sample@example.com | 10/6/2026 9:48:31 AM | Coffee enthusiast |
-| JMC-0003 | Daniel | daniel.sample@example.com | 10/6/2026 9:48:31 AM | Weekend cyclist |
-| JMC-0004 | Updated | meera.sample@example.com | 10/6/2026 9:48:31 AM | Avid reader |
-| JMC-0005 | Lucas | lucas.sample@example.com | 10/6/2026 9:48:31 AM | Amateur
+## Proposed automation: `AUTO_Orchestrate_Full_Test`
+It goes in folder 32393, runs daily at 9:00 AM IST (India Standard Time), and has one activity per step so the steps run one after another:
+
+| Step | Activity type | Activity name | What it does |
+|---|---|---|---|
+| 1 | SQL Query | `SQL_FullTest_Combine_Sources` | Combines both source tables, tagged by source, and overwrites `TEST_FullTest_SQL_Output` |
+| 2 | Data Copy | `IMP_FullTest_DataCopy_JMC` | Copies `John_Mike_Customers` into `TEST_
 
 _[summary truncated — see the session record for the full text]_
 <!-- orchestrate:session-state:end -->
