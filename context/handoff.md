@@ -42,37 +42,38 @@
 <!-- Written by Orchestrate at the end of each session. Edits inside this block are
      replaced next session; anything OUTSIDE it is yours and is never touched. -->
 ### Engagement state — 2026-10-07
-**Status:** blocked — Table-sourced import rejected by both APIs—requires UI workaround or design change
+**Status:** at risk — Automation ran end-to-end; 2 output issues found—cutoff filter and script row count need fixes before production
 
 **Done this session**
-- Confirmed John_Mike_Customers (5 rows) matches TEST_FullTest_DataCopy schema
-- Tested table-sourced import via SOAP and REST—both rejected for missing file/FTP fields
-- Verified AUTO_Orchestrate_Full_Test unchanged (6 steps, Paused)
+- AUTO_Orchestrate_Full_Test executed successfully (all 6 steps Complete)
+- TEST_FullTest_SQL_Output: 20 rows (15+5, correct)
+- TEST_FullTest_DataCopy: 5 rows (correct)
+- JNOT_FullTest_20261007.csv extracted and uploaded to FTP
+- Identified root cause of ACT_SQL_Test over-count: CreatedDate filter matches subsecond precision
 
 **Open items**
-- Decision: build Import File activity in UI (option 1) or accept step 2 SQL copy as final solution (option 2)
-- If option 1: create step 7 Import File in Automation Studio UI with John_Mike_Customers table source
-- If option 1: read back step 7 to verify table source persists without file/FTP in API view
-- Run automation end-to-end test once import strategy is decided
-- Verify TEST_SQL_Output receives 5 rows after first run
-- Add Send Email activity as final step manually in Automation Studio UI
+- Fix ACT_SQL_Test cutoff: change CreatedDate > '2026-10-06 09:38:48' to >= '2026-10-06 09:38:49'
+- Fix SSJS_FullTest_Log_Run: replace DataExtensionRowCount with row lookup or WSProxy for row counting
+- Confirm JNOT_FullTest_20261007.csv landed in Enhanced FTP Export folder (15 data rows)
+- Run automation once more after both fixes to verify outputs match expected counts
+- Add Send Email activity as final step (deferred from previous session)
 - Restore step labels if needed
 
 **Decisions**
-- Cutoff filter: CreatedDate > '2026-10-06 09:38:48' (5 rows only)
+- Cutoff filter: CreatedDate > '2026-10-06 09:38:48' (to be updated to >= '2026-10-06 09:38:49')
 - SQL Query step 6 position: at end of automation, after Script step 5
 - Data Copy implemented as SQL query (table-to-table), not Import activity
 - Send Email step deferred to manual UI creation due to API limitation
 - Script logs row counts for SQL output and Data Copy only
 
 **Blockers**
-- Marketing Cloud APIs require file name, file type, and FTP location for all imports—table-sourced imports cannot be created via SOAP or REST without file metadata
-- Unknown whether Automation Studio UI can save table-sourced import in a way APIs expose without file/FTP fields
+- None
 
 **Next**
-- Choose option 1 (UI-built Import File step 7) or option 2 (keep step 2 SQL copy only)
-- If option 1: build and save step 7 in Automation Studio UI, then read back to test API visibility
-- If option 2: proceed directly to end-to-end automation test run
+- Apply cutoff fix to ACT_SQL_Test query
+- Apply row-count fix to SSJS_FullTest_Log_Run script
+- Run automation once more and verify TEST_SQL_Output shows 5 rows and script log shows row counts
+- Confirm JNOT_FullTest_20261007.csv in FTP Export folder
 
 **Checked live on 2026-10-07:** the Salesforce org
 ### Last session — 2026-10-07
@@ -83,23 +84,17 @@
 | Branch | `orchestrate/context` |
 | Session | `f203b158-e2aa-4e90-b9af-ee68c9f98be8` |
 **In its own words (excerpt):**
-I couldn't create `ACT_DataCopy_Test`. Marketing Cloud rejected a table-sourced import twice, through two different APIs, so nothing was created and step 7 wasn't added. The automation is unchanged and still Paused.
+`AUTO_Orchestrate_Full_Test` ran once and finished with status **Complete**. All 6 activities reported success, and the schedule is still **Paused**. Two outputs didn't come out as intended, though: `ACT_SQL_Test` wrote 15 rows instead of 5, and the Script step logged an error rather than row counts.
 
-## What Marketing Cloud returned
-**SOAP** (source `John_Mike_Customers`, destination `TEST_FullTest_DataCopy`, Overwrite, no file):
-> ImportDefinition DestinationObjects was not specified in the request.
-> ImportDefinition FileTransferLocation was not specified in the request.
-> ImportDefinition FileSpec was not specified in the request.
-> ImportDefinition FileType was not specified in the request.
+**Run:** started 16:29:13 and finished 16:36:52 IST (instance `40e65090…`), about 7.5 minutes. No email was sent, because the automation has no Send Email step.
 
-The first line, "DestinationObjects", is my tool's fault. It dropped the nested source and destination table settings, the same problem it had with the Send Email setup. The other three lines are Marketing Cloud's own rules: it wants a file name, a file type and an FTP location.
-
-**REST** (same settings, table as source):
-> The following field is required: 'FileType'.
-> The following field is required: 'FileTransferLocationId'.
-> The following field is required: 'SendEmailNotification'.
-
-Both APIs require a file and an FTP location for an import. I can't meet your "no CSV, 
+## Results by step
+| Step | Activity | Result | Output read back |
+|---|---|---|---|
+| 1 | `SQL_FullTest_Combine_Sources` | ✅ Complete | `TEST_FullTest_SQL_Output`: **20 rows**, all 15 from John_N_Orchestrate_Test plus all 5 from John_Mike_Customers, tagged by source. Matches the expected count. |
+| 2 | `SQL_FullTest_DataCopy_JMC` | ✅ Complete | `TEST_FullTest_DataCopy`: **5 rows** (JMC-0001 to 0005), every field filled. Matches the expected count. |
+| 3 | `DX_FullTest_JNOT_Extract` | ✅ Complete | Writes `JNOT_FullTest_YYYYMMDD.csv` (header row, comma-separated, quoted values, UTF-8). For this run the name should be `JNOT_FullTest_20261007.csv`. |
+| 4 | `FT_FullTest_JNOT_Export` | ✅ Complete | Uploads that file to the Enhance
 
 _[summary truncated — see the session record for the full text]_
 <!-- orchestrate:session-state:end -->
