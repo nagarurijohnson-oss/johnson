@@ -42,12 +42,12 @@
 <!-- Written by Orchestrate at the end of each session. Edits inside this block are
      replaced next session; anything OUTSIDE it is yours and is never touched. -->
 ### Engagement state — 2026-10-07
-**Status:** on track — Error notification recipient updated to nagaruri.johnson@jaxconsult.com and confirmed saved.
+**Status:** on track — Automation runs verified in Marketing Cloud; 3 runs found, latest passed all checks. Ready to add Send Email step.
 
 **Done this session**
-- Updated error notification recipient from anagaruri.johnson@jaxconsult.com to nagaruri.johnson@jaxconsult.com
-- Confirmed new address saved in Marketing Cloud and old address removed
-- Verified automation schedule, steps, and last run unchanged after notification update
+- Verified run history in Marketing Cloud: 3 runs total, newest (22:56 IST 7 Oct) passed all checks
+- Corrected IST time conversion error from earlier in session
+- Confirmed TEST_SQL_Output has 5 rows and log shows Success row with counts 20 and 5
 
 **Open items**
 - Confirm JNOT_FullTest_20261007.csv exists in Enhanced FTP Export folder
@@ -55,7 +55,6 @@
 - Update TEST_SQL_Output description label (old cutoff reference)
 - Update TEST_FullTest_DataCopy description label (old import reference)
 - Test error notification by forcing a real automation run failure
-- Decide: modify Script step to throw errors after logging to trigger notification?
 
 **Decisions**
 - Error notification recipient: nagaruri.johnson@jaxconsult.com (confirmed)
@@ -84,26 +83,23 @@
 | Branch | `orchestrate/context` |
 | Session | `f203b158-e2aa-4e90-b9af-ee68c9f98be8` |
 **In its own words (excerpt):**
-I changed the failure notification on `AUTO_Orchestrate_Full_Test` so it now goes to `nagaruri.johnson@jaxconsult.com` only. Reading it back confirmed the new address saved, and the old `anagaruri` address is gone. Nothing was run and no email was sent.
+Only **3 runs** exist for `AUTO_Orchestrate_Full_Test`, not 5. Marketing Cloud returned these three and no others, which fits an automation that was built today and has only been run by hand. Nothing was started or changed.
 
-## Notification, as read back
-| | Saved value |
-|---|---|
-| Type | **Error** (sent when a step fails) |
-| Recipient | `nagaruri.johnson@jaxconsult.com` (one address only) |
-| Message | "AUTO_Orchestrate_Full_Test: a step failed. Check the run history in Automation Studio." |
-| Success notification | None |
+## Run history (newest first)
+| # | Started (IST) | Ended (IST) | Duration | Status |
+|---|---|---|---|---|
+| 1 | 7 Oct, 22:56:19 | 23:02:53 | **6m 33s** | ✅ Complete |
+| 2 | 7 Oct, 22:47:02 | 22:51:15 | **4m 13s** | ⏹ Stopped (manually; only step 1 finished) |
+| 3 | 7 Oct, 22:29:13 | 22:36:52 | **7m 39s** | ✅ Complete (all 6 steps succeeded, but the Script step logged an error and `ACT_SQL_Test` returned 15 rows) |
 
-Marketing Cloud gave the notification a new internal ID when it saved. That's expected when a notification is replaced, and there's still only one.
+Marketing Cloud records these times in its server time (UTC−6). I converted them to IST by adding 11h 30m.
 
-## Automation, read back after the change
-- **Schedule:** still Paused, daily at 9:00 AM India Standard Time from 8 Oct.
-- **Steps:** the same 6 activities in the same order.
-- **Last run:** still the 22:56 IST run, so no new run started.
+## Correction to my earlier reports
+Earlier in this session I gave the wrong IST times for runs 2 and 3. I treated the server times as if they were UTC, so I said:
+- Run 3 started at **16:29 IST**. It actually started at **22:29 IST**.
+- Run 2 started at **16:47 IST** and had been stuck for "six hours". It actually started at **22:47 IST**, and it had only been going for a few minutes when you stopped it.
 
-## Still open
-- **The email hasn't been tested.** It's only sent when a real run fails.
-- **Errors the Script step catches itself won't trigger the email.** `SSJS_FullTest_Log_Run` logs those errors and still finishes, so Marketing Cloud doesn't c
+The time error explains the "six hou
 
 _[summary truncated — see the session record for the full text]_
 <!-- orchestrate:session-state:end -->
