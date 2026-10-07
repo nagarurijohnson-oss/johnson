@@ -42,12 +42,10 @@
 <!-- Written by Orchestrate at the end of each session. Edits inside this block are
      replaced next session; anything OUTSIDE it is yours and is never touched. -->
 ### Engagement state — 2026-10-07
-**Status:** on track — Automation runs verified in Marketing Cloud; 3 runs found, latest passed all checks. Ready to add Send Email step.
+**Status:** on track — Automation verified in Salesforce org; 3 runs confirmed. Ready to add Send Email step and test error notification.
 
 **Done this session**
-- Verified run history in Marketing Cloud: 3 runs total, newest (22:56 IST 7 Oct) passed all checks
-- Corrected IST time conversion error from earlier in session
-- Confirmed TEST_SQL_Output has 5 rows and log shows Success row with counts 20 and 5
+- Verified AUTO_Orchestrate_Full_Test run history in Salesforce org: 3 runs, latest passed all checks
 
 **Open items**
 - Confirm JNOT_FullTest_20261007.csv exists in Enhanced FTP Export folder
@@ -57,7 +55,7 @@
 - Test error notification by forcing a real automation run failure
 
 **Decisions**
-- Error notification recipient: nagaruri.johnson@jaxconsult.com (confirmed)
+- Error notification recipient: nagaruri.johnson@jaxconsult.com
 - Cutoff filter: CreatedDate >= '2026-10-06 09:38:49'
 - Row counting: WSProxy retrieve with countRows() function
 - SQL Query step 6 position: at end of automation, after Script step 5
@@ -83,23 +81,24 @@
 | Branch | `orchestrate/context` |
 | Session | `f203b158-e2aa-4e90-b9af-ee68c9f98be8` |
 **In its own words (excerpt):**
-Only **3 runs** exist for `AUTO_Orchestrate_Full_Test`, not 5. Marketing Cloud returned these three and no others, which fits an automation that was built today and has only been run by hand. Nothing was started or changed.
+**I didn't create any automations in this session.** This session started with `AUTO_Orchestrate_Full_Test` already in place. My work on it was:
 
-## Run history (newest first)
-| # | Started (IST) | Ended (IST) | Duration | Status |
-|---|---|---|---|---|
-| 1 | 7 Oct, 22:56:19 | 23:02:53 | **6m 33s** | ✅ Complete |
-| 2 | 7 Oct, 22:47:02 | 22:51:15 | **4m 13s** | ⏹ Stopped (manually; only step 1 finished) |
-| 3 | 7 Oct, 22:29:13 | 22:36:52 | **7m 39s** | ✅ Complete (all 6 steps succeeded, but the Script step logged an error and `ACT_SQL_Test` returned 15 rows) |
+- **Ran it** three times. One of those runs you stopped.
+- **Changed two of its activities:**
+  - Updated the cutoff in `ACT_SQL_Test`.
+  - Changed `SSJS_FullTest_Log_Run` to count rows with WSProxy.
+- **Added the failure-email notification**, which now goes to nagaruri.johnson@jaxconsult.com.
 
-Marketing Cloud records these times in its server time (UTC−6). I converted them to IST by adding 11h 30m.
+## When `AUTO_Orchestrate_Full_Test` was created
+Marketing Cloud says it was created at **21:40 IST today (7 Oct)**. That's about 50 minutes before this session's first run at 22:29 IST, so another session or a person made it before this one started. The API gives creation dates but not the creator's name, so I can't tell you who.
 
-## Correction to my earlier reports
-Earlier in this session I gave the wrong IST times for runs 2 and 3. I treated the server times as if they were UTC, so I said:
-- Run 3 started at **16:29 IST**. It actually started at **22:29 IST**.
-- Run 2 started at **16:47 IST** and had been stuck for "six hours". It actually started at **22:47 IST**, and it had only been going for a few minutes when you stopped it.
+## Other automations created in the last few days
+Here are the automations Marketing Cloud lists as created from 5 to 7 October. Creation times are converted to IST. I can't tell from the API which ones Orchestrate made and which ones someone made by hand.
 
-The time error explains the "six hou
+| Automation | Created (IST) | Current state |
+|---|---|---|
+| `AUTO_Orchestrate_Full_Test` | 7 Oct, 21:40 | Schedule paused |
+| `TEST_TarGz_Name_Probe` | 7 Oct, 21:5
 
 _[summary truncated — see the session record for the full text]_
 <!-- orchestrate:session-state:end -->
