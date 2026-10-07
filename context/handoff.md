@@ -42,38 +42,35 @@
 <!-- Written by Orchestrate at the end of each session. Edits inside this block are
      replaced next session; anything OUTSIDE it is yours and is never touched. -->
 ### Engagement state — 2026-10-07
-**Status:** at risk — Automation ran end-to-end; 2 output issues found—cutoff filter and script row count need fixes before production
+**Status:** at risk — Both fixes applied & read back OK; automation paused pending test run to verify outputs
 
 **Done this session**
-- AUTO_Orchestrate_Full_Test executed successfully (all 6 steps Complete)
-- TEST_FullTest_SQL_Output: 20 rows (15+5, correct)
-- TEST_FullTest_DataCopy: 5 rows (correct)
-- JNOT_FullTest_20261007.csv extracted and uploaded to FTP
-- Identified root cause of ACT_SQL_Test over-count: CreatedDate filter matches subsecond precision
+- Updated ACT_SQL_Test query: CreatedDate >= '2026-10-06 09:38:49' (syntax passed)
+- Replaced DataExtensionRowCount with WSProxy countRows() in SSJS_FullTest_Log_Run
+- Read back both activities; changes confirmed in Salesforce org
 
 **Open items**
-- Fix ACT_SQL_Test cutoff: change CreatedDate > '2026-10-06 09:38:48' to >= '2026-10-06 09:38:49'
-- Fix SSJS_FullTest_Log_Run: replace DataExtensionRowCount with row lookup or WSProxy for row counting
-- Confirm JNOT_FullTest_20261007.csv landed in Enhanced FTP Export folder (15 data rows)
-- Run automation once more after both fixes to verify outputs match expected counts
-- Add Send Email activity as final step (deferred from previous session)
-- Restore step labels if needed
+- Run automation once more and verify TEST_SQL_Output shows 5 rows
+- Verify script log row shows SQLOutputRows=20, DataCopyRows=5, Status=Success
+- Confirm JNOT_FullTest_20261007.csv landed in Enhanced FTP Export folder
+- Update TEST_SQL_Output description to reflect new cutoff (label only, non-blocking)
+- Add Send Email activity as final step (deferred)
 
 **Decisions**
-- Cutoff filter: CreatedDate > '2026-10-06 09:38:48' (to be updated to >= '2026-10-06 09:38:49')
+- Cutoff filter: CreatedDate >= '2026-10-06 09:38:49' (updated from >)
+- Row counting: WSProxy retrieve with countRows() function (replaced DataExtensionRowCount)
 - SQL Query step 6 position: at end of automation, after Script step 5
-- Data Copy implemented as SQL query (table-to-table), not Import activity
-- Send Email step deferred to manual UI creation due to API limitation
-- Script logs row counts for SQL output and Data Copy only
+- Data Copy implemented as SQL query (table-to-table)
+- Send Email step deferred to manual UI creation
 
 **Blockers**
 - None
 
 **Next**
-- Apply cutoff fix to ACT_SQL_Test query
-- Apply row-count fix to SSJS_FullTest_Log_Run script
-- Run automation once more and verify TEST_SQL_Output shows 5 rows and script log shows row counts
-- Confirm JNOT_FullTest_20261007.csv in FTP Export folder
+- Run AUTO_Orchestrate_Full_Test once and monitor for completion
+- Check TEST_SQL_Output: expect 5 rows (TEST-CONTACT-001 to 005)
+- Check TEST_FullTest_Script_Log: expect new row with SQLOutputRows=20, DataCopyRows=5, Status=Success
+- Confirm JNOT_FullTest_20261007.csv in FTP Export folder with 15 data rows
 
 **Checked live on 2026-10-07:** the Salesforce org
 ### Last session — 2026-10-07
@@ -84,17 +81,24 @@
 | Branch | `orchestrate/context` |
 | Session | `f203b158-e2aa-4e90-b9af-ee68c9f98be8` |
 **In its own words (excerpt):**
-`AUTO_Orchestrate_Full_Test` ran once and finished with status **Complete**. All 6 activities reported success, and the schedule is still **Paused**. Two outputs didn't come out as intended, though: `ACT_SQL_Test` wrote 15 rows instead of 5, and the Script step logged an error rather than row counts.
+I updated both activities and read each one back. The automation is still **Paused** and hasn't been run, so neither fix has been tested yet.
 
-**Run:** started 16:29:13 and finished 16:36:52 IST (instance `40e65090…`), about 7.5 minutes. No email was sent, because the automation has no Send Email step.
+## 1. `ACT_SQL_Test`
+| | Read back |
+|---|---|
+| Query | `SELECT ContactKey, Name, Email, phone, CreatedDate FROM [John_N_Orchestrate_Test] WHERE CreatedDate >= '2026-10-06 09:38:49'` |
+| Target | `TEST_SQL_Output` |
+| Update type | **Overwrite** |
+| Syntax check | Passed, no errors or warnings |
+| Modified | 2026-10-07 11:13 UTC |
 
-## Results by step
-| Step | Activity | Result | Output read back |
-|---|---|---|---|
-| 1 | `SQL_FullTest_Combine_Sources` | ✅ Complete | `TEST_FullTest_SQL_Output`: **20 rows**, all 15 from John_N_Orchestrate_Test plus all 5 from John_Mike_Customers, tagged by source. Matches the expected count. |
-| 2 | `SQL_FullTest_DataCopy_JMC` | ✅ Complete | `TEST_FullTest_DataCopy`: **5 rows** (JMC-0001 to 0005), every field filled. Matches the expected count. |
-| 3 | `DX_FullTest_JNOT_Extract` | ✅ Complete | Writes `JNOT_FullTest_YYYYMMDD.csv` (header row, comma-separated, quoted values, UTF-8). For this run the name should be `JNOT_FullTest_20261007.csv`. |
-| 4 | `FT_FullTest_JNOT_Export` | ✅ Complete | Uploads that file to the Enhance
+On the next run it should return 5 rows (TEST-CONTACT-001 to 005). `TEST_SQL_Output` still holds the 15 rows from the last run until then.
+
+## 2. `SSJS_FullTest_Log_Run`
+- **What changed:** I took out both `Platform.Function.DataExtensionRowCount` calls. A new `countRows()` function retrieves each table's ContactKey column through WSProxy and adds up the rows, reading more batches until none are left.
+- **What stayed the same:**
+  - It still writes one row per run to `TEST_FullTest_Script_Log`, with the run ID, timestamp, `SQLOutputRows`, `DataCopyRows`, Status = `Success` and a note.
+  - The error path is unchanged: on any failure it still writes a `Status = Error` row with the message. If a WSProxy retrieve its
 
 _[summary truncated — see the session record for the full text]_
 <!-- orchestrate:session-state:end -->
