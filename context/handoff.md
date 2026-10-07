@@ -42,36 +42,38 @@
 <!-- Written by Orchestrate at the end of each session. Edits inside this block are
      replaced next session; anything OUTSIDE it is yours and is never touched. -->
 ### Engagement state — 2026-10-07
-**Status:** at risk — AUTO_Orchestrate_Full_Test created & paused (5 of 6 steps); Send Email step missing, needs manual add
+**Status:** waiting — Automation 5/6 steps built & paused. Awaiting cutoff decision (A: 15 rows | B: 5 rows) + step order confirmation before adding SQL Query st…
 
 **Done this session**
-- Created AUTO_Orchestrate_Full_Test automation (ID a61210b2-b55c-4acf-a10f-935597c30d86) in folder 32393, paused daily 9:00 AM IST
-- Built & verified 5 activities: SQL Query, Data Copy (SQL), Data Extract, File Transfer, Script
-- Created test email ORCH_FullTest_Test_Email and audience table TEST_FullTest_Email_Audience (0 rows)
-- Confirmed all 5 steps read back correctly with expected outputs
+- Verified John_N_Orchestrate_Test has 15 rows with two CreatedDate timestamps (10/6/2026 9:38:48 AM and 3:30:11 PM)
+- Confirmed AUTO_Orchestrate_Full_Test remains paused with 5 steps intact, daily 9:00 AM IST schedule unchanged
 
 **Open items**
-- Add Send Email activity as step 6 manually in Automation Studio UI (email, audience, Default Transactional classification)
+- User decision: cutoff filter option A (15 rows) or B (5 rows) for SQL Query
+- User decision: add SQL Query as step 6 at end or move before Script step 5 for logging
+- Create TEST_SQL_Output table in folder 49911 with ContactKey, Name, Email, phone, CreatedDate
+- Create ACT_SQL_Test query with chosen cutoff, targeting TEST_SQL_Output
+- Add ACT_SQL_Test to AUTO_Orchestrate_Full_Test at confirmed step position
+- Add Send Email activity as step (manual UI creation required)
 - Run automation once to test all steps end-to-end
-- Verify TEST_FullTest_Script_Log shows 20 rows (SQL output) and 5 rows (copy)
-- Confirm deletion of leftover items: IMP_FullTest_csvUpload, TEST_FullTest_Import, IMP_FullTest_DataCopy_JMC
-- Decide: start automation or keep paused pending further testing
+- Verify TEST_FullTest_Script_Log row counts and TEST_SQL_Output results
 
 **Decisions**
-- Data Copy implemented as SQL query (table-to-table), not Import activity, due to REST/SOAP constraints
-- Send Email step deferred to manual UI creation due to tool limitation with nested send settings
-- Script logs row counts only for SQL output and Data Copy (csvUpload test removed)
+- Data Copy implemented as SQL query (table-to-table), not Import activity
+- Send Email step deferred to manual UI creation due to API limitation
+- Script logs row counts for SQL output and Data Copy only
 - Automation schedule: daily 9:00 AM IST, status Paused, first run 8 Oct
 
 **Blockers**
 - Send Email activity cannot be created via API—nested send classification settings rejected; manual UI step required
+- Cutoff timestamp ambiguity: CreatedDate boundary at 2026-10-06 09:38:48 AM determines 15 vs 5 rows—awaiting user choice
 
 **Next**
-- User adds Send Email step 6 in Automation Studio UI with ORCH_FullTest_Test_Email, TEST_FullTest_Email_Audience, Default Transactional
-- Click Run Once to execute full automation test
-- Check TEST_FullTest_Script_Log for expected row counts (20 SQL, 5 copy)
-- Confirm deletion of 3 leftover items or keep for reference
-- Unpause automation when ready for daily runs
+- User replies with cutoff choice (A or B) and step 6 position confirmation
+- Create TEST_SQL_Output table and ACT_SQL_Test query with chosen parameters
+- Add SQL Query step to automation at confirmed position
+- Read back table, query, and automation to verify configuration
+- User adds Send Email step 6 (or 7) manually in Automation Studio UI
 
 **Checked live on 2026-10-07:** the Salesforce org
 ### Last session — 2026-10-07
@@ -82,21 +84,27 @@
 | Branch | `orchestrate/context` |
 | Session | `f203b158-e2aa-4e90-b9af-ee68c9f98be8` |
 **In its own words (excerpt):**
-I created `AUTO_Orchestrate_Full_Test` and confirmed each item by reading it back, but it covers 5 of your 6 activity types: I couldn't create the Send Email activity. The Data Copy step also works differently than planned. Nothing has been run yet, so this is checked configuration, not a tested run.
+I haven't created anything yet. There's one decision for you first, because "after 9:38 AM" catches either every row in the table or only a third of them.
 
-## The automation as saved
-- **ID:** `a61210b2-b55c-4acf-a10f-935597c30d86`, in folder 32393
-- **Schedule:** daily at 9:00 AM India Standard Time, first run 8 Oct. Status is **Paused**, so it won't run until you start it.
+## What I found
+- **`TEST_SQL_Output` doesn't exist**, so I'd create it. `ACT_SQL_Test` doesn't exist yet either.
+- **`John_N_Orchestrate_Test` has 15 rows, with only two CreatedDate values:**
+  - 10 rows (TEST-CONTACT-006 to 015) at **10/6/2026 9:38:48 AM**
+  - 5 rows (TEST-CONTACT-001 to 005) at **10/6/2026 3:30:11 PM**
+- **The automation** has 5 steps and is still Paused, with the daily 9:00 AM IST schedule unchanged.
 
-| Step | Activity | Read-back result |
+## The cutoff question
+Your cutoff lands in the same minute as those 10 rows, so the exact boundary decides the result:
+
+| Option | Filter | Rows returned |
 |---|---|---|
-| 1 | SQL Query `SQL_FullTest_Combine_Sources` | Combines both source tables → `TEST_FullTest_SQL_Output`, overwrite |
-| 2 | Data Copy `SQL_FullTest_DataCopy_JMC` (new) | Copies all `John_Mike_Customers` rows → `TEST_FullTest_DataCopy`, overwrite, no file used |
-| 3 | Data Extract `DX_FullTest_JNOT_Extract` | Exports `John_N_Orchestrate_Test` → `JNOT_FullTest_YYYYMMDD.csv` (header row, comma, UTF-8) |
-| 4 | File Transfer `FT_FullTest_JNOT_Export` | Uploads that same file to the Enhanced FTP |
-| 5 | Script `SSJS_FullTest_Log_Run` | Writes one row per run with row counts into `TEST_FullTest_Script_Log` |
+| **A** | `CreatedDate > '2026-10-06 09:38:00'` (from the start of the minute) | **15**, which is the whole table |
+| **B** | `CreatedDate > '2026-10-06 09:38:48'` (strictly after those 10 rows) | **5**, only the 3:30 PM rows |
 
-Two other 
+I'll compare against the timestamps exactly as they're stored in the table, with no time-zone conversion. That matches how the values above were loaded.
+
+## What I'll do once you choose
+1. **Create the table `TEST_SQL_
 
 _[summary truncated — see the session record for the full text]_
 <!-- orchestrate:session-state:end -->
