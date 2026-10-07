@@ -42,10 +42,10 @@
 <!-- Written by Orchestrate at the end of each session. Edits inside this block are
      replaced next session; anything OUTSIDE it is yours and is never touched. -->
 ### Engagement state — 2026-10-07
-**Status:** waiting — Plan presented for new test automation Auto_Test_Orchestrate_for_Del; awaiting approval to proceed
+**Status:** on track — Auto_Test_Orchestrate_for_Del created successfully; 6 open items remain from previous session
 
 **Done this session**
-- None
+- Created Auto_Test_Orchestrate_for_Del automation (ID addf539a-3320-4bcc-a14f-1de3dbbed78f) as empty shell in default folder
 
 **Open items**
 - Confirm JNOT_FullTest_20261007.csv exists in Enhanced FTP Export folder
@@ -53,7 +53,7 @@
 - Update TEST_SQL_Output description label (old cutoff reference)
 - Update TEST_FullTest_DataCopy description label (old import reference)
 - Test error notification by forcing a real automation run failure
-- Approve plan for Auto_Test_Orchestrate_for_Del: empty shell, no schedule, default folder
+- Populate Auto_Test_Orchestrate_for_Del with activities if needed
 
 **Decisions**
 - Error notification recipient: nagaruri.johnson@jaxconsult.com
@@ -63,15 +63,16 @@
 - Data Copy implemented as SQL query (table-to-table)
 - Error notification type: Error only, no success notification
 - Script step internal error handling: writes Error row but doesn't fail step
+- Auto_Test_Orchestrate_for_Del created as empty shell, no schedule, default folder
 
 **Blockers**
 - None
 
 **Next**
-- Approve or modify plan for Auto_Test_Orchestrate_for_Del creation
 - Manually verify JNOT_FullTest_20261007.csv in Enhanced FTP Export folder
 - Add Send Email step as step 7 in Automation Studio UI
 - Update table description labels for TEST_SQL_Output and TEST_FullTest_DataCopy
+- Test error notification by forcing a real automation run failure
 
 **Checked live on 2026-10-07:** the Salesforce org
 ### Last session — 2026-10-07
@@ -82,24 +83,25 @@
 | Branch | `orchestrate/context` |
 | Session | `f203b158-e2aa-4e90-b9af-ee68c9f98be8` |
 **In its own words (excerpt):**
-The name `Auto_Test_Orchestrate_for_Del` isn't in use, so I can create it. I haven't created anything yet. Your request only gives the name, so here's the plan with defaults. Tell me if you want any of them changed.
+I created `Auto_Test_Orchestrate_for_Del` and read it back, and it saved as planned. Marketing Cloud accepted it with no steps.
 
-## Plan
-1. **Create the automation** `Auto_Test_Orchestrate_for_Del` in Automation Studio:
-   - **Steps:** none. It will be an empty shell. If you want activities in it, tell me which ones. I can reuse existing ones, such as the `TEST_FullTest` SQL queries or the script, or create new ones.
-   - **Start source:** none, no schedule. It can't run by itself.
-   - **Folder:** the default Automation Studio folder, unless you name another one.
-   - **Description:** "Test automation created by Orchestrate. Safe to delete."
-2. **Check it saved:** read it back by name and confirm the name, status, empty steps and lack of a schedule.
+## The new automation
+| | Value |
+|---|---|
+| Name / key | `Auto_Test_Orchestrate_for_Del` |
+| ID | `addf539a-3320-4bcc-a14f-1de3dbbed78f` |
+| Description | "Test automation created by Orchestrate. Safe to delete." |
+| Status | **Building**. Marketing Cloud uses this status for an automation that has no steps yet. |
+| Steps | None |
+| Start source / schedule | None. It can't run on its own. |
+| Folder | Default Automation Studio folder (category `32393`) |
+| Created by | Revecast Orchestrate MCP1 app user, 7 Oct 2026 at 23:41 IST |
 
-What this won't do:
-- **Run it.**
-- **Change any other automation.** That includes `AUTO_Orchestrate_Full_Test`.
-- **Send any email.**
+I didn't run it, and nothing else was touched. `AUTO_Orchestrate_Full_Test` and its Paused schedule are unchanged.
 
-One thing to know first: Marketing Cloud may reject an automation that has no steps. If it does, I'll show you the exact error and won't report it as created. Then you can pick an activity for step 1.
+## If you need more
+- **Adding steps:** tell me which activities to put in it. I can reuse existing ones or create new ones.
+- **Deleting it later:** I can delete it, with an extra confirmation first because deletion can't be undone. You can also delete it in Automation Studio.
 
-**Proceed wi
-
-_[summary truncated — see the session record for the full text]_
+Sources: checked live: Marketing Cloud automation `addf539a…`, read back after creation · not checked: nothing else.
 <!-- orchestrate:session-state:end -->
