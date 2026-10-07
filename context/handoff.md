@@ -42,36 +42,29 @@
 <!-- Written by Orchestrate at the end of each session. Edits inside this block are
      replaced next session; anything OUTSIDE it is yours and is never touched. -->
 ### Engagement state — 2026-10-07
-**Status:** waiting — Query & table created, added to automation step 5. Awaiting: schedule fix to 9:00 AM IST + resume automation.
+**Status:** waiting — Two automations exist; previous one awaits schedule fix (9 AM IST), new one ready for direction
 
 **Done this session**
-- Created output table JNOT_CreatedAfter_0938 (ID 50f038ed-52c2-f111-a5e6-5cba2c19e778) with 5 fields, ContactKey PK, CreatedDate as Date type
-- Created SQL query JNOT_CreatedAfter_0938_Query (ID 47de54c0-97de-4285-abf0-cd401ae5cd90) filtering CreatedDate > 2026-10-06 09:38:00
-- Added query as step 5 to AUTO_Daily_Data_Load; verified all 5 steps in correct order
-- Confirmed table in folder 49911, query in folder 32395, both read back successfully
+- Confirmed AUTO_FT_Import_Query exists with 3 steps in correct order (File Transfer → Import → SQL Query)
+- Read back all step definitions live from Marketing Cloud
 
 **Open items**
-- User fixes schedule in Automation Studio: set AUTO_Daily_Data_Load to 9:00 AM India Standard Time
-- User resumes automation (change status from PausedSchedule to active)
-- Confirm schedule fix by reading back automation after user saves
-- Optional: run JNOT_CreatedAfter_0938_Query once before resuming to verify 15 rows load
+- User fixes AUTO_Daily_Data_Load schedule to 9:00 AM IST and resumes it
+- Confirm AUTO_Daily_Data_Load schedule change by replying
+- Decide on AUTO_FT_Import_Query: use as-is with/without run, build new variant, or build copy
+- If proceeding with AUTO_FT_Import_Query run: confirm separately before overwriting CSV_Incoming_Override
 
 **Decisions**
-- Cut-off timestamp: 2026-10-06 09:38:00 (returns all 15 rows)
-- Output table name: JNOT_CreatedAfter_0938
-- Step position: step 5 (at end, after existing steps 1–4)
-- Automation folder: 32393, time zone: India Standard Time, recurrence: daily
-- Output table folder: 49911, Overwrite mode
+- AUTO_Daily_Data_Load: cut-off 2026-10-06 09:38:00, output table JNOT_CreatedAfter_0938, step 5, 9 AM IST daily
+- AUTO_FT_Import_Query: three-step chain exists and is ready (not built this session)
 
 **Blockers**
-- Automation paused (status PausedSchedule) — must be resumed after schedule fix
-- Schedule stored as 7:00 AM IST instead of 9:00 AM IST — must be corrected in Automation Studio
+- AUTO_Daily_Data_Load schedule still set to 7:00 AM IST instead of 9:00 AM IST
+- AUTO_Daily_Data_Load status still PausedSchedule
 
 **Next**
-- User opens AUTO_Daily_Data_Load in Automation Studio (folder 32393) → Schedule tab
-- Set time to 9:00 AM, time zone to India Standard Time, save and make active
-- Confirm schedule change by replying; I will read back automation to verify
-- Automation will run at 9:00 AM IST daily; first run will load 15 rows into JNOT_CreatedAfter_0938
+- Complete AUTO_Daily_Data_Load fix: user opens Automation Studio, sets schedule to 9:00 AM IST, resumes, replies to confirm
+- Provide direction on AUTO_FT_Import_Query: reply with (a) use as-is, (b) build new variant, or (c) build copy, plus details
 
 **Checked live on 2026-10-07:** the Salesforce org
 ### Last session — 2026-10-07
@@ -82,25 +75,21 @@
 | Branch | `orchestrate/context` |
 | Session | `58b3d8ba-c450-493f-9233-a0d9e3d2720f` |
 **In its own words (excerpt):**
-I've added the query to `AUTO_Daily_Data_Load` as step 5 and checked everything by reading it back. Nothing has run yet: the automation is still paused.
+I haven't created anything. This chain already exists in your account, so I've stopped before building a duplicate.
 
-**What I created**
+**`AUTO_FT_Import_Query`** (ID `f6692d03-3bb8-40d3-b3ba-588f10509e1e`, folder 32393, status **Ready**, no schedule) has these three steps in the order you asked for:
 
-| Item | Name | ID | Read back |
+| Step | Type | Activity | What it does |
 |---|---|---|---|
-| Output table | `JNOT_CreatedAfter_0938` | `50f038ed-52c2-f111-a5e6-5cba2c19e778` | In folder 49911, 0 rows. It has the same 5 fields as the source table, and every field is required. **CreatedDate is a Date field**, and ContactKey is the primary key. |
-| SQL query | `JNOT_CreatedAfter_0938_Query` | `47de54c0-97de-4285-abf0-cd401ae5cd90` | Runs `SELECT Email, CreatedDate, ContactKey, phone, Name FROM [John_N_Orchestrate_Test] WHERE CreatedDate > '2026-10-06 09:38:00'`. It **overwrites** `JNOT_CreatedAfter_0938` each run and is in folder 32395. |
+| 1 | File Transfer | `FT_csvUpload_Import` | Pulls `csvUpload.csv` from the Enhanced FTP **Import** folder |
+| 2 | Import | `csv import Activity` | Loads that file into `CSV_Incoming_Override` (currently 10 rows) |
+| 3 | SQL Query | `SFTP Import - Append Audit Row` | Appends a summary row to `Import_Audit_Log` (currently 3 rows) |
 
-**`AUTO_Daily_Data_Load` steps now**
-1. `John_Mike_Customers_Amateur_Chef_Query`
-2. `DX_John_N_Orchestrate_Test` (export to CSV)
-3. `FT_John_N_Orchestrate_Test_Export` (move the CSV to the FTP Export folder)
-4. `DX_Zip_John_N_Orchestrate_Test` (zip the CSV)
-5. **`JNOT_CreatedAfter_0938_Query`** (new)
+I read all three steps back just now. I haven't run it in this session, so I haven't checked that the file is in the Import folder or that the run succeeds.
 
-Steps 1–4 are the same as before, and the schedule wasn't changed.
-
-**What the first run should do:** put all 15 rows 
+**What would you like to do?**
+- **(a) Use this automation as it is.** I can run it once now, or give it a schedule. A run would overwrite `CSV_Incoming_Override` with whatever is in `csvUpload.csv` and add one row to the audit log.
+- **(b) Build a new automation with different activities**, for example a different file, a different target table, or a different
 
 _[summary truncated — see the session record for the full text]_
 <!-- orchestrate:session-state:end -->
