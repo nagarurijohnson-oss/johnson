@@ -42,36 +42,36 @@
 <!-- Written by Orchestrate at the end of each session. Edits inside this block are
      replaced next session; anything OUTSIDE it is yours and is never touched. -->
 ### Engagement state — 2026-10-07
-**Status:** on track — Automation 6/6 steps complete. Adding error notification via API; no schedule/step changes.
+**Status:** on track — Error notification added & verified. 6 steps, Paused schedule unchanged. Manual FTP check & Send Email step remain open.
 
 **Done this session**
-- Confirmed automation has no notifications currently set
-- Located automation legacy ID for API calls
-- Planned error notification: Type Error, recipient anagaruri.johnson@jaxconsult.com
+- Added error notification (Type Error, recipient anagaruri.johnson@jaxconsult.com) via API
+- Read notification settings back and confirmed they persisted correctly
+- Re-read automation and confirmed 6 steps and Paused schedule unchanged
+- Identified that Script step errors caught internally won't trigger notification (logged as info, not failure)
 
 **Open items**
 - Confirm JNOT_FullTest_20261007.csv exists in Enhanced FTP Export folder (manual check needed)
-- Update TEST_SQL_Output description label (old cutoff text, non-blocking)
 - Add Send Email activity as final step 7 (deferred, manual UI creation)
-- Apply error notification via API and verify it persists
-- Confirm automation schedule remains Paused after notification addition
+- Update TEST_SQL_Output description label (old cutoff text, non-blocking)
+- Test error notification by forcing a real automation run failure (not yet done)
 
 **Decisions**
 - Cutoff filter: CreatedDate >= '2026-10-06 09:38:49'
 - Row counting: WSProxy retrieve with countRows() function
 - SQL Query step 6 position: at end of automation, after Script step 5
 - Data Copy implemented as SQL query (table-to-table)
-- Send Email step deferred to manual UI creation
 - Error notification: Type Error, recipient anagaruri.johnson@jaxconsult.com, no success notification
+- Script step internal error handling: writes Error row but doesn't fail step (no email trigger unless changed)
 
 **Blockers**
 - None
 
 **Next**
-- Add error notification to AUTO_Orchestrate_Full_Test via Notification Settings API
-- Read notification settings back to confirm address and type persisted
-- Re-read automation to confirm 6 steps and Paused schedule unchanged
 - Manually verify JNOT_FullTest_20261007.csv in Enhanced FTP Export folder
+- Decide: modify Script step to throw errors after logging (to trigger notification on internal errors)?
+- Add Send Email step 7 via Automation Studio UI
+- Update TEST_SQL_Output description label
 
 **Checked live on 2026-10-07:** the Salesforce org
 ### Last session — 2026-10-07
@@ -82,24 +82,27 @@
 | Branch | `orchestrate/context` |
 | Session | `f203b158-e2aa-4e90-b9af-ee68c9f98be8` |
 **In its own words (excerpt):**
-I have what I need, and I haven't changed anything yet.
+`AUTO_Orchestrate_Full_Test` now has an error notification that emails anagaruri.johnson@jaxconsult.com when a step fails. I read the setting back and it saved correctly. The schedule, the steps and the activities weren't touched, and nothing was run.
 
-## What I found
-- **The automation has no notifications set up right now.** Its notification settings come back empty.
-- **I can set the notification through the API.** This is the same "Notification Settings" endpoint that Automation Studio's own screen uses. It needs the automation's legacy ID, which I looked up: `c2hBU3BseTF6MHFoRDVOVmw4TU5oZzoyNTow`.
-- **There's no published spec for this endpoint.** I'll use the request format that Automation Studio itself sends, then read the settings back to check they saved.
+## Notification, as read back
+| | Saved value |
+|---|---|
+| Type | **Error** (fires when a step fails) |
+| Recipient | `anagaruri.johnson@jaxconsult.com` |
+| Message | "AUTO_Orchestrate_Full_Test: a step failed. Check the run history in Automation Studio." |
+| Success notification | None |
 
-## Plan
-1. **Add an error notification** to `AUTO_Orchestrate_Full_Test`:
-   - Type **Error**, which fires if any step fails
-   - Recipient `anagaruri.johnson@jaxconsult.com`
-   - A short note: "AUTO_Orchestrate_Full_Test: a step failed. Check the run history in Automation Studio."
-   - No notification on successful completion
-2. **Read it back** from the notification endpoint, and confirm the address and type stuck. Then re-read the automation to confirm the 6 steps and the **Paused** schedule are unchanged.
+## Automation, re-read after the change
+- **Schedule:** still `PausedSchedule`, daily at 9:00 AM India Standard Time from 8 Oct.
+- **Steps:** all 6 are the same activities in the same order.
+- **Last run:** still `0b3f33c7…` from 22:56 IST, so no new run started.
 
-What this won't do:
-- **Change the schedule, the steps, or any activity.**
-- **Send anything now.** Mark
+## How it went
+The first two save attempts were rejected with "Encoded token … valid GUID". The ID in the request body was in the wrong format. I used the automation's legacy ID in both places instead, and the third attempt saved.
+
+## Still to know
+- **The email hasn't been tested.** It only goes out when a real run fails, and I didn't force one.
+- **Errors the Script step catches itself
 
 _[summary truncated — see the session record for the full text]_
 <!-- orchestrate:session-state:end -->
