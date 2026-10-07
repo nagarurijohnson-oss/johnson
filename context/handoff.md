@@ -42,11 +42,10 @@
 <!-- Written by Orchestrate at the end of each session. Edits inside this block are
      replaced next session; anything OUTSIDE it is yours and is never touched. -->
 ### Engagement state — 2026-10-07
-**Status:** on track — Automation verified in Salesforce org; 17 Orchestrate-created automations catalogued. Ready to add Send Email step.
+**Status:** waiting — Plan presented for new test automation Auto_Test_Orchestrate_for_Del; awaiting approval to proceed
 
 **Done this session**
-- Catalogued 17 automations created by Orchestrate user in Marketing Cloud (7 Aug–7 Oct 2026)
-- Confirmed AUTO_Orchestrate_Full_Test exists and was created before this session started
+- None
 
 **Open items**
 - Confirm JNOT_FullTest_20261007.csv exists in Enhanced FTP Export folder
@@ -54,6 +53,7 @@
 - Update TEST_SQL_Output description label (old cutoff reference)
 - Update TEST_FullTest_DataCopy description label (old import reference)
 - Test error notification by forcing a real automation run failure
+- Approve plan for Auto_Test_Orchestrate_for_Del: empty shell, no schedule, default folder
 
 **Decisions**
 - Error notification recipient: nagaruri.johnson@jaxconsult.com
@@ -68,10 +68,10 @@
 - None
 
 **Next**
+- Approve or modify plan for Auto_Test_Orchestrate_for_Del creation
 - Manually verify JNOT_FullTest_20261007.csv in Enhanced FTP Export folder
 - Add Send Email step as step 7 in Automation Studio UI
 - Update table description labels for TEST_SQL_Output and TEST_FullTest_DataCopy
-- Test error notification by triggering a real automation run failure
 
 **Checked live on 2026-10-07:** the Salesforce org
 ### Last session — 2026-10-07
@@ -82,26 +82,24 @@
 | Branch | `orchestrate/context` |
 | Session | `f203b158-e2aa-4e90-b9af-ee68c9f98be8` |
 **In its own words (excerpt):**
-Marketing Cloud lists **17 automations** as created by **"Revecast Orchestrate MCP1 app user"**. That is the Marketing Cloud user Orchestrate connects as, and its ID (747850839) matches this session's connection.
+The name `Auto_Test_Orchestrate_for_Del` isn't in use, so I can create it. I haven't created anything yet. Your request only gives the name, so here's the plan with defaults. Tell me if you want any of them changed.
 
-## Automations created by the Orchestrate user (newest first, times in IST)
-| # | Automation | Created |
-|---|---|---|
-| 1 | `TEST_TarGz_Name_Probe` | 7 Oct 2026, 21:53 |
-| 2 | `AUTO_Orchestrate_Full_Test` | 7 Oct 2026, 21:40 |
-| 3 | `AUTO_Daily_Import_GZip_RunOnce` | 7 Oct 2026, 19:26 |
-| 4 | `AUTO_Daily_Import_RunOnce` | 7 Oct 2026, 14:58 |
-| 5 | `AUTO_FT_Import_Query` | 7 Oct 2026, 12:48 |
-| 6 | `AUTO_Daily_Import` | 7 Oct 2026, 10:41 |
-| 7 | `AUTO_Daily_Data_Load` | 6 Oct 2026, 23:54 |
-| 8 | `RE_Daily_KPI_Snapshot` | 5 Oct 2026, 19:26 |
-| 9 | `RE_Daily_Audience_Refresh` | 5 Oct 2026, 19:01 |
-| 10 | `Sync_Email_To_AllSubscribers` | 28 Aug 2026, 21:45 |
-| 11 | `Run_Delete_Contacts_Test_Somnath_102` | 28 Aug 2026, 21:15 |
-| 12 | `Daily_SQL_Refresh_Test_Somnath_105_Filtered` | 28 Aug 2026, 20:30 |
-| 13 | `MCP_Test_Chained_Automation` | 28 Aug 2026, 20:15 |
-| 14 | `Daily_Refresh_Test_Somnath_104_filtered` | 28 Aug 2026, 19:53 |
-| 15 | `SFTP CSV Import & Master DE Sync` | 2
+## Plan
+1. **Create the automation** `Auto_Test_Orchestrate_for_Del` in Automation Studio:
+   - **Steps:** none. It will be an empty shell. If you want activities in it, tell me which ones. I can reuse existing ones, such as the `TEST_FullTest` SQL queries or the script, or create new ones.
+   - **Start source:** none, no schedule. It can't run by itself.
+   - **Folder:** the default Automation Studio folder, unless you name another one.
+   - **Description:** "Test automation created by Orchestrate. Safe to delete."
+2. **Check it saved:** read it back by name and confirm the name, status, empty steps and lack of a schedule.
+
+What this won't do:
+- **Run it.**
+- **Change any other automation.** That includes `AUTO_Orchestrate_Full_Test`.
+- **Send any email.**
+
+One thing to know first: Marketing Cloud may reject an automation that has no steps. If it does, I'll show you the exact error and won't report it as created. Then you can pick an activity for step 1.
+
+**Proceed wi
 
 _[summary truncated — see the session record for the full text]_
 <!-- orchestrate:session-state:end -->
