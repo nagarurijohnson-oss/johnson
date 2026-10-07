@@ -42,37 +42,36 @@
 <!-- Written by Orchestrate at the end of each session. Edits inside this block are
      replaced next session; anything OUTSIDE it is yours and is never touched. -->
 ### Engagement state — 2026-10-07
-**Status:** on track — Auto_Test_Orchestrate_for_Del deleted successfully. 5 open items remain: verify CSV, add Send Email step, update 2 table labels.
+**Status:** at risk — Read-only checks done on AUTO_Daily_Data_Load. Awaiting approval to run failure test.
 
 **Done this session**
-- Deleted Auto_Test_Orchestrate_for_Del (ID addf539a-3320-4bcc-a14f-1de3dbbed78f) via SOAP delete
-- Verified deletion by ID lookup (404) and name search (no rows found)
-- Confirmed AUTO_Orchestrate_Full_Test unchanged (6 steps, paused schedule intact)
+- Reviewed AUTO_Daily_Data_Load structure: 5 steps, paused schedule, no failure notifications set
+- Identified low-risk failure method: break step 1 import by pointing to non-existent file
+- Documented exact restore procedure and error capture plan
 
 **Open items**
 - Confirm JNOT_FullTest_20261007.csv exists in Enhanced FTP Export folder
 - Add Send Email activity as final step 7 in Automation Studio UI
-- Update TEST_SQL_Output description label (old cutoff reference)
-- Update TEST_FullTest_DataCopy description label (old import reference)
-- Test error notification by forcing a real automation run failure
+- Update TEST_SQL_Output description label
+- Update TEST_FullTest_DataCopy description label
+- APPROVAL NEEDED: run failure test on AUTO_Daily_Data_Load (one-time, cannot be undone)
+- Execute failure test: change import file name, run once, restore, capture error details
 
 **Decisions**
 - Error notification recipient: nagaruri.johnson@jaxconsult.com
 - Cutoff filter: CreatedDate >= '2026-10-06 09:38:49'
-- Row counting: WSProxy retrieve with countRows() function
-- SQL Query step 6 position: at end of automation, after Script step 5
-- Data Copy implemented as SQL query (table-to-table)
-- Error notification type: Error only, no success notification
-- Script step internal error handling: writes Error row but doesn't fail step
+- Failure test method: break step 1 import with non-existent file name
+- Failure test scope: single run only, schedule remains paused
 
 **Blockers**
-- None
+- Awaiting approval to proceed with AUTO_Daily_Data_Load failure test
 
 **Next**
-- Manually verify JNOT_FullTest_20261007.csv in Enhanced FTP Export folder
-- Add Send Email step as step 7 in Automation Studio UI
-- Update table description labels for TEST_SQL_Output and TEST_FullTest_DataCopy
-- Test error notification by forcing a real automation run failure
+- Reply 'Confirm' to approve failure test or 'Cancel' to stop
+- If approved: change import file name to ORCH_FAILTEST_DoesNotExist.csv
+- Run AUTO_Daily_Data_Load once and monitor until error
+- Restore original file name and verify it matches
+- Capture run ID, status, failed activity, and error message from run history
 
 **Checked live on 2026-10-07:** the Salesforce org
 ### Last session — 2026-10-07
@@ -83,29 +82,27 @@
 | Branch | `orchestrate/context` |
 | Session | `f203b158-e2aa-4e90-b9af-ee68c9f98be8` |
 **In its own words (excerpt):**
-I deleted `Auto_Test_Orchestrate_for_Del` and checked that it's gone. No other automation was affected.
+I've done read-only checks and found a low-risk way to make the run fail. Nothing has been changed or run yet.
 
-## What happened
-- **First try failed:** the REST delete returned **404 Not Found**. I read the automation back right after, and it was still there, so nothing had been deleted. That REST route doesn't accept DELETE for automations.
-- **Second try worked:** I used Marketing Cloud's SOAP delete on the same ID (`addf539a-3320-4bcc-a14f-1de3dbbed78f`), and it returned **"Program deleted"**.
+## What `AUTO_Daily_Data_Load` looks like now
+- **Schedule:** Paused. It's set to run daily at 9:00 AM India Standard Time. I won't change it.
+- **Failure notifications:** none set up, so a failed run won't email anyone.
+- **Run history:** none found yet.
+- **Steps:**
 
-## Check that it's gone
-| Check | Result |
-|---|---|
-| Look up by ID | **404 Not Found** |
-| Search by name `Auto_Test_Orchestrate_for_Del` | **No rows were found** |
+| Step | Activity | Type |
+|---|---|---|
+| 1 | `testOrchestrateMap` | Import into `John_N_Orchestrate_Test` (15 rows) from `John_N_test_records_UTF8_b860c369-bbbb-47f5-abd1-2bd6cb490d02.csv` on Enhanced FTP |
+| 2 | `DX_John_N_Orchestrate_Test` | Data extract |
+| 3 | `FT_John_N_Orchestrate_Test_Export` | File transfer |
+| 4 | `DX_Zip_John_N_Orchestrate_Test` | Data extract |
+| 5 | `JNOT_CreatedAfter_0938_Query` | SQL, overwrites `JNOT_CreatedAfter_0938` |
 
-## `AUTO_Orchestrate_Full_Test` is unchanged
-- **Schedule:** still Paused, daily at 9:00 AM IST from 8 Oct.
-- **Steps:** the same 6 activities in the same order.
-- **Last run:** still the 22:56 IST run.
+## How I'd make it fail
+I'd break **step 1**, the import. When a step fails, the run stops there, so steps 2–5 never run. That means no data load, no exported files and no SQL overwrite.
 
-The automation was empty, so no activities, data extensions or files were deleted along with it.
-
-## Still open from before
-- Look in the Enhanced FTP Export folder for `JNOT_FullTest_20261007.csv`.
-- Add the Send Email step in the Automation Studio UI.
-- Update the old descriptions on two tables. These are labels only and don't 
+1. **Temporary change:** point the import's file name at a file that doesn't exist: `ORCH_FAILTEST_DoesNotExist.csv`. That's the only field I'd change.
+2. **Run once:** s
 
 _[summary truncated — see the session record for the full text]_
 <!-- orchestrate:session-state:end -->
