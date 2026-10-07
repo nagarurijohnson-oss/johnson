@@ -42,34 +42,35 @@
 <!-- Written by Orchestrate at the end of each session. Edits inside this block are
      replaced next session; anything OUTSIDE it is yours and is never touched. -->
 ### Engagement state — 2026-10-07
-**Status:** waiting — AUTO_Daily_Data_Load paused; step 1 changed to testOrchestrateMap import. Awaiting user choice: resume now (7 AM), pause-resume cycle, or f…
+**Status:** waiting — AUTO_Daily_Data_Load paused; step 1 now testOrchestrateMap import. Awaiting user file clarification.
 
 **Done this session**
-- Confirmed AUTO_Daily_Data_Load is paused (PausedSchedule status)
-- Detected step 1 changed from SQL query to testOrchestrateMap import into John_Mike_Customers
-- Identified resume would run all 5 steps daily starting 8 Oct 7:00 AM IST
+- Confirmed testOrchestrateMap import (step 1) writes 5 rows to John_Mike_Customers
+- Searched Content Builder, all imports, file transfers, and tables for uploaded CSV
+- Read John_Mike_Customers table: 5 rows, all dated 6 Oct (before import creation)
 
 **Open items**
-- User confirms trigger file name for file-triggered model: AUTO_Daily_Data_Load_trigger.csv or custom name
+- User confirms trigger file name: AUTO_Daily_Data_Load_trigger.csv or custom
 - User confirms match type: Exact name or Begins with
-- User confirms activation: Yes (run on next matching upload) or No (inactive until manual turn-on)
-- User chooses: (a) resume now at 7 AM, (b) pause-resume cycle, or (c) fix time to 9 AM and/or verify step 1 first
-- Update AUTO_Daily_Data_Load from scheduled to file-triggered once three decisions received
-- Read back automation to verify trigger type, file name, folder, all 5 steps, and trigger state
+- User confirms activation: Yes or No
+- User chooses resume timing: (a) now 7 AM, (b) pause-resume cycle, or (c) fix time/verify step 1
+- Clarify actual CSV file: attach to chat OR name the table it was imported into
+- Verify whether testOrchestrateMap has loaded user's file or contains older data
 
 **Decisions**
-- AUTO_Daily_Data_Load: switch from 7:00 AM IST schedule to file-triggered model (replaces earlier chain-addition plan)
+- AUTO_Daily_Data_Load: switch from 7:00 AM IST schedule to file-triggered model
 - Trigger source: Enhanced FTP Import folder, file queuing on
-- Avoid csvUpload.csv as trigger file name (AUTO_Daily_Import already uses it; conflict risk if both activated)
+- Avoid csvUpload.csv as trigger file name (conflict with AUTO_Daily_Import)
 
 **Blockers**
-- None
+- Cannot access uploaded CSV (John_N_test_records_UTF8_b860c369-bbbb-47f5-abd1-2bd6cb490d02.csv) — not in Content Builder, FTP, or Safehouse
 
 **Next**
-- User replies with one choice: (a), (b), or (c)
-- If (a) or (b): resume schedule, read back status and stored start time
-- If (c): user fixes time in Automation Studio and/or verifies step 1, then confirm to proceed
-- Once resume/pause-resume complete or (c) resolved, proceed with file-triggered conversion and three-decision plan
+- User attaches CSV to chat OR names the destination table for the import
+- Verify testOrchestrateMap file contents and row count
+- User provides three decisions (trigger name, match type, activation)
+- User chooses resume timing option (a), (b), or (c)
+- Convert AUTO_Daily_Data_Load to file-triggered and read back full automation
 
 **Checked live on 2026-10-07:** the Salesforce org
 ### Last session — 2026-10-07
@@ -80,25 +81,17 @@
 | Branch | `orchestrate/context` |
 | Session | `58b3d8ba-c450-493f-9233-a0d9e3d2720f` |
 **In its own words (excerpt):**
-I haven't changed anything yet. Before I do, there are two things you should know, and one of them changes what a resume would do.
+I can't open `John_N_test_records_UTF8_b860c369-bbbb-47f5-abd1-2bd6cb490d02.csv`. It isn't anywhere I can read: it isn't in Content Builder, it isn't attached to this chat, and no import or file transfer refers to it by name. A name made of a file name plus a GUID is what Marketing Cloud gives a file uploaded from a computer through the Import wizard. It keeps that file in its internal Safehouse, and I have no tool that can read files there or on the FTP.
 
-**1. It's already paused.** I just read `AUTO_Daily_Data_Load` back and its status is `PausedSchedule`. A pause call would do nothing, so "pause then resume" here really just means **resume**.
+**The closest data I can read.** The import `testOrchestrateMap`, created today and now step 1 of `AUTO_Daily_Data_Load`, uses an uploaded file and writes to `John_Mike_Customers`. That table has 5 rows right now:
 
-**2. The steps have changed since my last read, and I didn't make the change.**
-
-| Step | Earlier this session | Now |
-|---|---|---|
-| 1 | `John_Mike_Customers_Amateur_Chef_Query` (SQL) | **`testOrchestrateMap`**, an **Import** into `John_Mike_Customers` (5 rows) |
-| 2 | `DX_John_N_Orchestrate_Test` | same |
-| 3 | `FT_John_N_Orchestrate_Test_Export` | same |
-| 4 | `DX_Zip_John_N_Orchestrate_Test` | same |
-| 5 | `JNOT_CreatedAfter_0938_Query` | same |
-
-The Amateur Chef query is no longer in the automation. Someone probably edited it in Automation Studio, and I've left that change alone.
-
-**What a resume would do**
-- It switches the daily schedule back on. The next run would be **8 Oct at 7:00 AM IST**, because the stored start is still 2 hours earlier than the 9:00 AM you wanted.
-- From then on it runs all 5 steps every day. That includes the new import into `Joh
+| ContactKey | FirstName | Email | CreatedDate (server time) | Bio |
+|---|---|---|---|---|
+| JMC-0001 | Aarav | aarav.sample@example.com | 10/6/2026 9:48:31 AM | Loves hiking |
+| JMC-0002 | Priya | priya.sample@example.com | 10/6/2026 9:48:31 AM | Coffee enthusiast |
+| JMC-0003 | Daniel | daniel.sample@example.com | 10/6/2026 9:48:31 AM | Weekend cyclist |
+| JMC-0004 | Updated | meera.sample@example.com | 10/6/2026 9:48:31 AM | Avid reader |
+| JMC-0005 | Lucas | lucas.sample@example.com | 10/6/2026 9:48:31 AM | Amateur
 
 _[summary truncated — see the session record for the full text]_
 <!-- orchestrate:session-state:end -->
