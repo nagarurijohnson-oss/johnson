@@ -42,10 +42,11 @@
 <!-- Written by Orchestrate at the end of each session. Edits inside this block are
      replaced next session; anything OUTSIDE it is yours and is never touched. -->
 ### Engagement state — 2026-10-07
-**Status:** on track — Automation verified in Salesforce org; 3 runs confirmed. Ready to add Send Email step and test error notification.
+**Status:** on track — Automation verified in Salesforce org; 17 Orchestrate-created automations catalogued. Ready to add Send Email step.
 
 **Done this session**
-- Verified AUTO_Orchestrate_Full_Test run history in Salesforce org: 3 runs, latest passed all checks
+- Catalogued 17 automations created by Orchestrate user in Marketing Cloud (7 Aug–7 Oct 2026)
+- Confirmed AUTO_Orchestrate_Full_Test exists and was created before this session started
 
 **Open items**
 - Confirm JNOT_FullTest_20261007.csv exists in Enhanced FTP Export folder
@@ -81,24 +82,26 @@
 | Branch | `orchestrate/context` |
 | Session | `f203b158-e2aa-4e90-b9af-ee68c9f98be8` |
 **In its own words (excerpt):**
-**I didn't create any automations in this session.** This session started with `AUTO_Orchestrate_Full_Test` already in place. My work on it was:
+Marketing Cloud lists **17 automations** as created by **"Revecast Orchestrate MCP1 app user"**. That is the Marketing Cloud user Orchestrate connects as, and its ID (747850839) matches this session's connection.
 
-- **Ran it** three times. One of those runs you stopped.
-- **Changed two of its activities:**
-  - Updated the cutoff in `ACT_SQL_Test`.
-  - Changed `SSJS_FullTest_Log_Run` to count rows with WSProxy.
-- **Added the failure-email notification**, which now goes to nagaruri.johnson@jaxconsult.com.
-
-## When `AUTO_Orchestrate_Full_Test` was created
-Marketing Cloud says it was created at **21:40 IST today (7 Oct)**. That's about 50 minutes before this session's first run at 22:29 IST, so another session or a person made it before this one started. The API gives creation dates but not the creator's name, so I can't tell you who.
-
-## Other automations created in the last few days
-Here are the automations Marketing Cloud lists as created from 5 to 7 October. Creation times are converted to IST. I can't tell from the API which ones Orchestrate made and which ones someone made by hand.
-
-| Automation | Created (IST) | Current state |
+## Automations created by the Orchestrate user (newest first, times in IST)
+| # | Automation | Created |
 |---|---|---|
-| `AUTO_Orchestrate_Full_Test` | 7 Oct, 21:40 | Schedule paused |
-| `TEST_TarGz_Name_Probe` | 7 Oct, 21:5
+| 1 | `TEST_TarGz_Name_Probe` | 7 Oct 2026, 21:53 |
+| 2 | `AUTO_Orchestrate_Full_Test` | 7 Oct 2026, 21:40 |
+| 3 | `AUTO_Daily_Import_GZip_RunOnce` | 7 Oct 2026, 19:26 |
+| 4 | `AUTO_Daily_Import_RunOnce` | 7 Oct 2026, 14:58 |
+| 5 | `AUTO_FT_Import_Query` | 7 Oct 2026, 12:48 |
+| 6 | `AUTO_Daily_Import` | 7 Oct 2026, 10:41 |
+| 7 | `AUTO_Daily_Data_Load` | 6 Oct 2026, 23:54 |
+| 8 | `RE_Daily_KPI_Snapshot` | 5 Oct 2026, 19:26 |
+| 9 | `RE_Daily_Audience_Refresh` | 5 Oct 2026, 19:01 |
+| 10 | `Sync_Email_To_AllSubscribers` | 28 Aug 2026, 21:45 |
+| 11 | `Run_Delete_Contacts_Test_Somnath_102` | 28 Aug 2026, 21:15 |
+| 12 | `Daily_SQL_Refresh_Test_Somnath_105_Filtered` | 28 Aug 2026, 20:30 |
+| 13 | `MCP_Test_Chained_Automation` | 28 Aug 2026, 20:15 |
+| 14 | `Daily_Refresh_Test_Somnath_104_filtered` | 28 Aug 2026, 19:53 |
+| 15 | `SFTP CSV Import & Master DE Sync` | 2
 
 _[summary truncated — see the session record for the full text]_
 <!-- orchestrate:session-state:end -->
