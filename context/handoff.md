@@ -42,30 +42,33 @@
 <!-- Written by Orchestrate at the end of each session. Edits inside this block are
      replaced next session; anything OUTSIDE it is yours and is never touched. -->
 ### Engagement state — 2026-10-07
-**Status:** done — Failure test completed successfully. AUTO_Daily_Data_Load failed as designed at step 1; file restored.
+**Status:** waiting — Failure test done. Now awaiting decision: blank journey draft (A) or test flow with API entry + wait (B)?
 
 **Done this session**
-- Executed failure test: changed import file name to ORCH_FAILTEST_DoesNotExist.csv
-- Run ID 5e3aca47… failed at step 1 (testOrchestrateMap import) with status Error
-- Verified steps 2–5 never ran (status Initialized)
-- Restored import file name to original: John_N_test_records_UTF8_b860c369-bbbb-47f5-abd1-2bd6cb490d02.csv
-- Confirmed no data changes, schedule still paused, no failure email sent
+- Confirmed John_Mike_JB_Test journey name is available
+- Verified John_N_Orchestrate_Test data extension is not sendable
+- Identified ORCH_TEST Entry - DE_Test_Customers as safe API-event entry source for Option B
 
 **Open items**
 - Retrieve exact error message from Automation Studio UI (testOrchestrateMap activity in 23:57 IST run)
+- Decision required: create journey as Option A (blank draft) or Option B (with API entry + 1-day wait)
+- Create John_Mike_JB_Test journey once decision received
+- Confirm journey exists with correct name, key, and Draft status
 
 **Decisions**
 - Error notification recipient: nagaruri.johnson@jaxconsult.com
 - Cutoff filter: CreatedDate >= '2026-10-06 09:38:49'
 - Failure test method: break step 1 import with non-existent file name
-- Failure test scope: single run only, schedule remains paused
+- Journey will be created with status Draft, not published or activated
 
 **Blockers**
 - None
 
 **Next**
-- Open Automation Studio → AUTO_Daily_Data_Load → Activity tab → 23:57 IST run → testOrchestrateMap to capture exact error text
-- Document final error message and close engagement
+- Reply with Option A or B (or specify alternative entry source/steps)
+- Once decision received: create journey via Journey Builder API
+- Read journey back to confirm name, key, and Draft status
+- Close engagement
 
 **Checked live on 2026-10-07:** the Salesforce org
 ### Last session — 2026-10-07
@@ -74,26 +77,24 @@
 | Type | BUILD |
 | Outcome | COMPLETED |
 | Branch | `orchestrate/context` |
-| Session | `f203b158-e2aa-4e90-b9af-ee68c9f98be8` |
+| Session | `01fb15ac-1085-4a83-a04a-d398ce9717b9` |
 **In its own words (excerpt):**
-The failure test ran as planned and the file name is back to its original value. I got four of the five details you asked for. The exact error message is the one I couldn't retrieve: none of the run-history records I can reach through the API include it.
+No journey named **John_Mike_JB_Test** exists yet, so the name is free. Before I create it, there's one decision you need to make.
 
-## Results
-| | Value |
-|---|---|
-| Automation | `AUTO_Daily_Data_Load` (`21f21dab-f5f1-4ef9-950c-21ebd13e7cbb`) |
-| Run ID | `5e3aca47-6180-43d1-80f3-5cd7b4baecdb` |
-| Overall status | **Error** |
-| Started → ended | 23:57:29 → 23:57:50 IST, about 20 seconds (server time 12:27:29 → 12:27:50) |
-| Failed activity | **`testOrchestrateMap`** (import, step 1 "Extract John_N_Orchestrate_Test"), activity status −1 / Error |
-| Steps 2–5 | Never ran. The run history shows them as status 0 / "Initialized". |
-| Exact error message | **Not available through the API.** See below. |
+You didn't say what should go on the journey canvas. I also checked the data extension from earlier sessions: `John_N_Orchestrate_Test` is **not sendable**, so it can't be the entry source for a journey that sends anything.
 
-## Why I don't have the error message
-I checked every place I could reach:
-- **Run instance:** gives the status of each activity but no message.
-- **Legacy automation definition:** says step 1 is "Error" and nothing more.
-- **Import results summary:** has no record for this run. That fits an import that stopped because it couldn't find its file and never started lo
+**Option A: blank draft (my recommendation)**
+- Name `John_Mike_JB_Test`, a unique key `John_Mike_JB_Test-20261008`, entry mode "no re-entry".
+- No entry source and no activities. You set up the canvas in Journey Builder yourself.
+- Nobody can enter it and nothing can be sent.
+
+**Option B: draft with a simple test flow**
+- Entry source: the existing API-event entry **ORCH_TEST Entry - DE_Test_Customers**, which was made for draft test journeys and isn't used by any published journey.
+- One 1-day Wait step, then exit. **No email**, so even if it were activated by mistake it couldn't send anything.
+
+**What I'll do (either option)**
+1. Marketing Cloud: create the journey through the Journey Builder API, with status **Draft**. I won't publish, activate or run it.
+2. Read the journey back by its key to confirm it exists, the name is rig
 
 _[summary truncated — see the session record for the full text]_
 <!-- orchestrate:session-state:end -->
