@@ -42,20 +42,17 @@
 <!-- Written by Orchestrate at the end of each session. Edits inside this block are
      replaced next session; anything OUTSIDE it is yours and is never touched. -->
 ### Engagement state — 2026-10-07
-**Status:** at risk — Read-only checks done on AUTO_Daily_Data_Load. Awaiting approval to run failure test.
+**Status:** done — Failure test completed successfully. AUTO_Daily_Data_Load failed as designed at step 1; file restored.
 
 **Done this session**
-- Reviewed AUTO_Daily_Data_Load structure: 5 steps, paused schedule, no failure notifications set
-- Identified low-risk failure method: break step 1 import by pointing to non-existent file
-- Documented exact restore procedure and error capture plan
+- Executed failure test: changed import file name to ORCH_FAILTEST_DoesNotExist.csv
+- Run ID 5e3aca47… failed at step 1 (testOrchestrateMap import) with status Error
+- Verified steps 2–5 never ran (status Initialized)
+- Restored import file name to original: John_N_test_records_UTF8_b860c369-bbbb-47f5-abd1-2bd6cb490d02.csv
+- Confirmed no data changes, schedule still paused, no failure email sent
 
 **Open items**
-- Confirm JNOT_FullTest_20261007.csv exists in Enhanced FTP Export folder
-- Add Send Email activity as final step 7 in Automation Studio UI
-- Update TEST_SQL_Output description label
-- Update TEST_FullTest_DataCopy description label
-- APPROVAL NEEDED: run failure test on AUTO_Daily_Data_Load (one-time, cannot be undone)
-- Execute failure test: change import file name, run once, restore, capture error details
+- Retrieve exact error message from Automation Studio UI (testOrchestrateMap activity in 23:57 IST run)
 
 **Decisions**
 - Error notification recipient: nagaruri.johnson@jaxconsult.com
@@ -64,14 +61,11 @@
 - Failure test scope: single run only, schedule remains paused
 
 **Blockers**
-- Awaiting approval to proceed with AUTO_Daily_Data_Load failure test
+- None
 
 **Next**
-- Reply 'Confirm' to approve failure test or 'Cancel' to stop
-- If approved: change import file name to ORCH_FAILTEST_DoesNotExist.csv
-- Run AUTO_Daily_Data_Load once and monitor until error
-- Restore original file name and verify it matches
-- Capture run ID, status, failed activity, and error message from run history
+- Open Automation Studio → AUTO_Daily_Data_Load → Activity tab → 23:57 IST run → testOrchestrateMap to capture exact error text
+- Document final error message and close engagement
 
 **Checked live on 2026-10-07:** the Salesforce org
 ### Last session — 2026-10-07
@@ -82,27 +76,24 @@
 | Branch | `orchestrate/context` |
 | Session | `f203b158-e2aa-4e90-b9af-ee68c9f98be8` |
 **In its own words (excerpt):**
-I've done read-only checks and found a low-risk way to make the run fail. Nothing has been changed or run yet.
+The failure test ran as planned and the file name is back to its original value. I got four of the five details you asked for. The exact error message is the one I couldn't retrieve: none of the run-history records I can reach through the API include it.
 
-## What `AUTO_Daily_Data_Load` looks like now
-- **Schedule:** Paused. It's set to run daily at 9:00 AM India Standard Time. I won't change it.
-- **Failure notifications:** none set up, so a failed run won't email anyone.
-- **Run history:** none found yet.
-- **Steps:**
+## Results
+| | Value |
+|---|---|
+| Automation | `AUTO_Daily_Data_Load` (`21f21dab-f5f1-4ef9-950c-21ebd13e7cbb`) |
+| Run ID | `5e3aca47-6180-43d1-80f3-5cd7b4baecdb` |
+| Overall status | **Error** |
+| Started → ended | 23:57:29 → 23:57:50 IST, about 20 seconds (server time 12:27:29 → 12:27:50) |
+| Failed activity | **`testOrchestrateMap`** (import, step 1 "Extract John_N_Orchestrate_Test"), activity status −1 / Error |
+| Steps 2–5 | Never ran. The run history shows them as status 0 / "Initialized". |
+| Exact error message | **Not available through the API.** See below. |
 
-| Step | Activity | Type |
-|---|---|---|
-| 1 | `testOrchestrateMap` | Import into `John_N_Orchestrate_Test` (15 rows) from `John_N_test_records_UTF8_b860c369-bbbb-47f5-abd1-2bd6cb490d02.csv` on Enhanced FTP |
-| 2 | `DX_John_N_Orchestrate_Test` | Data extract |
-| 3 | `FT_John_N_Orchestrate_Test_Export` | File transfer |
-| 4 | `DX_Zip_John_N_Orchestrate_Test` | Data extract |
-| 5 | `JNOT_CreatedAfter_0938_Query` | SQL, overwrites `JNOT_CreatedAfter_0938` |
-
-## How I'd make it fail
-I'd break **step 1**, the import. When a step fails, the run stops there, so steps 2–5 never run. That means no data load, no exported files and no SQL overwrite.
-
-1. **Temporary change:** point the import's file name at a file that doesn't exist: `ORCH_FAILTEST_DoesNotExist.csv`. That's the only field I'd change.
-2. **Run once:** s
+## Why I don't have the error message
+I checked every place I could reach:
+- **Run instance:** gives the status of each activity but no message.
+- **Legacy automation definition:** says step 1 is "Error" and nothing more.
+- **Import results summary:** has no record for this run. That fits an import that stopped because it couldn't find its file and never started lo
 
 _[summary truncated — see the session record for the full text]_
 <!-- orchestrate:session-state:end -->
