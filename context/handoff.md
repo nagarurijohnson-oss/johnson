@@ -42,38 +42,36 @@
 <!-- Written by Orchestrate at the end of each session. Edits inside this block are
      replaced next session; anything OUTSIDE it is yours and is never touched. -->
 ### Engagement state — 2026-10-07
-**Status:** waiting — Build plan ready for AUTO_Orchestrate_Full_Test. Awaiting 4 user decisions before creation.
+**Status:** at risk — AUTO_Orchestrate_Full_Test created & paused (5 of 6 steps); Send Email step missing, needs manual add
 
 **Done this session**
-- Discovered folder 32393 (my automations) and source tables John_N_Orchestrate_Test (15 rows) and John_Mike_Customers (5 rows)
-- Located csvUpload.csv in Enhanced FTP Import folder
-- Designed 7-step automation with SQL Query, Data Copy, Import File, Data Extract, File Transfer, Script, and Send Email
-- Planned 5 new test tables in folder 49911
+- Created AUTO_Orchestrate_Full_Test automation (ID a61210b2-b55c-4acf-a10f-935597c30d86) in folder 32393, paused daily 9:00 AM IST
+- Built & verified 5 activities: SQL Query, Data Copy (SQL), Data Extract, File Transfer, Script
+- Created test email ORCH_FullTest_Test_Email and audience table TEST_FullTest_Email_Audience (0 rows)
+- Confirmed all 5 steps read back correctly with expected outputs
 
 **Open items**
-- User chooses test recipient: (a) internal address OR (b) leave table empty
-- User chooses schedule state: (a) turn on now OR (b) save paused for manual test run
-- User chooses email content: create new test email OR reuse existing ORCH_TEST Welcome 1
-- User confirms: proceed with creation of tables, activities, and automation
+- Add Send Email activity as step 6 manually in Automation Studio UI (email, audience, Default Transactional classification)
+- Run automation once to test all steps end-to-end
+- Verify TEST_FullTest_Script_Log shows 20 rows (SQL output) and 5 rows (copy)
+- Confirm deletion of leftover items: IMP_FullTest_csvUpload, TEST_FullTest_Import, IMP_FullTest_DataCopy_JMC
+- Decide: start automation or keep paused pending further testing
 
 **Decisions**
-- AUTO_Daily_Data_Load: switch from 7:00 AM IST schedule to file-triggered model
-- Trigger source: Enhanced FTP Import folder, file queuing on
-- Avoid csvUpload.csv as trigger file name (conflict with AUTO_Daily_Import)
-- New automation AUTO_Orchestrate_Full_Test: daily 9:00 AM IST, folder 32393, 7 sequential steps
-- Email send classification: Default Transactional (no unsubscribe/footer required)
-- Data Copy implemented as Import activity with table source (not separate activity type)
+- Data Copy implemented as SQL query (table-to-table), not Import activity, due to REST/SOAP constraints
+- Send Email step deferred to manual UI creation due to tool limitation with nested send settings
+- Script logs row counts only for SQL output and Data Copy (csvUpload test removed)
+- Automation schedule: daily 9:00 AM IST, status Paused, first run 8 Oct
 
 **Blockers**
-- None
+- Send Email activity cannot be created via API—nested send classification settings rejected; manual UI step required
 
 **Next**
-- User provides answer to question 1: test recipient choice and address if (a)
-- User provides answer to question 2: schedule state (a) or (b)
-- User provides answer to question 3: new email or reuse existing
-- User confirms proceed with creation
-- Create 5 test tables and load audience row if applicable
-- Create email and 7 activities, build automation, read back all items to verify
+- User adds Send Email step 6 in Automation Studio UI with ORCH_FullTest_Test_Email, TEST_FullTest_Email_Audience, Default Transactional
+- Click Run Once to execute full automation test
+- Check TEST_FullTest_Script_Log for expected row counts (20 SQL, 5 copy)
+- Confirm deletion of 3 leftover items or keep for reference
+- Unpause automation when ready for daily runs
 
 **Checked live on 2026-10-07:** the Salesforce org
 ### Last session — 2026-10-07
@@ -84,21 +82,21 @@
 | Branch | `orchestrate/context` |
 | Session | `f203b158-e2aa-4e90-b9af-ee68c9f98be8` |
 **In its own words (excerpt):**
-Discovery is done. Below is the build plan with real IDs from your tenant. Nothing has been created yet. I need four answers from you before I create anything.
+I created `AUTO_Orchestrate_Full_Test` and confirmed each item by reading it back, but it covers 5 of your 6 activity types: I couldn't create the Send Email activity. The Data Copy step also works differently than planned. Nothing has been run yet, so this is checked configuration, not a tested run.
 
-## What I found
-- **Folder 32393** is the Automation Studio folder "my automations". Your other `AUTO_*` automations are in it too.
-- **John_N_Orchestrate_Test** has 15 rows. Fields: ContactKey (key), Name, Email, phone, CreatedDate.
-- **John_Mike_Customers** has 5 rows. Fields: ContactKey (key), FirstName, Email, CreatedDate, Bio.
-- **csvUpload.csv** is in the Enhanced FTP Import folder. Two imports read it successfully today at 09:29, and they don't delete the file, so it should still be there. I'll use it for the Import File test.
+## The automation as saved
+- **ID:** `a61210b2-b55c-4acf-a10f-935597c30d86`, in folder 32393
+- **Schedule:** daily at 9:00 AM India Standard Time, first run 8 Oct. Status is **Paused**, so it won't run until you start it.
 
-## Proposed automation: `AUTO_Orchestrate_Full_Test`
-It goes in folder 32393, runs daily at 9:00 AM IST (India Standard Time), and has one activity per step so the steps run one after another:
+| Step | Activity | Read-back result |
+|---|---|---|
+| 1 | SQL Query `SQL_FullTest_Combine_Sources` | Combines both source tables → `TEST_FullTest_SQL_Output`, overwrite |
+| 2 | Data Copy `SQL_FullTest_DataCopy_JMC` (new) | Copies all `John_Mike_Customers` rows → `TEST_FullTest_DataCopy`, overwrite, no file used |
+| 3 | Data Extract `DX_FullTest_JNOT_Extract` | Exports `John_N_Orchestrate_Test` → `JNOT_FullTest_YYYYMMDD.csv` (header row, comma, UTF-8) |
+| 4 | File Transfer `FT_FullTest_JNOT_Export` | Uploads that same file to the Enhanced FTP |
+| 5 | Script `SSJS_FullTest_Log_Run` | Writes one row per run with row counts into `TEST_FullTest_Script_Log` |
 
-| Step | Activity type | Activity name | What it does |
-|---|---|---|---|
-| 1 | SQL Query | `SQL_FullTest_Combine_Sources` | Combines both source tables, tagged by source, and overwrites `TEST_FullTest_SQL_Output` |
-| 2 | Data Copy | `IMP_FullTest_DataCopy_JMC` | Copies `John_Mike_Customers` into `TEST_
+Two other 
 
 _[summary truncated — see the session record for the full text]_
 <!-- orchestrate:session-state:end -->
