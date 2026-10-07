@@ -42,18 +42,19 @@
 <!-- Written by Orchestrate at the end of each session. Edits inside this block are
      replaced next session; anything OUTSIDE it is yours and is never touched. -->
 ### Engagement state — 2026-10-07
-**Status:** on track — All 6 automation steps complete, all checks pass. File export unconfirmed (no FTP access). Send Email step and description label remain.
+**Status:** on track — Automation 6/6 steps complete. Adding error notification via API; no schedule/step changes.
 
 **Done this session**
-- Ran automation to completion (6.5 min, all steps ✅)
-- Verified TEST_SQL_Output: 5 rows, cutoff filter working
-- Verified TEST_FullTest_Script_Log: Success row with SQLOutputRows=20, DataCopyRows=5
-- Confirmed WSProxy row counting fix is working
+- Confirmed automation has no notifications currently set
+- Located automation legacy ID for API calls
+- Planned error notification: Type Error, recipient anagaruri.johnson@jaxconsult.com
 
 **Open items**
 - Confirm JNOT_FullTest_20261007.csv exists in Enhanced FTP Export folder (manual check needed)
 - Update TEST_SQL_Output description label (old cutoff text, non-blocking)
 - Add Send Email activity as final step 7 (deferred, manual UI creation)
+- Apply error notification via API and verify it persists
+- Confirm automation schedule remains Paused after notification addition
 
 **Decisions**
 - Cutoff filter: CreatedDate >= '2026-10-06 09:38:49'
@@ -61,14 +62,16 @@
 - SQL Query step 6 position: at end of automation, after Script step 5
 - Data Copy implemented as SQL query (table-to-table)
 - Send Email step deferred to manual UI creation
+- Error notification: Type Error, recipient anagaruri.johnson@jaxconsult.com, no success notification
 
 **Blockers**
 - None
 
 **Next**
+- Add error notification to AUTO_Orchestrate_Full_Test via Notification Settings API
+- Read notification settings back to confirm address and type persisted
+- Re-read automation to confirm 6 steps and Paused schedule unchanged
 - Manually verify JNOT_FullTest_20261007.csv in Enhanced FTP Export folder
-- Update TEST_SQL_Output description to reflect new cutoff (label only)
-- Create Send Email step in Automation Studio UI as final step
 
 **Checked live on 2026-10-07:** the Salesforce org
 ### Last session — 2026-10-07
@@ -79,27 +82,24 @@
 | Branch | `orchestrate/context` |
 | Session | `f203b158-e2aa-4e90-b9af-ee68c9f98be8` |
 **In its own words (excerpt):**
-Yes, a new run instance was created at 22:56 IST. It finished with status **Complete**, so there's no error message to report. All your checks pass, and nothing was started or changed this turn.
+I have what I need, and I haven't changed anything yet.
 
-## The run (`0b3f33c7…`)
-- **Started:** 22:56:19 IST, about 11 seconds after the run request.
-- **Completed:** 23:02:53 IST, about 6.5 minutes later. That's in line with the earlier ~7.5-minute run.
-- Marketing Cloud stores these times in server time (UTC−6), as 11:26:19 and 11:32:53. I converted them to IST.
+## What I found
+- **The automation has no notifications set up right now.** Its notification settings come back empty.
+- **I can set the notification through the API.** This is the same "Notification Settings" endpoint that Automation Studio's own screen uses. It needs the automation's legacy ID, which I looked up: `c2hBU3BseTF6MHFoRDVOVmw4TU5oZzoyNTow`.
+- **There's no published spec for this endpoint.** I'll use the request format that Automation Studio itself sends, then read the settings back to check they saved.
 
-| Step | Activity | Status |
-|---|---|---|
-| 1 | `SQL_FullTest_Combine_Sources` | ✅ Complete |
-| 2 | `SQL_FullTest_DataCopy_JMC` | ✅ Complete |
-| 3 | `DX_FullTest_JNOT_Extract` | ✅ Complete |
-| 4 | `FT_FullTest_JNOT_Export` | ✅ Complete |
-| 5 | `SSJS_FullTest_Log_Run` | ✅ Complete |
-| 6 | `ACT_SQL_Test` | ✅ Complete |
+## Plan
+1. **Add an error notification** to `AUTO_Orchestrate_Full_Test`:
+   - Type **Error**, which fires if any step fails
+   - Recipient `anagaruri.johnson@jaxconsult.com`
+   - A short note: "AUTO_Orchestrate_Full_Test: a step failed. Check the run history in Automation Studio."
+   - No notification on successful completion
+2. **Read it back** from the notification endpoint, and confirm the address and type stuck. Then re-read the automation to confirm the 6 steps and the **Paused** schedule are unchanged.
 
-## Your checks
-| Check | Result |
-|---|---|
-| `TEST_SQL_Output` has exactly 5 rows | ✅ **5 rows**: TEST-CONTACT-001 to 005, all with CreatedDate 3:30:11 PM. The new `>=` cutoff fixed the 15-row problem. |
-| New log row with Status Success, SQLOutputRows 20, DataCopyRows 5 | ✅ A new row was logged at 11:30:28 server time (23:00 IST). It reads **Success, 20, 5**, with th
+What this won't do:
+- **Change the schedule, the steps, or any activity.**
+- **Send anything now.** Mark
 
 _[summary truncated — see the session record for the full text]_
 <!-- orchestrate:session-state:end -->
