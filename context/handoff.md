@@ -42,35 +42,38 @@
 <!-- Written by Orchestrate at the end of each session. Edits inside this block are
      replaced next session; anything OUTSIDE it is yours and is never touched. -->
 ### Engagement state — 2026-10-07
-**Status:** waiting — Awaiting confirmation: error notification recipient address (anagaruri vs nagaruri)
+**Status:** on track — Error notification recipient updated to nagaruri.johnson@jaxconsult.com and confirmed saved.
 
 **Done this session**
-- None
+- Updated error notification recipient from anagaruri.johnson@jaxconsult.com to nagaruri.johnson@jaxconsult.com
+- Confirmed new address saved in Marketing Cloud and old address removed
+- Verified automation schedule, steps, and last run unchanged after notification update
 
 **Open items**
-- Confirm error notification recipient: anagaruri.johnson@jaxconsult.com vs nagaruri.johnson@jaxconsult.com
-- Update error notification to correct recipient address once confirmed
 - Confirm JNOT_FullTest_20261007.csv exists in Enhanced FTP Export folder
-- Add Send Email activity as final step 7
-- Update TEST_SQL_Output description label
+- Add Send Email activity as final step 7 in Automation Studio UI
+- Update TEST_SQL_Output description label (old cutoff reference)
+- Update TEST_FullTest_DataCopy description label (old import reference)
 - Test error notification by forcing a real automation run failure
+- Decide: modify Script step to throw errors after logging to trigger notification?
 
 **Decisions**
+- Error notification recipient: nagaruri.johnson@jaxconsult.com (confirmed)
 - Cutoff filter: CreatedDate >= '2026-10-06 09:38:49'
 - Row counting: WSProxy retrieve with countRows() function
 - SQL Query step 6 position: at end of automation, after Script step 5
 - Data Copy implemented as SQL query (table-to-table)
-- Error notification type: Error, no success notification
+- Error notification type: Error only, no success notification
 - Script step internal error handling: writes Error row but doesn't fail step
 
 **Blockers**
 - None
 
 **Next**
-- Confirm correct recipient email address for error notification
-- Update notification once address is confirmed
 - Manually verify JNOT_FullTest_20261007.csv in Enhanced FTP Export folder
-- Decide: modify Script step to throw errors after logging (to trigger notification)?
+- Add Send Email step as step 7 in Automation Studio UI
+- Update table description labels for TEST_SQL_Output and TEST_FullTest_DataCopy
+- Test error notification by triggering a real automation run failure
 
 **Checked live on 2026-10-07:** the Salesforce org
 ### Last session — 2026-10-07
@@ -81,24 +84,26 @@
 | Branch | `orchestrate/context` |
 | Session | `f203b158-e2aa-4e90-b9af-ee68c9f98be8` |
 **In its own words (excerpt):**
-I haven't changed anything yet. I read the current setting first, and before I update it I need you to confirm one thing.
+I changed the failure notification on `AUTO_Orchestrate_Full_Test` so it now goes to `nagaruri.johnson@jaxconsult.com` only. Reading it back confirmed the new address saved, and the old `anagaruri` address is gone. Nothing was run and no email was sent.
 
-## Current notification on `AUTO_Orchestrate_Full_Test`
-| | Value |
+## Notification, as read back
+| | Saved value |
 |---|---|
-| Type | Error (fires when a step fails) |
-| Recipient | `anagaruri.johnson@jaxconsult.com` |
+| Type | **Error** (sent when a step fails) |
+| Recipient | `nagaruri.johnson@jaxconsult.com` (one address only) |
 | Message | "AUTO_Orchestrate_Full_Test: a step failed. Check the run history in Automation Studio." |
+| Success notification | None |
 
-## Please check the new address
-The current address starts with **"anagaruri"**. The one you sent is **`nagaruri.johnson@jaxconsult.com`**, with no leading "a". Please confirm that's the spelling you want, so the failure emails don't go to an address nobody reads.
+Marketing Cloud gave the notification a new internal ID when it saved. That's expected when a notification is replaced, and there's still only one.
 
-## What the change does
-1. Updates the existing Error notification so it emails **`nagaruri.johnson@jaxconsult.com`** only. The old address is removed, not kept alongside it. The type and message stay the same.
-2. Reads the notification back to confirm the new address saved.
-3. Re-reads the automation to confirm the 6 steps and the Paused schedule haven't changed.
+## Automation, read back after the change
+- **Schedule:** still Paused, daily at 9:00 AM India Standard Time from 8 Oct.
+- **Steps:** the same 6 activities in the same order.
+- **Last run:** still the 22:56 IST run, so no new run started.
 
-It won't run the automation or send any email.
+## Still open
+- **The email hasn't been tested.** It's only sent when a real run fails.
+- **Errors the Script step catches itself won't trigger the email.** `SSJS_FullTest_Log_Run` logs those errors and still finishes, so Marketing Cloud doesn't c
 
-**Proceed with `nagaruri.johnson@jaxconsult.com`?** Or send me the corrected address.
+_[summary truncated — see the session record for the full text]_
 <!-- orchestrate:session-state:end -->
