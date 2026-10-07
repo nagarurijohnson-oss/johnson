@@ -42,10 +42,10 @@
 <!-- Written by Orchestrate at the end of each session. Edits inside this block are
      replaced next session; anything OUTSIDE it is yours and is never touched. -->
 ### Engagement state — 2026-10-07
-**Status:** at risk — I haven't created anything yet.
+**Status:** blocked — I've created the 3 activities that export `John_N_Orchestrate_Test` to a zipped CSV.
 
 **Done this session**
-- I haven't created anything yet. Here's what I found and what I'd build. **What I checked (read-only)** - `John_N_Orchestrate_Test` exists: 15 rows, 5 fields (Email, CreatedDate, ContactKey, phone, Name), folder 49911. - **A Data Extension…
+- I've created the 3 activities that export `John_N_Orchestrate_Test` to a zipped CSV. They aren't in an automation yet, because your reply picked option **c** but didn't name the automation. **Created (each one read back by ID)** | Step | A…
 
 **Open items**
 - Fix automation run time: user to open Schedule UI, set 9:00 AM India Standard Time, click Done and Save
@@ -80,21 +80,21 @@
 | | |
 |---|---|
 | Type | BUILD |
-| Outcome | FAILED |
+| Outcome | COMPLETED |
 | Branch | `orchestrate/context` |
 | Session | `58b3d8ba-c450-493f-9233-a0d9e3d2720f` |
 **In its own words (excerpt):**
-I haven't created anything yet. Here's what I found and what I'd build.
+I've created the 3 activities that export `John_N_Orchestrate_Test` to a zipped CSV. They aren't in an automation yet, because your reply picked option **c** but didn't name the automation.
 
-**What I checked (read-only)**
-- `John_N_Orchestrate_Test` exists: 15 rows, 5 fields (Email, CreatedDate, ContactKey, phone, Name), folder 49911.
-- **A Data Extension Extract writes a plain CSV only.** Its only compression setting is `Create_TarGz_OutputFile`, which makes a .tar.gz, not a .zip. A zipped CSV needs a separate **Zip** extract after it.
-- This account already has a three-step export that works: `DX_DE_Test_Customers` → `FT_DE_Test_Customers_Export` → `DX_Zip_DE_Test_Customers`. The Zip extract can only read files on the Enhanced FTP, not files in the Safehouse, so the CSV has to be moved there first. I'll copy that pattern exactly. None of the names below are in use.
+**Created (each one read back by ID)**
 
-**Plan: 3 activities**
-1. **`DX_John_N_Orchestrate_Test`** (Data Extension Extract): exports `John_N_Orchestrate_Test` to `John_N_Orchestrate_Test.csv` with a header row, comma delimiter, text qualifiers and UTF-8, the same settings as the example.
-2. **`FT_John_N_Orchestrate_Test_Export`** (File Transfer): moves that CSV from the Safehouse to the Enhanced FTP **Export** folder.
-3. **`DX_Zip_John_N_Orchestrate_Test`** (Zip extract): 
+| Step | Activity | ID | Confirmed |
+|---|---|---|---|
+| 1 | `DX_John_N_Orchestrate_Test` (Data Extension Extract) | `91b446ef-2182-4490-b38a-6b6f91976c78` | Source key `John_N_Orchestrate_Test`. Writes `John_N_Orchestrate_Test_%%Year%%%%Month%%%%Day%%.csv` with a header row, comma delimiter, text qualifiers and UTF-8 |
+| 2 | `FT_John_N_Orchestrate_Test_Export` (File Transfer) | `abaa02a4-16d4-4294-8adb-dcb1aa3f2545` | Moves that CSV from the Safehouse to the Enhanced FTP Export folder, using the same location as the working example |
+| 3 | `DX_Zip_John_N_Orchestrate_Test` (Zip extract) | `3e707142-c31f-49b0-9095-4d22932ccff7` | Zips the CSV into `John_N_Orchestrate_Test_%%Year%%%%Month%%%%Day%%.zip` in Export and keeps the CSV |
+
+**How the timestamp works.** Each file name ends with the run date, e.g. `John_N_Orchestrate_Test_20261008.zip`. I didn't use the extract's built-in "add timestamp" option. It adds a time to the name that steps 2 and 3 couldn't 
 
 _[summary truncated — see the session record for the full text]_
 <!-- orchestrate:session-state:end -->
