@@ -41,32 +41,35 @@
 <!-- orchestrate:session-state:start -->
 <!-- Written by Orchestrate at the end of each session. Edits inside this block are
      replaced next session; anything OUTSIDE it is yours and is never touched. -->
-### Engagement state — 2026-10-07
-**Status:** done — Journey John_Mike_JB_Test created in Draft status, empty canvas. Engagement complete.
+### Engagement state — 2026-10-08
+**Status:** at risk — Send Email activity added to John_Mike_JB_Test draft, but no entry source — journey cannot run yet
 
 **Done this session**
-- Created journey John_Mike_JB_Test via Journey Builder API
-- Confirmed Draft status, key John_Mike_JB_Test-20261008, ID 4d4c9b78-999a-4d65-ba06-6938c3883e5e
-- Verified empty canvas: no entry source, activities, goals or exits
-- Confirmed journey in default Journeys folder, no re-entry mode
+- Added Send Welcome Email activity (ID 418d4e03-e06a-4de1-80c9-fc7f3fb853ee) to John_Mike_JB_Test
+- Verified activity saved in Marketing Cloud with correct email, subject, and send settings
+- Confirmed journey remains in Draft status, unpublished
 
 **Open items**
-- None
+- Add entry source to journey — required before validation or publication
+- Open journey in Journey Builder editor to verify Send Email activity renders correctly on canvas
+- Error message from testOrchestrateMap activity in 23:57 IST automation run (from previous session)
 
 **Decisions**
 - Error notification recipient: nagaruri.johnson@jaxconsult.com
 - Cutoff filter: CreatedDate >= '2026-10-06 09:38:49'
-- Journey created as blank draft (Option A selected by action)
-- Journey status Draft, not published or activated
+- Journey created as blank draft (Option A)
+- Send Email uses Simple Welcome Email (Content Builder ID 32583) with click tracking enabled
 
 **Blockers**
-- None
+- No entry source defined — journey cannot be validated or published until one is added
 
 **Next**
-- Engagement closed — journey ready for canvas setup in Journey Builder
+- Add entry source to John_Mike_JB_Test journey
+- Open journey in Journey Builder to verify Send Email activity displays correctly
+- Validate journey configuration before publication
 
-**Checked live on 2026-10-07:** the Salesforce org
-### Last session — 2026-10-07
+**Checked live on 2026-10-08:** the Salesforce org
+### Last session — 2026-10-08
 | | |
 |---|---|
 | Type | BUILD |
@@ -74,19 +77,21 @@
 | Branch | `orchestrate/context` |
 | Session | `01fb15ac-1085-4a83-a04a-d398ce9717b9` |
 **In its own words (excerpt):**
-I created the journey **John_Mike_JB_Test** and read it back from Marketing Cloud. It's in **Draft** status and I didn't publish or activate it.
+I added the Send Email activity to **John_Mike_JB_Test** and read the journey back from Marketing Cloud to check it saved. The journey is still in **Draft**: I didn't publish or activate it, and nothing has been sent.
 
 | | |
 |---|---|
-| Name | John_Mike_JB_Test |
-| Key | `John_Mike_JB_Test-20261008` |
-| ID | `4d4c9b78-999a-4d65-ba06-6938c3883e5e` |
-| Status | Draft (it has never been published) |
-| Entry mode | OnceAndDone (no re-entry) |
-| Canvas | Empty: no entry source, activities, goals or exits |
-| Folder | Journey category 32400 (the default Journeys folder) |
+| Activity | **Send Welcome Email** (activity ID `418d4e03-e06a-4de1-80c9-fc7f3fb853ee`) |
+| Email | Simple Welcome Email (Content Builder ID 32583) |
+| Subject | `Welcome, %%FirstName%%!` |
+| Send settings | Same send classification, sender profile and delivery profile as your Simple Welcome Journey. Publication list 1115. Click tracking on. |
+| Recipient address | The contact's default email address |
+| Journey status | Draft. It has never been published. |
 
-You'll find it in **Journey Builder → Journeys**; filter by Draft or search for the name. Nobody can enter it and it can't send anything until you add an entry source and activities on the canvas.
+**What you should know:**
+- **There's still no entry source.** Nobody can enter the journey, so the email can't go to anyone yet. You need to add an entry source before it can be validated or published.
+- **The first save was rejected.** Marketing Cloud refused my first update because it didn't include the journey's last-modified time. I re-read the journey, confirmed nobody else had changed it, and the second attempt saved.
+- **Check it in Journey Builder.** The activity is marked as configured
 
-One item from the earlier failure test is still open: the exact error message from the `testOrchestrateMap` activity in the 23:57 IST automation run. I can look at that next if you want.
+_[summary truncated — see the session record for the full text]_
 <!-- orchestrate:session-state:end -->
