@@ -41,35 +41,42 @@
 <!-- orchestrate:session-state:start -->
 <!-- Written by Orchestrate at the end of each session. Edits inside this block are
      replaced next session; anything OUTSIDE it is yours and is never touched. -->
-### Engagement state — 2026-10-08
-**Status:** at risk — Send Email activity added to John_Mike_JB_Test draft, but no entry source — journey cannot run yet
+### Engagement state — 2026-10-09
+**Status:** on track — John_Mike_JB_Test draft complete: entry source + Bio_Check decision added. Ready for editor verification & validation.
 
 **Done this session**
-- Added Send Welcome Email activity (ID 418d4e03-e06a-4de1-80c9-fc7f3fb853ee) to John_Mike_JB_Test
-- Verified activity saved in Marketing Cloud with correct email, subject, and send settings
-- Confirmed journey remains in Draft status, unpublished
+- Added entry source DEAudience-John_Mike_JB_Test-20261009 reading from John_Mike_Bio_Split_Test
+- Added Bio_Check decision activity with Has Bio condition (non-empty AND not default text)
+- Configured both paths to end journey; routed test rows correctly per condition logic
+- Changed recipient email from default to entry data Email field
+- Verified all changes saved in Marketing Cloud; journey remains Draft
 
 **Open items**
-- Add entry source to journey — required before validation or publication
-- Open journey in Journey Builder editor to verify Send Email activity renders correctly on canvas
-- Error message from testOrchestrateMap activity in 23:57 IST automation run (from previous session)
+- Open John_Mike_JB_Test in Journey Builder editor to verify Bio_Check displays both paths and condition correctly
+- Run Validate in Journey Builder (does not publish)
+- Replace four test email addresses (*.sample@example.com) with controlled addresses before publication
+- Run entry source automation or journey to test actual routing of four test rows
+- Resolve error message from testOrchestrateMap activity in previous session automation run
 
 **Decisions**
-- Error notification recipient: nagaruri.johnson@jaxconsult.com
+- Entry source: DEAudience-John_Mike_JB_Test-20261009 from John_Mike_Bio_Split_Test, no schedule
+- Bio_Check condition: Bio is not empty AND Bio is not 'No Biography is Available here.'
+- Recipient email: entry data Email field (not contact default)
+- Journey path: Entry source → Send Welcome Email → Bio_Check (Has Bio / Remainder) → End
+- Error notification: nagaruri.johnson@jaxconsult.com
 - Cutoff filter: CreatedDate >= '2026-10-06 09:38:49'
-- Journey created as blank draft (Option A)
-- Send Email uses Simple Welcome Email (Content Builder ID 32583) with click tracking enabled
 
 **Blockers**
-- No entry source defined — journey cannot be validated or published until one is added
+- None
 
 **Next**
-- Add entry source to John_Mike_JB_Test journey
-- Open journey in Journey Builder to verify Send Email activity displays correctly
-- Validate journey configuration before publication
+- Open John_Mike_JB_Test in Journey Builder and verify Bio_Check activity shows both paths and Has Bio condition
+- Run Validate in Journey Builder to check configuration before publication
+- Replace test email addresses with controlled ones
+- Test journey with entry source automation run to verify routing of four test rows
 
-**Checked live on 2026-10-08:** the Salesforce org
-### Last session — 2026-10-08
+**Checked live on 2026-10-09:** the Salesforce org
+### Last session — 2026-10-09
 | | |
 |---|---|
 | Type | BUILD |
@@ -77,21 +84,24 @@
 | Branch | `orchestrate/context` |
 | Session | `01fb15ac-1085-4a83-a04a-d398ce9717b9` |
 **In its own words (excerpt):**
-I added the Send Email activity to **John_Mike_JB_Test** and read the journey back from Marketing Cloud to check it saved. The journey is still in **Draft**: I didn't publish or activate it, and nothing has been sent.
+The Bio_Check setup is in place. I read the journey and the entry source back from Marketing Cloud, and everything saved as planned. **John_Mike_JB_Test is still in Draft.** I didn't publish or activate it, I didn't run anything, and nothing was sent.
 
-| | |
+| Item | Read-back result |
 |---|---|
-| Activity | **Send Welcome Email** (activity ID `418d4e03-e06a-4de1-80c9-fc7f3fb853ee`) |
-| Email | Simple Welcome Email (Content Builder ID 32583) |
-| Subject | `Welcome, %%FirstName%%!` |
-| Send settings | Same send classification, sender profile and delivery profile as your Simple Welcome Journey. Publication list 1115. Click tracking on. |
-| Recipient address | The contact's default email address |
-| Journey status | Draft. It has never been published. |
+| **Test data extension** | `John_Mike_Bio_Split_Test` is sendable, with ContactKey, Email, FirstName and Bio. It has 4 rows. |
+| **Entry source** | `DEAudience-John_Mike_JB_Test-20261009` reads from `John_Mike_Bio_Split_Test`. It has no schedule. It's linked to 1 journey, and that journey isn't published. |
+| **Recipient email** | Changed from the contact's default email to the entry data's `Email` field. |
+| **Journey order** | Entry source → **Send Welcome Email** → **Bio_Check** |
+| **Has Bio path** | Bio is not empty AND Bio is not `No Biography is Available here.` |
+| **Remainder path** | Everyone else |
+| **End of both paths** | Both paths end the journey. |
+
+**How the test rows should route:**
+- **Has Bio:** JMC-0001 ("Loves hiking") and JMC-0002 ("Coffee enthusiast").
+- **Remainder:** JMC-0003 (Bio is the default text) and JMC-0005 (Bio is blank).
 
 **What you should know:**
-- **There's still no entry source.** Nobody can enter the journey, so the email can't go to anyone yet. You need to add an entry source before it can be validated or published.
-- **The first save was rejected.** Marketing Cloud refused my first update because it didn't include the journey's last-modified time. I re-read the journey, confirmed nobody else had changed it, and the second attempt saved.
-- **Check it in Journey Builder.** The activity is marked as configured
+- **The routi
 
 _[summary truncated — see the session record for the full text]_
 <!-- orchestrate:session-state:end -->
