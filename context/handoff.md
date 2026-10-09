@@ -42,18 +42,17 @@
 <!-- Written by Orchestrate at the end of each session. Edits inside this block are
      replaced next session; anything OUTSIDE it is yours and is never touched. -->
 ### Engagement state — 2026-10-09
-**Status:** on track — John_Mike_JB_Test draft complete: entry source + Bio_Check decision added. Ready for editor verification & validation.
+**Status:** at risk — John_Mike_JB_Test fails validation: Bio_Check has wrong operator name and missing field mapping in entry source.
 
 **Done this session**
-- Added entry source DEAudience-John_Mike_JB_Test-20261009 reading from John_Mike_Bio_Split_Test
-- Added Bio_Check decision activity with Has Bio condition (non-empty AND not default text)
-- Configured both paths to end journey; routed test rows correctly per condition logic
-- Changed recipient email from default to entry data Email field
-- Verified all changes saved in Marketing Cloud; journey remains Draft
+- Identified two validation errors in Bio_Check: IsNotEmpty operator not recognized, Bio field not in entry source schema
+- Confirmed entry source, Send Welcome Email, and data extension are error-free
+- Verified journey remains Draft, unmodified, nothing sent
 
 **Open items**
-- Open John_Mike_JB_Test in Journey Builder editor to verify Bio_Check displays both paths and condition correctly
-- Run Validate in Journey Builder (does not publish)
+- Fix Bio_Check condition: replace IsNotEmpty operator with correct Marketing Cloud operator name
+- Re-select John_Mike_Bio_Split_Test in entry source to load Bio field into journey schema
+- Run Validate in Journey Builder after fixes to confirm all errors resolved
 - Replace four test email addresses (*.sample@example.com) with controlled addresses before publication
 - Run entry source automation or journey to test actual routing of four test rows
 - Resolve error message from testOrchestrateMap activity in previous session automation run
@@ -65,15 +64,18 @@
 - Journey path: Entry source → Send Welcome Email → Bio_Check (Has Bio / Remainder) → End
 - Error notification: nagaruri.johnson@jaxconsult.com
 - Cutoff filter: CreatedDate >= '2026-10-06 09:38:49'
+- Fix approach: use Journey Builder editor (more reliable than API)
 
 **Blockers**
-- None
+- Bio_Check validation errors prevent publication: wrong operator enum and missing field in entry source schema
 
 **Next**
-- Open John_Mike_JB_Test in Journey Builder and verify Bio_Check activity shows both paths and Has Bio condition
-- Run Validate in Journey Builder to check configuration before publication
+- Open John_Mike_JB_Test in Journey Builder editor
+- Re-select John_Mike_Bio_Split_Test in entry source to load all fields including Bio
+- Rebuild Bio_Check condition with correct operator (not IsNotEmpty) and correct comparison operator
+- Run Validate in Journey Builder to confirm errors resolved
 - Replace test email addresses with controlled ones
-- Test journey with entry source automation run to verify routing of four test rows
+- Test journey with entry source automation run
 
 **Checked live on 2026-10-09:** the Salesforce org
 ### Last session — 2026-10-09
@@ -84,24 +86,19 @@
 | Branch | `orchestrate/context` |
 | Session | `01fb15ac-1085-4a83-a04a-d398ce9717b9` |
 **In its own words (excerpt):**
-The Bio_Check setup is in place. I read the journey and the entry source back from Marketing Cloud, and everything saved as planned. **John_Mike_JB_Test is still in Draft.** I didn't publish or activate it, I didn't run anything, and nothing was sent.
+**John_Mike_JB_Test fails validation.** Marketing Cloud's validator found errors in **Bio_Check**. The journey can't be published until they're fixed. I didn't change anything, and I checked afterwards that the journey is still **Draft**: never published, last modified 2026-10-09 05:59, the same time as before. Nothing was sent.
 
-| Item | Read-back result |
-|---|---|
-| **Test data extension** | `John_Mike_Bio_Split_Test` is sendable, with ContactKey, Email, FirstName and Bio. It has 4 rows. |
-| **Entry source** | `DEAudience-John_Mike_JB_Test-20261009` reads from `John_Mike_Bio_Split_Test`. It has no schedule. It's linked to 1 journey, and that journey isn't published. |
-| **Recipient email** | Changed from the contact's default email to the entry data's `Email` field. |
-| **Journey order** | Entry source → **Send Welcome Email** → **Bio_Check** |
-| **Has Bio path** | Bio is not empty AND Bio is not `No Biography is Available here.` |
-| **Remainder path** | Everyone else |
-| **End of both paths** | Both paths end the journey. |
+This also corrects my last update. I said Bio_Check was "in place", but at that point I had only read it back, not validated it. It saved, but it isn't valid.
 
-**How the test rows should route:**
-- **Has Bio:** JMC-0001 ("Loves hiking") and JMC-0002 ("Coffee enthusiast").
-- **Remainder:** JMC-0003 (Bio is the default text) and JMC-0005 (Bio is blank).
+**Validation errors** (all in Bio_Check):
 
-**What you should know:**
-- **The routi
+| # | Error from Marketing Cloud | What it means |
+|---|---|---|
+| 1 | `CantConvertDataType`: "The node named 'Condition.Operator' with value 'IsNotEmpty' could not be converted to data type 'OperatorEnum'." | I used the wrong operator name for "Bio is not empty". Marketing Cloud doesn't recognise `IsNotEmpty`. |
+| 2 | `121408` (reported twice, once for each Bio condition): "Path HasBio has criteria which uses a field "Bio" that does not exists in the Journeys entry event schema." | The data extension does have Bio. But the entry source I created has no field list, so the journey can't see Bio. |
+
+**What passed:**
+- **Entry source:** no errors. `DEAudience-
 
 _[summary truncated — see the session record for the full text]_
 <!-- orchestrate:session-state:end -->
