@@ -42,18 +42,20 @@
 <!-- Written by Orchestrate at the end of each session. Edits inside this block are
      replaced next session; anything OUTSIDE it is yours and is never touched. -->
 ### Engagement state — 2026-10-09
-**Status:** at risk — John_Mike_JB_Test fails validation: Bio_Check has wrong operator name and missing field mapping in entry source.
+**Status:** at risk — Bio_Check operator identified as IsNotNull; entry source Bio exposure unconfirmed. Fix ready for approval.
 
 **Done this session**
-- Identified two validation errors in Bio_Check: IsNotEmpty operator not recognized, Bio field not in entry source schema
-- Confirmed entry source, Send Welcome Email, and data extension are error-free
-- Verified journey remains Draft, unmodified, nothing sent
+- Identified correct operator: IsNotNull (not IsNotEmpty) — confirmed in 10 uses across 6 journeys
+- Analyzed Bio field exposure: entry source points to correct DE but field list cannot be verified via API
+- Identified likely root cause: Bio field wrapped in quotes and missing IsEphemeralAttribute marker in XML
+- Proposed exact fix: rewrite both Bio_Check conditions in editor format with IsNotNull operator
 
 **Open items**
-- Fix Bio_Check condition: replace IsNotEmpty operator with correct Marketing Cloud operator name
-- Re-select John_Mike_Bio_Split_Test in entry source to load Bio field into journey schema
-- Run Validate in Journey Builder after fixes to confirm all errors resolved
-- Replace four test email addresses (*.sample@example.com) with controlled addresses before publication
+- Get approval for proposed Bio_Check rewrite before applying changes
+- Apply fix: change IsNotEmpty to IsNotNull and align XML format (remove quotes, add IsEphemeralAttribute)
+- Run Validate in Journey Builder to confirm operator and Bio field errors resolved
+- If Bio error persists after fix, update entry source field exposure
+- Replace four test email addresses (*.sample@example.com) with controlled addresses
 - Run entry source automation or journey to test actual routing of four test rows
 - Resolve error message from testOrchestrateMap activity in previous session automation run
 
@@ -65,19 +67,19 @@
 - Error notification: nagaruri.johnson@jaxconsult.com
 - Cutoff filter: CreatedDate >= '2026-10-06 09:38:49'
 - Fix approach: use Journey Builder editor (more reliable than API)
+- Operator for 'is not empty': IsNotNull (confirmed in 10 uses, 6 journeys)
 
 **Blockers**
-- Bio_Check validation errors prevent publication: wrong operator enum and missing field in entry source schema
+- Bio_Check validation errors prevent publication: IsNotEmpty operator not recognized; Bio field not matched in entry source schema
 
 **Next**
-- Open John_Mike_JB_Test in Journey Builder editor
-- Re-select John_Mike_Bio_Split_Test in entry source to load all fields including Bio
-- Rebuild Bio_Check condition with correct operator (not IsNotEmpty) and correct comparison operator
+- Present exact XML changes for Bio_Check conditions to stakeholder for approval
+- Upon approval: open John_Mike_JB_Test in Journey Builder editor
+- Rewrite both Bio_Check conditions: change IsNotEmpty to IsNotNull, remove quotes around Bio, add IsEphemeralAttribute=true
 - Run Validate in Journey Builder to confirm errors resolved
-- Replace test email addresses with controlled ones
-- Test journey with entry source automation run
+- If Bio error persists, investigate entry source field exposure and update if needed
 
-**Checked live on 2026-10-09:** the Salesforce org
+**Checked live on 2026-10-09:** the Salesforce org, the web
 ### Last session — 2026-10-09
 | | |
 |---|---|
@@ -86,19 +88,23 @@
 | Branch | `orchestrate/context` |
 | Session | `01fb15ac-1085-4a83-a04a-d398ce9717b9` |
 **In its own words (excerpt):**
-**John_Mike_JB_Test fails validation.** Marketing Cloud's validator found errors in **Bio_Check**. The journey can't be published until they're fixed. I didn't change anything, and I checked afterwards that the journey is still **Draft**: never published, last modified 2026-10-09 05:59, the same time as before. Nothing was sent.
+The operator for "Bio is not empty" is **`IsNotNull`**. I can't confirm the entry source exposes `Bio`, because Marketing Cloud's API doesn't return a field list for this type of entry source. I didn't change anything, and John_Mike_JB_Test is still **Draft**.
 
-This also corrects my last update. I said Bio_Check was "in place", but at that point I had only read it back, not validated it. It saved, but it isn't valid.
+**1. Supported operators**
 
-**Validation errors** (all in Bio_Check):
+I couldn't get the full official list. Salesforce's operator reference page blocked access (HTTP 403), and the search results didn't give exact names. So the list below is only what I could check in your tenant's 20 journeys:
 
-| # | Error from Marketing Cloud | What it means |
+| Operator | Used in your splits | Status |
 |---|---|---|
-| 1 | `CantConvertDataType`: "The node named 'Condition.Operator' with value 'IsNotEmpty' could not be converted to data type 'OperatorEnum'." | I used the wrong operator name for "Bio is not empty". Marketing Cloud doesn't recognise `IsNotEmpty`. |
-| 2 | `121408` (reported twice, once for each Bio condition): "Path HasBio has criteria which uses a field "Bio" that does not exists in the Journeys entry event schema." | The data extension does have Bio. But the entry source I created has no field list, so the journey can't see Bio. |
+| `IsNotNull` | 10 times, in 6 journeys | This is "is not empty". |
+| `Equal` | 3 times | Used in your journeys. |
+| `NotEqual` | Once, in Bio_Check | Didn't cause a validation error, so it's fine for "Bio is not the default text". |
+| `IsNotEmpty` | Once, in Bio_Check only | **Not valid.** The validator rejected it (`CantConvertDataType`). |
 
-**What passed:**
-- **Entry source:** no errors. `DEAudience-
+The strongest evidence is the **"DE entry source"** journey (created 2026-10-08). It was built in the editor and splits on a field also called `Bio`:
+
+```
+<Condition IsEphemeralAttribute="true" Key="Event.DEAudience-5c2339f6-….Bio" Operator="IsNotNull" UiMetaData="{}"><Value><![
 
 _[summary truncated — see the session record for the full text]_
 <!-- orchestrate:session-state:end -->
