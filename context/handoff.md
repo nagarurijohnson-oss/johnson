@@ -42,38 +42,37 @@
 <!-- Written by Orchestrate at the end of each session. Edits inside this block are
      replaced next session; anything OUTSIDE it is yours and is never touched. -->
 ### Engagement state — 2026-10-09
-**Status:** on track — Bio_Check validation fixed and applied. Journey passes validation; ready for test run after email address replacement.
+**Status:** on track — Bio_Check validation fixed. Journey ready for manual test in Journey Builder; no API test available.
 
 **Done this session**
-- Applied Bio_Check fix: changed IsNotEmpty to IsNotNull, removed quotes from Bio field, added IsEphemeralAttribute=true
-- Confirmed John_Mike_JB_Test passes validation with 0 errors and 0 warnings
-- Verified both Bio_Check conditions saved correctly in journey definition
+- Confirmed journey test capability exists in Journey Builder UI (no API endpoint found)
+- Verified test can run without publishing or sending email to sample addresses
+- Documented expected test routing: JMC-0001, JMC-0002 → Has Bio; JMC-0003, JMC-0005 → Remainder
 
 **Open items**
-- Replace four test email addresses (*.sample@example.com) with controlled addresses before publishing
-- Run entry source automation or journey to test actual routing of four test rows
-- Resolve error message from testOrchestrateMap activity in previous session automation run
-- Publish journey and monitor real contact routing through Has Bio / Remainder paths
+- Run manual test in Journey Builder (select contacts, validate, test, leave send email off)
+- Replace four *.sample@example.com test addresses with controlled addresses before publishing
+- Publish John_Mike_JB_Test journey after test confirms routing
+- Run entry source automation to test actual contact routing through journey
+- Resolve testOrchestrateMap error from previous automation run
 
 **Decisions**
 - Entry source: DEAudience-John_Mike_JB_Test-20261009 from John_Mike_Bio_Split_Test, no schedule
-- Bio_Check condition 1: IsNotNull operator (confirmed fix)
-- Bio_Check condition 2: NotEqual 'No Biography is Available here.' (unchanged)
-- Recipient email: entry data Email field
-- Journey path: Entry source → Send Welcome Email → Bio_Check (Has Bio / Remainder) → End
-- Error notification: nagaruri.johnson@jaxconsult.com
-- Fix approach: use Journey Builder editor (applied successfully)
+- Bio_Check condition 1: IsNotNull operator
+- Bio_Check condition 2: NotEqual 'No Biography is Available here.'
+- Test method: manual in Journey Builder UI (no API available)
+- Test email sending: leave unticked to avoid delivery to sample addresses
 
 **Blockers**
 - None
 
 **Next**
-- Replace *.sample@example.com test addresses with controlled email addresses
-- Publish John_Mike_JB_Test journey
-- Run test data through entry source to verify routing (JMC-0001, JMC-0002 → Has Bio; JMC-0003, JMC-0005 → Remainder)
-- Resolve testOrchestrateMap error from previous automation run
+- Open John_Mike_JB_Test in Journey Builder and run manual test with 4 test contacts
+- Verify routing matches expected paths (Has Bio vs Remainder)
+- Replace sample email addresses with controlled addresses
+- Publish journey and monitor real contact routing
 
-**Checked live on 2026-10-09:** the Salesforce org
+**Checked live on 2026-10-09:** the Salesforce org, the web
 ### Last session — 2026-10-09
 | | |
 |---|---|
@@ -82,22 +81,20 @@
 | Branch | `orchestrate/context` |
 | Session | `01fb15ac-1085-4a83-a04a-d398ce9717b9` |
 **In its own words (excerpt):**
-**John_Mike_JB_Test now passes validation with no errors and no warnings.** I changed only the two Bio_Check conditions. The journey is still **Draft**: it hasn't been published, nobody has entered it (population 0), and nothing was sent.
+**Yes. You can test `Bio_Check` without publishing the journey or sending email, but only from the Journey Builder screen.** I couldn't find a way to run the test through the API, so I can't run it for you. I didn't change or run anything: John_Mike_JB_Test is still **Draft**, nobody has entered it, and it was last modified at 06:33:50, the time of the last fix.
 
-**What changed in Bio_Check** (I read the saved definition back to confirm it):
+**Why it qualifies** (checked on the journey today):
 
-| | Before | After |
-|---|---|---|
-| Field reference | `Event.DEAudience-John_Mike_JB_Test-20261009.&quot;Bio&quot;` | `Event.DEAudience-John_Mike_JB_Test-20261009.Bio` |
-| `IsEphemeralAttribute` | missing | `"true"` |
-| Condition 1 (not empty) | `IsNotEmpty`, no `<Value>` | `IsNotNull`, empty `<Value>` |
-| Condition 2 (not the default text) | `NotEqual` "No Biography is Available here." | unchanged |
+| What Test needs | John_Mike_JB_Test |
+|---|---|
+| A Data Extension entry source | Yes: `DEAudience-John_Mike_JB_Test-20261009`, reading from `John_Mike_Bio_Split_Test` |
+| The journey must pass validation first, which is what turns on the **Test** button | Yes: 0 errors and 0 warnings in the last validation |
+| The journey must still be a draft | Yes: never published, and nobody has entered it |
+| The split must use the entry data's fields | Yes: Bio_Check reads `Event.DEAudience-John_Mike_JB_Test-20261009.Bio` |
 
-**Validation result:** `ValidateCompleted`, with 0 errors and 0 warnings. Before the fix it had 3 errors: `CantConvertDataType` on `IsNotEmpty`, and two `121408` errors saying Bio wasn't in the entry schema. Both kinds are gone. The entry source didn't need a field list after all, so I left it as it was.
-
-**What stayed the same:**
-- **Entry source:** `DEAudience-John_Mike_JB_Test-20261009`, reading from `John_Mike_Bio_Split_Test`, with no schedule.
-- **Send Welcome Ema
+**How the test works:**
+- You pick one or more test contacts from the 4 rows in `John_Mike_Bio_Split_Test`. The test runs each one through the journey without publishing it.
+- Decision Splits are worked out from the real data, so Bio_Check routes each contac
 
 _[summary truncated — see the session record for the full text]_
 <!-- orchestrate:session-state:end -->
